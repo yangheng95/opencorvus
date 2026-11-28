@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0VcEPkqB00Jl0gi3zby",
+  "rows": 4,
+  "totalAmount": "18.00",
+  "groups": {
+    "普通订单": {
+      "amount": "20.50",
+      "count": 2
+    },
+    "退款": {
+      "amount": "-2.50",
+      "count": 1
+    },
+    "免费样品": {
+      "amount": "0.00",
+      "count": 1
+    }
+  },
+  "sourceBytes": 223,
+  "identities": "all4 record IDs, original offsets, UTC instants, signed amounts and zero retained",
+  "scope": "Actual published API data and independent Decimal arithmetic; no UI or narrative-copy assertions. Initial model narrative26 is independently recorded as failed and must be corrected/reviewed separately."
+}

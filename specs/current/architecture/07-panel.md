@@ -6276,7 +6276,12 @@ or container dimensions after state restoration settles; explicit dimensions
 remain authored values. Composed plots keep their native child dimensions and
 layout: the host neither injects root dimensions nor changes their width/height
 signals. This also keeps categorical brushes tied to the same child scales when
-the surrounding pane or workspace changes size. Vega
+the surrounding pane or workspace changes size. Composed views default to native
+pad sizing with resize enabled, so gestures that move legends or extend labels
+also update the outer canvas bounds. Unit and layered plots retain their fit
+default. The existing configuration merge and top-level specification keep
+authored autosize overrides authoritative; no host gesture listener supplies
+this layout update. Vega
 export controls use the current product language. The shared theme configuration
 also supplies per-View `config.locale` number/time definitions from D3's bundled
 resources for the current supported product language. Chart and every Dashboard

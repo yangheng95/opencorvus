@@ -1,0 +1,306 @@
+[
+  {
+    "id": "art_g0VcEPkqB00Jl0gi3zby",
+    "sessionID": "ses_h4Lk4Zr7u12EW70aRAMI",
+    "messageID": "msg_g0VcEPcuk00To1ACNFb6",
+    "payload": {
+      "schemaVersion": "1",
+      "title": "北仓金额框选联动复核 20261128",
+      "renderer": "chart@1",
+      "spec": {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "来源仅为当前项目 events.csv 的全部四条记录。左侧拖拽框选，右侧按类型计算选中记录的带符号金额之和与记录行数；无选择时统计全量。左侧双击清除选择。金额无已知币种，非利润。",
+        "spacing": 36,
+        "hconcat": [
+          {
+            "title": "逐笔金额｜拖拽框选，双击恢复全量",
+            "width": 330,
+            "height": 320,
+            "params": [
+              {
+                "name": "records_brush",
+                "select": {
+                  "type": "interval",
+                  "encodings": [
+                    "x",
+                    "y"
+                  ],
+                  "clear": "dblclick"
+                }
+              }
+            ],
+            "mark": {
+              "type": "point",
+              "filled": true,
+              "size": 150
+            },
+            "encoding": {
+              "x": {
+                "field": "记录编号",
+                "type": "ordinal",
+                "sort": [
+                  "R01",
+                  "R02",
+                  "R03",
+                  "R04"
+                ],
+                "axis": {
+                  "title": "记录编号",
+                  "labelAngle": 0
+                }
+              },
+              "y": {
+                "field": "金额",
+                "type": "quantitative",
+                "scale": {
+                  "zero": true
+                },
+                "axis": {
+                  "title": "逐笔金额（币种未提供）",
+                  "format": ".2f"
+                }
+              },
+              "color": {
+                "field": "类型",
+                "type": "nominal",
+                "scale": {
+                  "domain": [
+                    "普通订单",
+                    "退款",
+                    "免费样品"
+                  ],
+                  "range": [
+                    "#4C78A8",
+                    "#E45756",
+                    "#72B7B2"
+                  ]
+                },
+                "legend": {
+                  "title": "记录类型",
+                  "orient": "bottom"
+                }
+              },
+              "opacity": {
+                "condition": {
+                  "param": "records_brush",
+                  "empty": true,
+                  "value": 1
+                },
+                "value": 0.25
+              },
+              "tooltip": [
+                {
+                  "field": "记录编号",
+                  "type": "nominal"
+                },
+                {
+                  "field": "类型",
+                  "type": "nominal"
+                },
+                {
+                  "field": "金额",
+                  "type": "quantitative",
+                  "format": ".2f"
+                },
+                {
+                  "field": "原始时区时间戳",
+                  "type": "nominal"
+                },
+                {
+                  "field": "真实 UTC 时刻",
+                  "type": "nominal"
+                }
+              ]
+            }
+          },
+          {
+            "title": "所选记录｜按类型净额与条数（无选择＝全量）",
+            "width": 330,
+            "height": 320,
+            "transform": [
+              {
+                "filter": {
+                  "param": "records_brush",
+                  "empty": true
+                }
+              },
+              {
+                "aggregate": [
+                  {
+                    "op": "sum",
+                    "field": "金额",
+                    "as": "净额"
+                  },
+                  {
+                    "op": "count",
+                    "as": "记录条数"
+                  }
+                ],
+                "groupby": [
+                  "类型"
+                ]
+              },
+              {
+                "calculate": "format(datum['净额'], '.2f') + ' · ' + datum['记录条数'] + ' 条'",
+                "as": "统计标签"
+              }
+            ],
+            "encoding": {
+              "x": {
+                "field": "类型",
+                "type": "nominal",
+                "sort": [
+                  "普通订单",
+                  "退款",
+                  "免费样品"
+                ],
+                "axis": {
+                  "title": "记录类型",
+                  "labelAngle": 0
+                }
+              },
+              "y": {
+                "field": "净额",
+                "type": "quantitative",
+                "scale": {
+                  "zero": true
+                },
+                "axis": {
+                  "title": "带符号金额净额（币种未提供）",
+                  "format": ".2f"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "类型",
+                  "type": "nominal"
+                },
+                {
+                  "field": "净额",
+                  "type": "quantitative",
+                  "format": ".2f"
+                },
+                {
+                  "field": "记录条数",
+                  "type": "quantitative",
+                  "format": "d"
+                }
+              ]
+            },
+            "layer": [
+              {
+                "mark": {
+                  "type": "bar",
+                  "size": 52
+                },
+                "encoding": {
+                  "color": {
+                    "field": "类型",
+                    "type": "nominal",
+                    "scale": {
+                      "domain": [
+                        "普通订单",
+                        "退款",
+                        "免费样品"
+                      ],
+                      "range": [
+                        "#4C78A8",
+                        "#E45756",
+                        "#72B7B2"
+                      ]
+                    },
+                    "legend": {
+                      "title": "记录类型",
+                      "orient": "bottom"
+                    }
+                  }
+                }
+              },
+              {
+                "mark": {
+                  "type": "point",
+                  "filled": true,
+                  "size": 55
+                },
+                "encoding": {
+                  "color": {
+                    "field": "类型",
+                    "type": "nominal",
+                    "scale": {
+                      "domain": [
+                        "普通订单",
+                        "退款",
+                        "免费样品"
+                      ],
+                      "range": [
+                        "#4C78A8",
+                        "#E45756",
+                        "#72B7B2"
+                      ]
+                    },
+                    "legend": null
+                  }
+                }
+              },
+              {
+                "mark": {
+                  "type": "text",
+                  "dy": -14,
+                  "fontSize": 12
+                },
+                "encoding": {
+                  "text": {
+                    "field": "统计标签",
+                    "type": "nominal"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "resolve": {
+          "scale": {
+            "color": "shared"
+          }
+        },
+        "config": {
+          "view": {
+            "stroke": null
+          }
+        }
+      },
+      "data": [
+        {
+          "记录编号": "R01",
+          "类型": "普通订单",
+          "金额": 12.5,
+          "原始时区时间戳": "2026-11-28T23:30:00-05:00",
+          "真实 UTC 时刻": "2026-11-29 04:30:00 UTC"
+        },
+        {
+          "记录编号": "R02",
+          "类型": "退款",
+          "金额": -2.5,
+          "原始时区时间戳": "2026-11-29T01:00:00+14:00",
+          "真实 UTC 时刻": "2026-11-28 11:00:00 UTC"
+        },
+        {
+          "记录编号": "R03",
+          "类型": "免费样品",
+          "金额": 0,
+          "原始时区时间戳": "2026-11-28T18:00:00Z",
+          "真实 UTC 时刻": "2026-11-28 18:00:00 UTC"
+        },
+        {
+          "记录编号": "R04",
+          "类型": "普通订单",
+          "金额": 8,
+          "原始时区时间戳": "2026-11-27T23:30:00-12:00",
+          "真实 UTC 时刻": "2026-11-28 11:30:00 UTC"
+        }
+      ]
+    },
+    "timeCreated": 1795833357683,
+    "timeUpdated": 1795833357683
+  }
+]

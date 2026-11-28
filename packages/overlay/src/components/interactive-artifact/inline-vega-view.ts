@@ -15,12 +15,15 @@ type ViewState = ReturnType<Result["view"]["getState"]> & { subcontext?: ViewSta
 function artifactVegaConfig(
   theme: ArtifactVisualTheme,
   label: string,
+  containerSized: boolean,
   source: Record<string, unknown> = {},
 ): Record<string, unknown> {
   const defaults = {
     description: label,
     locale: artifactVegaLocale(sanitizeLocale(localeTag())),
-    autosize: { type: "fit", contains: "padding" },
+    autosize: containerSized
+      ? { type: "fit", contains: "padding" }
+      : { type: "pad", contains: "padding", resize: true },
     background: theme.surface,
     font: theme.font,
     range: { category: theme.palette },
@@ -210,7 +213,7 @@ export function createInlineVegaView(input: {
             width: nextSource.width ?? measured.width,
             height: nextSource.height ?? measured.height,
           } : {}),
-          config: artifactVegaConfig(artifactVisualTheme(host), input.label(),
+          config: artifactVegaConfig(artifactVisualTheme(host), input.label(), containerSized,
             config && typeof config === "object" && !Array.isArray(config) ? config as Record<string, unknown> : {}),
         } as unknown as Parameters<typeof vegaEmbed>[1], {
           ...INLINE_VEGA_EMBED_OPTIONS,

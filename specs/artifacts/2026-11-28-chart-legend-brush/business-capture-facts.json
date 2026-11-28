@@ -1,0 +1,98 @@
+{
+  "sessionID": "ses_h4Lk4Zr7u12EW70aRAMI",
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+  "messageCount": 7,
+  "messages": [
+    {
+      "id": "msg_39ed65b9-85ec-4ca3-8d09-e6ba26b95be4",
+      "role": "user",
+      "finish": null,
+      "time": {
+        "created": 1795833322477
+      },
+      "tools": []
+    },
+    {
+      "id": "msg_g0VcEPbhE00hMzz9ywks",
+      "role": "assistant",
+      "finish": "tool-calls",
+      "time": {
+        "created": 1795833322532,
+        "completed": 1795833327190
+      },
+      "tools": [
+        {
+          "tool": "read",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VcEPcuk00To1ACNFb6",
+      "role": "assistant",
+      "finish": "tool-calls",
+      "time": {
+        "created": 1795833327214,
+        "completed": 1795833357774
+      },
+      "tools": [
+        {
+          "tool": "publish_interactive_artifact",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VcEPks200POVj3KM1v",
+      "role": "assistant",
+      "finish": "stop",
+      "time": {
+        "created": 1795833357798,
+        "completed": 1795833365525
+      },
+      "tools": []
+    },
+    {
+      "id": "msg_87cf2b75-6213-4c9c-9ec4-f29e67529b99",
+      "role": "user",
+      "finish": null,
+      "time": {
+        "created": 1795833532221
+      },
+      "tools": []
+    },
+    {
+      "id": "msg_g0VcEQUGj00ae0RXPDrY",
+      "role": "assistant",
+      "finish": "tool-calls",
+      "time": {
+        "created": 1795833532309,
+        "completed": 1795833536832
+      },
+      "tools": [
+        {
+          "tool": "read",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VcEQVS400JLp5D7A4M",
+      "role": "assistant",
+      "finish": "stop",
+      "time": {
+        "created": 1795833536856,
+        "completed": 1795833547559
+      },
+      "tools": []
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "art_g0VcEPkqB00Jl0gi3zby",
+      "renderer": "chart@1",
+      "title": "北仓金额框选联动复核 20261128",
+      "rows": 4
+    }
+  ]
+}

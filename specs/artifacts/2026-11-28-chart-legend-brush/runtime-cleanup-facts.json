@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "services": [
+    {
+      "label": "run152",
+      "originalExecHandle": 79685,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hlPTKPQwXAI1OPWOsiC6",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    },
+    {
+      "label": "run153",
+      "originalExecHandle": 94617,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_h7NaZUy7fdLtSgKeCfCe",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    }
+  ],
+  "ownedPort51776": "retired",
+  "ownedTab241805435": "closed through bound browser API",
+  "preferences": "zh-CN/system unchanged",
+  "priorLimitation": "old tabs241805392/241805428 unbound; neither represented as closed"
+}

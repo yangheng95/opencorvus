@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [框选图例宽度证据](2026-11-28-chart-legend-brush/README.md)
 - [图表无障碍语言证据](2026-11-28-chart-accessible-language/README.md)
 - [带时区交接看板证据](2026-11-28-dashboard-time-review/README.md)
 - [交接图表时间与完整阅读证据](2026-11-28-chart-locale-formatting/README.md)
