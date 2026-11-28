@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "label": "run148",
+  "artifactID": "art_g0VcE4IRj009JSI4YLSF",
+  "sameFullPublicObjectsAfterRestart": true,
+  "sourceRecords": 4,
+  "net": "18.00",
+  "utcOrder": [
+    "R02",
+    "R04",
+    "R03",
+    "R01"
+  ],
+  "utcDays": {
+    "2026-11-28": {
+      "ids": [
+        "R02",
+        "R03",
+        "R04"
+      ],
+      "net": "5.5"
+    },
+    "2026-11-29": {
+      "ids": [
+        "R01"
+      ],
+      "net": "12.5"
+    }
+  },
+  "tools": [
+    {
+      "id": "prt_g0VcE47Z200YW7DCVogB",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcE49xJ00G85yv9P8M",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ]
+}

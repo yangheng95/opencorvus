@@ -1,0 +1,180 @@
+{
+  "status": "passed",
+  "sessionID": "ses_hV8Hny04csS1HZGu02GX",
+  "messageID": "msg_7e83cc4a-9d2e-4266-adad-c979fffefc3d",
+  "artifacts": [
+    {
+      "id": "art_g0VcE60C9003r3XgLZKN",
+      "renderer": "dashboard@1",
+      "rows": 4
+    },
+    {
+      "id": "art_g0VcE63Aj004sICSWwzm",
+      "renderer": "table@1",
+      "rows": 4
+    }
+  ],
+  "sourceNet": "18.00",
+  "utcOrder": [
+    "R02",
+    "R04",
+    "R03",
+    "R01"
+  ],
+  "sharedAuthoredCategoryDomains": [
+    [
+      "普通订单",
+      "退款",
+      "免费样品"
+    ],
+    [
+      "普通订单",
+      "退款",
+      "免费样品"
+    ]
+  ],
+  "nativeCSV": {
+    "actualFilename": "北仓交接时区复核 · 全部原始记录与 UTC 对照（独立核对表）.csv",
+    "bytes": 544,
+    "columns": [
+      "记录编号",
+      "类型",
+      "金额（原始文本）",
+      "发生时间（原始时区时间戳）",
+      "对应 UTC 时刻",
+      "UTC 日期",
+      "真实时间先后序号"
+    ],
+    "originalIDOrder": [
+      "R01",
+      "R02",
+      "R03",
+      "R04"
+    ],
+    "sourceMoneyTexts": [
+      "12.50",
+      "-2.50",
+      "0.00",
+      "8.00"
+    ],
+    "exportedMoneyTexts": [
+      "12.50",
+      "'-2.50",
+      "0.00",
+      "8.00"
+    ],
+    "signedStringContract": "the source and Table keep -2.50; generated CSV prefixes that signed string with an apostrophe under the existing spreadsheet text-literal policy"
+  },
+  "candidateGuidanceRequests": [
+    {
+      "requestIndex": 3,
+      "sessionID": "ses_hV8Hny04csS1HZGu02GX",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "matches": [
+        {
+          "json_pointer": "/instructions",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 24336
+        },
+        {
+          "json_pointer": "/tools/25/description",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 1671
+        }
+      ]
+    },
+    {
+      "requestIndex": 4,
+      "sessionID": "ses_hV8Hny04csS1HZGu02GX",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "matches": [
+        {
+          "json_pointer": "/instructions",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 24336
+        },
+        {
+          "json_pointer": "/tools/25/description",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 1671
+        }
+      ]
+    },
+    {
+      "requestIndex": 5,
+      "sessionID": "ses_hV8Hny04csS1HZGu02GX",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "matches": [
+        {
+          "json_pointer": "/instructions",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 24336
+        },
+        {
+          "json_pointer": "/tools/25/description",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 1671
+        }
+      ]
+    },
+    {
+      "requestIndex": 6,
+      "sessionID": "ses_hV8Hny04csS1HZGu02GX",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "matches": [
+        {
+          "json_pointer": "/instructions",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 24336
+        },
+        {
+          "json_pointer": "/tools/25/description",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 1671
+        }
+      ]
+    }
+  ],
+  "evidenceMethod": "complete guidance text matched in actual Provider inputs with request context and decoded pointers; source/body digests are not acceptance criteria",
+  "tools": [
+    {
+      "id": "prt_g0VcE5sWs0040Qsg2GS9",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcE5v0Z00TDwygB3IG",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcE60kS00uq71YGaIf",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ]
+}

@@ -1,0 +1,373 @@
+[
+  {
+    "id": "art_g0VcE4IRj009JSI4YLSF",
+    "sessionID": "ses_h5Ybi3uVlNbPb8f0I0Su",
+    "messageID": "msg_g0VcE47hm001XoTVSjhO",
+    "payload": {
+      "schemaVersion": "1",
+      "title": "交接记录时区复核看板 20261128",
+      "renderer": "dashboard@1",
+      "metrics": [
+        {
+          "id": "all-count",
+          "label": "全量记录数（固定，不随筛选）",
+          "value": 4,
+          "unit": "条"
+        },
+        {
+          "id": "all-net",
+          "label": "全量净额（原金额带符号求和，无币种）",
+          "value": "18.00"
+        },
+        {
+          "id": "all-positive",
+          "label": "全量正金额合计（不含零金额）",
+          "value": "20.50"
+        },
+        {
+          "id": "all-refund",
+          "label": "全量退款合计（保留负号）",
+          "value": "-2.50"
+        },
+        {
+          "id": "all-zero",
+          "label": "全量零金额样品数（保留记录）",
+          "value": 1,
+          "unit": "条"
+        }
+      ],
+      "filters": [
+        {
+          "id": "type-filter",
+          "label": "记录类型（同步筛选下方全部视图）",
+          "field": "类型",
+          "values": [
+            "普通订单",
+            "退款",
+            "免费样品"
+          ]
+        },
+        {
+          "id": "utc-date-filter",
+          "label": "UTC 日期（非原始本地日期）",
+          "field": "UTC日期",
+          "values": [
+            "2026-11-28",
+            "2026-11-29"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "event-amounts",
+          "title": "逐笔金额 · 真实发生时刻（UTC）",
+          "spec": {
+            "description": "来源：events-review.csv 第2–5行。每个点代表一条原始记录，不聚合、不连线；负数退款和零金额均保留。横轴与提示统一使用UTC；原始时间戳以独立文本保留。",
+            "mark": {
+              "type": "point",
+              "filled": true,
+              "size": 110
+            },
+            "encoding": {
+              "x": {
+                "field": "UTC时刻",
+                "type": "temporal",
+                "scale": {
+                  "type": "utc"
+                },
+                "axis": {
+                  "title": "真实发生时刻（UTC）",
+                  "format": "%m-%d %H:%M"
+                }
+              },
+              "y": {
+                "field": "金额",
+                "type": "quantitative",
+                "scale": {
+                  "zero": true
+                },
+                "axis": {
+                  "title": "逐笔金额（未指定币种）"
+                }
+              },
+              "color": {
+                "field": "类型",
+                "type": "nominal",
+                "legend": {
+                  "title": "记录类型"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "记录编号",
+                  "type": "nominal",
+                  "title": "记录编号"
+                },
+                {
+                  "field": "类型",
+                  "type": "nominal",
+                  "title": "类型"
+                },
+                {
+                  "field": "金额",
+                  "type": "quantitative",
+                  "format": ".2f",
+                  "title": "金额（未指定币种）"
+                },
+                {
+                  "field": "原始时间戳",
+                  "type": "nominal",
+                  "title": "原始时区时间戳"
+                },
+                {
+                  "field": "UTC核对文本",
+                  "type": "nominal",
+                  "title": "对应 UTC 时刻"
+                },
+                {
+                  "field": "UTC日期",
+                  "type": "nominal",
+                  "title": "UTC 日期"
+                }
+              ]
+            }
+          },
+          "span": "full"
+        },
+        {
+          "id": "type-net",
+          "title": "按类型汇总净额 · 当前筛选内原金额带符号求和",
+          "spec": {
+            "description": "净额口径：当前筛选命中的每条记录金额直接带符号相加，不去除退款或零金额；不是利润。没有命中记录的类型不展示。",
+            "transform": [
+              {
+                "aggregate": [
+                  {
+                    "op": "sum",
+                    "field": "金额",
+                    "as": "类型净额"
+                  },
+                  {
+                    "op": "count",
+                    "as": "记录数"
+                  }
+                ],
+                "groupby": [
+                  "类型"
+                ]
+              }
+            ],
+            "layer": [
+              {
+                "mark": {
+                  "type": "bar"
+                },
+                "encoding": {
+                  "x": {
+                    "field": "类型",
+                    "type": "nominal",
+                    "axis": {
+                      "title": "记录类型"
+                    }
+                  },
+                  "y": {
+                    "field": "类型净额",
+                    "type": "quantitative",
+                    "scale": {
+                      "zero": true
+                    },
+                    "axis": {
+                      "title": "净额（未指定币种；非利润）"
+                    }
+                  },
+                  "color": {
+                    "field": "类型",
+                    "type": "nominal",
+                    "legend": null
+                  },
+                  "tooltip": [
+                    {
+                      "field": "类型",
+                      "type": "nominal"
+                    },
+                    {
+                      "field": "类型净额",
+                      "type": "quantitative",
+                      "format": ".2f",
+                      "title": "带符号求和净额"
+                    },
+                    {
+                      "field": "记录数",
+                      "type": "quantitative",
+                      "title": "筛选内记录数"
+                    }
+                  ]
+                }
+              },
+              {
+                "mark": {
+                  "type": "text",
+                  "dy": -10
+                },
+                "encoding": {
+                  "x": {
+                    "field": "类型",
+                    "type": "nominal"
+                  },
+                  "y": {
+                    "field": "类型净额",
+                    "type": "quantitative"
+                  },
+                  "text": {
+                    "field": "类型净额",
+                    "type": "quantitative",
+                    "format": ".2f"
+                  }
+                }
+              }
+            ]
+          },
+          "span": "full"
+        },
+        {
+          "id": "original-records",
+          "title": "原始记录核对表 · 随筛选同步更新（清除筛选查看全部 4 条）",
+          "spec": {
+            "description": "原始字段来自 events-review.csv:2–5；UTC时刻和UTC日期是根据每条原始时间戳的明确偏移量换算的核对字段。金额文本保留原文件两位小数。表格各单元格悬停均可核对完整记录。",
+            "transform": [
+              {
+                "fold": [
+                  "记录编号",
+                  "类型",
+                  "原始金额",
+                  "原始时间戳",
+                  "UTC核对文本"
+                ],
+                "as": [
+                  "核对列",
+                  "显示值"
+                ]
+              }
+            ],
+            "mark": {
+              "type": "text",
+              "align": "center",
+              "baseline": "middle"
+            },
+            "encoding": {
+              "x": {
+                "field": "核对列",
+                "type": "nominal",
+                "sort": [
+                  "记录编号",
+                  "类型",
+                  "原始金额",
+                  "原始时间戳",
+                  "UTC核对文本"
+                ],
+                "axis": {
+                  "orient": "top",
+                  "labelAngle": 0,
+                  "title": null,
+                  "labelLimit": 300
+                }
+              },
+              "y": {
+                "field": "记录编号",
+                "type": "nominal",
+                "sort": [
+                  "R01",
+                  "R02",
+                  "R03",
+                  "R04"
+                ],
+                "axis": {
+                  "title": null
+                }
+              },
+              "text": {
+                "field": "显示值",
+                "type": "nominal"
+              },
+              "tooltip": [
+                {
+                  "field": "记录编号",
+                  "type": "nominal"
+                },
+                {
+                  "field": "类型",
+                  "type": "nominal"
+                },
+                {
+                  "field": "金额",
+                  "type": "quantitative",
+                  "format": ".2f",
+                  "title": "金额"
+                },
+                {
+                  "field": "原始时间戳",
+                  "type": "nominal",
+                  "title": "原始时区时间戳"
+                },
+                {
+                  "field": "UTC核对文本",
+                  "type": "nominal",
+                  "title": "对应 UTC 时刻"
+                },
+                {
+                  "field": "UTC日期",
+                  "type": "nominal"
+                }
+              ]
+            }
+          },
+          "span": "full"
+        }
+      ],
+      "data": [
+        {
+          "记录编号": "R01",
+          "类型": "普通订单",
+          "金额": 12.5,
+          "原始金额": "12.50",
+          "原始时间戳": "2026-11-28T23:30:00-05:00",
+          "UTC时刻": "2026-11-29T04:30:00Z",
+          "UTC核对文本": "2026-11-29 04:30:00 UTC",
+          "UTC日期": "2026-11-29"
+        },
+        {
+          "记录编号": "R02",
+          "类型": "退款",
+          "金额": -2.5,
+          "原始金额": "-2.50",
+          "原始时间戳": "2026-11-29T01:00:00+14:00",
+          "UTC时刻": "2026-11-28T11:00:00Z",
+          "UTC核对文本": "2026-11-28 11:00:00 UTC",
+          "UTC日期": "2026-11-28"
+        },
+        {
+          "记录编号": "R03",
+          "类型": "免费样品",
+          "金额": 0,
+          "原始金额": "0.00",
+          "原始时间戳": "2026-11-28T18:00:00Z",
+          "UTC时刻": "2026-11-28T18:00:00Z",
+          "UTC核对文本": "2026-11-28 18:00:00 UTC",
+          "UTC日期": "2026-11-28"
+        },
+        {
+          "记录编号": "R04",
+          "类型": "普通订单",
+          "金额": 8,
+          "原始金额": "8.00",
+          "原始时间戳": "2026-11-27T23:30:00-12:00",
+          "UTC时刻": "2026-11-28T11:30:00Z",
+          "UTC核对文本": "2026-11-28 11:30:00 UTC",
+          "UTC日期": "2026-11-28"
+        }
+      ]
+    },
+    "timeCreated": 1795828243647,
+    "timeUpdated": 1795828243647
+  }
+]

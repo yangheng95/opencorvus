@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [带时区交接看板证据](2026-11-28-dashboard-time-review/README.md)
 - [交接图表时间与完整阅读证据](2026-11-28-chart-locale-formatting/README.md)
 - [带时区交接表排序证据](2026-11-28-table-date-order/README.md)
 - [跨对话项目记忆接续证据](2026-11-28-memory-session-continuity/README.md)

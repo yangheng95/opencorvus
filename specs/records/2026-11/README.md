@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [带时区交接看板的真实筛选与多视图](2026-11-28-dashboard-time-review.md)
 - [交接图表的时间语义与完整阅读](2026-11-28-chart-locale-formatting.md)
 - [带时区交接记录表的日期排序](2026-11-28-table-date-order.md)
 - [跨对话的项目记忆接续与真实交付](2026-11-28-memory-session-continuity.md)

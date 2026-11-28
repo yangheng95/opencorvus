@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "services": [
+    {
+      "label": "run147",
+      "pid": 25000,
+      "originalExecHandle": 81431,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hXzgWcrVHZ7o4ia1Yjsb",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    },
+    {
+      "label": "run148",
+      "pid": 17016,
+      "originalExecHandle": 8097,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hbs3yQbfcyvLucrhXkcb",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    }
+  ],
+  "ownedPort63284": "retired",
+  "ownedTab241805424": "closed through bound browser API",
+  "preferences": "unchanged; zh-CN/system",
+  "priorLimitation": "old tab241805392 remains unbound, not represented as closed"
+}

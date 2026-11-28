@@ -1,0 +1,38 @@
+{
+  "scope": "Actual public fields only; opaque Provider reasoning/protocol metadata omitted from evidence. Product messages/storage unchanged; full API objects compared before projection.",
+  "files": [
+    {
+      "file": "run147-dashboard-messages.json",
+      "sourceMessages": 4,
+      "projectedMessages": 4,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcE49iy00fOcCdT0ph",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run148-dashboard-messages.json",
+      "sourceMessages": 4,
+      "projectedMessages": 4,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcE49iy00fOcCdT0ph",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run148-candidate-review-messages.json",
+      "sourceMessages": 5,
+      "projectedMessages": 5,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcE5uS6002PPhNd9Ca",
+          "type": "reasoning"
+        }
+      ]
+    }
+  ]
+}

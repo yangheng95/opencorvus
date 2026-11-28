@@ -4,6 +4,7 @@ import {
   CHAT_INTERACTIVE_ARTIFACT_EXAMPLE_INPUTS,
   CHAT_INTERACTIVE_ARTIFACT_GUIDANCE,
   CHART_ARTIFACT_TIME_GUIDANCE,
+  DASHBOARD_ARTIFACT_REVIEW_GUIDANCE,
   PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION,
 } from "../../src/prompt/fragments/interactive-artifact-guidance"
 import { PublishInteractiveArtifactParameters } from "../../src/tool/publish-interactive-artifact"
@@ -36,5 +37,11 @@ describe("interactive artifact prompt guidance", () => {
     expect(PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION).toContain(CHART_ARTIFACT_TIME_GUIDANCE)
     expect(PrimaryAssistantRegistry.nativeDefaultPrompt("chat")).toContain(CHART_ARTIFACT_TIME_GUIDANCE)
     expect(WORK_RUNTIME_PROMPT).toContain(CHART_ARTIFACT_TIME_GUIDANCE)
+  })
+
+  test("projects the shared Dashboard review contract through the tool, Chat and Work", () => {
+    expect(PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION).toContain(DASHBOARD_ARTIFACT_REVIEW_GUIDANCE)
+    expect(PrimaryAssistantRegistry.nativeDefaultPrompt("chat")).toContain(DASHBOARD_ARTIFACT_REVIEW_GUIDANCE)
+    expect(WORK_RUNTIME_PROMPT).toContain(DASHBOARD_ARTIFACT_REVIEW_GUIDANCE)
   })
 })

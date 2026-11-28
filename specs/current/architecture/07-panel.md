@@ -6286,6 +6286,13 @@ configuration retain native override semantics. Global Vega locale setters are
 not part of this lifecycle. The shared publication guidance keeps timestamp
 fields temporal across axes and tooltips, with original text in a separate field
 and timezone labels matching the actual encoding semantics.
+Dashboard publication guidance also gives categorical color encodings the same
+ordered explicit domain from the full inline data across views, so filtering
+keeps each category's palette identity. Long-text record verification uses a
+companion native Table in the same assistant turn; its independent controls are
+explained as such. Categorical text marks remain chart labels, rather than a
+replacement for the existing grid in this long-record case. These authoring
+contracts do not rewrite historical publications or add a host routing decision.
 The shared theme configuration
 supplies the native View's default background from the product surface token,
 so SVG/PNG exports carry the same background as the visible plot. Explicit
