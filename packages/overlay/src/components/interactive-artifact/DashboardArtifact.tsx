@@ -25,6 +25,7 @@ function DashboardView(props: { view: DashboardViewPayload; data: DashboardRow[]
     host: () => host,
     observed: () => host?.parentElement ?? undefined,
     source: () => props.view.spec,
+    label: () => props.view.title,
     data: () => props.data,
     measure: () => {
       const width = Math.min(Math.floor(host?.parentElement?.clientWidth ?? 0), MAX_DASHBOARD_WIDTH)

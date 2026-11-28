@@ -12,6 +12,7 @@ export function ChartArtifact(props: { payload: ChartPayload }) {
     host: () => host,
     observed: () => host,
     source: () => props.payload.spec,
+    label: () => props.payload.title,
     data: () => props.payload.data,
     measure: () => {
       if (!host) return { width: 0, height: 0 }

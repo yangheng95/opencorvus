@@ -1,0 +1,745 @@
+[
+  {
+    "info": {
+      "id": "msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2",
+      "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+      "author": "user",
+      "role": "user",
+      "time": {
+        "created": 1795825338546
+      },
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "agent": "work",
+      "orderKey": "v1:0001795825338546:0000000000000030:0000000000000000:message:msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcDs6hG00ibYYOwEFR",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2",
+        "orderKey": "v1:0001795825338549:0000000000000031:0000000000000000:part:prt_g0VcDs6hG00ibYYOwEFR",
+        "type": "text",
+        "text": "请只读当前项目的 events.csv，发表一张题为“北仓交接记录金额图 20261128”的交互图供接班同事复核：横轴是真实发生时间，纵轴是每条记录金额，悬停可核对记录编号、类型、金额和原始时间戳。保留四条记录、退款负数和零金额样品，按各自时区理解真实先后；不要据此推断利润、币种或业务趋势。图应能在页面展开并通过原生菜单导出图片。只阅读和发表，不执行脚本、不修改文件、不委派。"
+      }
+    ]
+  },
+  {
+    "info": {
+      "id": "msg_g0VcDs6iq00OmWj4Y0Pt",
+      "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+      "author": "work",
+      "role": "assistant",
+      "time": {
+        "created": 1795825338644,
+        "completed": 1795825342629
+      },
+      "parentID": "msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2",
+      "acceptedInputMessageIDs": [
+        "msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "work",
+      "finish": "tool-calls",
+      "orderKey": "v1:0001795825338644:0000000000000030:0000000000000000:message:msg_g0VcDs6iq00OmWj4Y0Pt"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcDs6rU00ZMkcAxtyK",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs6iq00OmWj4Y0Pt",
+        "orderKey": "v1:0001795825339180:0000000000000031:0000000000000000:part:prt_g0VcDs6rU00ZMkcAxtyK",
+        "type": "step-start"
+      },
+      {
+        "id": "prt_g0VcDs7O000MnQGXwJRc",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs6iq00OmWj4Y0Pt",
+        "orderKey": "v1:0001795825341196:0000000000000031:0000000000000000:part:prt_g0VcDs7O000MnQGXwJRc",
+        "type": "text",
+        "text": "我会只读取 `events.csv`，核对四条记录的原始时间戳和时区，再发表按真实发生时间定位、悬停可复核原始字段的交互图。",
+        "time": {
+          "start": 1795825341196,
+          "end": 1795825342422
+        }
+      },
+      {
+        "id": "prt_g0VcDs7hs00IrNB8ZH6h",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs6iq00OmWj4Y0Pt",
+        "orderKey": "v1:0001795825342509:0000000000000031:0000000000000000:part:prt_g0VcDs7hs00IrNB8ZH6h",
+        "type": "tool",
+        "callID": "call_fdddd546a3424af8a2212b4e3b7a57f9",
+        "tool": "read",
+        "state": {
+          "status": "completed",
+          "input": {
+            "filePath": "events.csv"
+          },
+          "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north\\events.csv</path>\n<type>file</type>\n<content>1: 记录编号,类型,金额,发生时间\n2: R01,普通订单,12.50,2026-11-28T23:30:00-05:00\n3: R02,退款,-2.50,2026-11-29T01:00:00+14:00\n4: R03,免费样品,0.00,2026-11-28T18:00:00Z\n5: R04,普通订单,8.00,2026-11-27T23:30:00-12:00\n\n(End of file - total 5 lines)\n</content>",
+          "title": "events.csv",
+          "metadata": {
+            "preview": "记录编号,类型,金额,发生时间\nR01,普通订单,12.50,2026-11-28T23:30:00-05:00\nR02,退款,-2.50,2026-11-29T01:00:00+14:00\nR03,免费样品,0.00,2026-11-28T18:00:00Z\nR04,普通订单,8.00,2026-11-27T23:30:00-12:00",
+            "truncated": false,
+            "loaded": [],
+            "readType": "text",
+            "offset": 1,
+            "lines": 5,
+            "totalLines": 5
+          },
+          "time": {
+            "start": 1795825342428,
+            "end": 1795825342584
+          }
+        }
+      },
+      {
+        "id": "prt_g0VcDs7kS00FSmnlJREe",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs6iq00OmWj4Y0Pt",
+        "orderKey": "v1:0001795825342588:0000000000000031:0000000000000000:part:prt_g0VcDs7kS00FSmnlJREe",
+        "type": "source-file",
+        "sourceId": "fa9a49efd7e11e9d9f40ec2caed947538583dc6b66ed6bdce270b1f08c3f56a0",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north\\events.csv",
+        "title": "events.csv",
+        "snippet": "记录编号,类型,金额,发生时间\nR01,普通订单,12.50,2026-11-28T23:30:00-05:00\nR02,退款,-2.50,2026-11-29T01:00:00+14:00\nR03,免费样品,0.00,2026-11-28T18:00:00Z\nR04,普通订单,8.00,2026-11-27T23:30:00-12:00",
+        "provider": "opencorvus-read",
+        "toolPartID": "prt_g0VcDs7hs00IrNB8ZH6h"
+      },
+      {
+        "id": "prt_g0VcDs7kW00lpWP0KS0p",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs6iq00OmWj4Y0Pt",
+        "orderKey": "v1:0001795825342592:0000000000000031:0000000000000000:part:prt_g0VcDs7kW00lpWP0KS0p",
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 38066,
+          "input": 37995,
+          "output": 71,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    ]
+  },
+  {
+    "info": {
+      "id": "msg_g0VcDs7lZ006ndMSwP5m",
+      "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+      "author": "work",
+      "role": "assistant",
+      "time": {
+        "created": 1795825342657,
+        "completed": 1795825360870
+      },
+      "parentID": "msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2",
+      "acceptedInputMessageIDs": [
+        "msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "work",
+      "finish": "tool-calls",
+      "orderKey": "v1:0001795825342657:0000000000000030:0000000000000000:message:msg_g0VcDs7lZ006ndMSwP5m"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcDs7qn00AVHuOfUoG",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs7lZ006ndMSwP5m",
+        "orderKey": "v1:0001795825342981:0000000000000031:0000000000000000:part:prt_g0VcDs7qn00AVHuOfUoG",
+        "type": "step-start"
+      },
+      {
+        "id": "prt_g0VcDs8t3007sVbXGe0J",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs7lZ006ndMSwP5m",
+        "orderKey": "v1:0001795825346965:0000000000000031:0000000000000000:part:prt_g0VcDs8t3007sVbXGe0J",
+        "type": "text",
+        "text": "文件包含四条记录，退款为 `-2.50`，免费样品为 `0.00`。按原始时间戳中的时区换算，真实先后是 R02 → R04 → R03 → R01；图中将统一用 UTC 标示横轴，并在悬停信息中保留原始时间戳。",
+        "time": {
+          "start": 1795825346965,
+          "end": 1795825348633
+        }
+      },
+      {
+        "id": "prt_g0VcDs9K50055FjXl61f",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs7lZ006ndMSwP5m",
+        "orderKey": "v1:0001795825360621:0000000000000031:0000000000000000:part:prt_g0VcDs9K50055FjXl61f",
+        "type": "tool",
+        "callID": "call_b3335ba19d2f4b3280560d8cbb8cf800",
+        "tool": "publish_interactive_artifact",
+        "state": {
+          "status": "completed",
+          "input": {
+            "artifact": {
+              "schemaVersion": "1",
+              "title": "北仓交接记录金额图 20261128",
+              "content": {
+                "renderer": "chart@1",
+                "spec": {
+                  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                  "description": "来源：当前项目 events.csv，全部四条记录。横轴按时间戳各自的时区偏移换算为真实时刻，统一以 UTC 显示；悬停保留原始时间戳。金额不代表利润，不指定币种，不推断业务趋势。",
+                  "width": "container",
+                  "height": 340,
+                  "layer": [
+                    {
+                      "mark": {
+                        "type": "rule",
+                        "color": "#808080",
+                        "strokeDash": [
+                          4,
+                          4
+                        ]
+                      },
+                      "encoding": {
+                        "y": {
+                          "datum": 0,
+                          "type": "quantitative"
+                        }
+                      }
+                    },
+                    {
+                      "mark": {
+                        "type": "point",
+                        "filled": true,
+                        "size": 140
+                      },
+                      "encoding": {
+                        "x": {
+                          "field": "真实发生时间UTC",
+                          "type": "temporal",
+                          "scale": {
+                            "type": "utc"
+                          },
+                          "axis": {
+                            "title": "真实发生时间（UTC）",
+                            "format": "%m-%d %H:%M",
+                            "labelAngle": -25
+                          }
+                        },
+                        "y": {
+                          "field": "金额",
+                          "type": "quantitative",
+                          "scale": {
+                            "zero": true
+                          },
+                          "axis": {
+                            "title": "每条记录金额（未指定币种）",
+                            "format": ".2f"
+                          }
+                        },
+                        "color": {
+                          "field": "类型",
+                          "type": "nominal",
+                          "legend": {
+                            "title": "记录类型"
+                          }
+                        },
+                        "tooltip": [
+                          {
+                            "field": "记录编号",
+                            "type": "nominal",
+                            "title": "记录编号"
+                          },
+                          {
+                            "field": "类型",
+                            "type": "nominal",
+                            "title": "类型"
+                          },
+                          {
+                            "field": "金额",
+                            "type": "quantitative",
+                            "title": "金额",
+                            "format": ".2f"
+                          },
+                          {
+                            "field": "发生时间",
+                            "type": "nominal",
+                            "title": "原始时间戳"
+                          },
+                          {
+                            "field": "真实发生时间UTC",
+                            "type": "nominal",
+                            "title": "真实发生时间（UTC）"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "data": [
+                  {
+                    "记录编号": "R01",
+                    "类型": "普通订单",
+                    "金额": 12.5,
+                    "发生时间": "2026-11-28T23:30:00-05:00",
+                    "真实发生时间UTC": "2026-11-29T04:30:00Z"
+                  },
+                  {
+                    "记录编号": "R02",
+                    "类型": "退款",
+                    "金额": -2.5,
+                    "发生时间": "2026-11-29T01:00:00+14:00",
+                    "真实发生时间UTC": "2026-11-28T11:00:00Z"
+                  },
+                  {
+                    "记录编号": "R03",
+                    "类型": "免费样品",
+                    "金额": 0,
+                    "发生时间": "2026-11-28T18:00:00Z",
+                    "真实发生时间UTC": "2026-11-28T18:00:00Z"
+                  },
+                  {
+                    "记录编号": "R04",
+                    "类型": "普通订单",
+                    "金额": 8,
+                    "发生时间": "2026-11-27T23:30:00-12:00",
+                    "真实发生时间UTC": "2026-11-28T11:30:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "output": "{\"artifactID\":\"art_g0VcDsCUO00tNs09B8KT\",\"renderer\":\"chart@1\"}",
+          "title": "北仓交接记录金额图 20261128",
+          "metadata": {
+            "artifactID": "art_g0VcDsCUO00tNs09B8KT",
+            "renderer": "chart@1",
+            "truncated": false
+          },
+          "time": {
+            "start": 1795825348641,
+            "end": 1795825360816
+          }
+        }
+      },
+      {
+        "id": "prt_g0VcDsCUP00t47sSm9OH",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs7lZ006ndMSwP5m",
+        "orderKey": "v1:0001795825360819:0000000000000031:0000000000000000:part:prt_g0VcDsCUP00t47sSm9OH",
+        "type": "interactive-artifact",
+        "toolPartID": "prt_g0VcDs9K50055FjXl61f",
+        "artifactID": "art_g0VcDsCUO00tNs09B8KT"
+      },
+      {
+        "id": "prt_g0VcDsCUZ00h0Hx9u2eC",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDs7lZ006ndMSwP5m",
+        "orderKey": "v1:0001795825360824:0000000000000031:0000000000000000:part:prt_g0VcDsCUZ00h0Hx9u2eC",
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 39131,
+          "input": 450,
+          "output": 706,
+          "reasoning": 87,
+          "cache": {
+            "read": 37888,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    ]
+  },
+  {
+    "info": {
+      "id": "msg_g0VcDsCVh00AcJmzMcBL",
+      "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+      "author": "work",
+      "role": "assistant",
+      "time": {
+        "created": 1795825360893,
+        "completed": 1795825366272
+      },
+      "parentID": "msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2",
+      "acceptedInputMessageIDs": [
+        "msg_0d1f5be8-230d-4315-bed2-a060f2dbfca2"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "work",
+      "finish": "stop",
+      "orderKey": "v1:0001795825360893:0000000000000030:0000000000000000:message:msg_g0VcDsCVh00AcJmzMcBL"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcDsCbe00ETPu1cChc",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDsCVh00AcJmzMcBL",
+        "orderKey": "v1:0001795825361262:0000000000000031:0000000000000000:part:prt_g0VcDsCbe00ETPu1cChc",
+        "type": "step-start"
+      },
+      {
+        "id": "prt_g0VcDsD6800PB2v5aKCr",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDsCVh00AcJmzMcBL",
+        "orderKey": "v1:0001795825363153:0000000000000031:0000000000000000:part:prt_g0VcDsD6800PB2v5aKCr",
+        "type": "text",
+        "text": "已发表 **“北仓交接记录金额图 20261128”**。\n\n- 四条记录全部保留，包括退款 `-2.50` 和零金额样品。\n- 横轴按各自时区换算后的真实时间定位，统一显示 UTC；纵轴为每条记录金额，不作汇总。\n- 悬停数据点可核对记录编号、类型、金额及原始时间戳。\n- 可使用图表卡片的展开控件放大查看，通过原生菜单导出图片。\n\n来源仅为当前项目 `events.csv`；未执行脚本、修改文件或委派，也未推断利润、币种或业务趋势。",
+        "time": {
+          "start": 1795825363152,
+          "end": 1795825366080
+        }
+      },
+      {
+        "id": "prt_g0VcDsDtv00UJdsKh1B6",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDsCVh00AcJmzMcBL",
+        "orderKey": "v1:0001795825366239:0000000000000031:0000000000000000:part:prt_g0VcDsDtv00UJdsKh1B6",
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 39482,
+          "input": 12068,
+          "output": 150,
+          "reasoning": 0,
+          "cache": {
+            "read": 27264,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    ]
+  },
+  {
+    "info": {
+      "id": "msg_523c86fc-7ae8-4009-b246-1155b027d13a",
+      "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+      "author": "user",
+      "role": "user",
+      "time": {
+        "created": 1795825518539
+      },
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "agent": "work",
+      "orderKey": "v1:0001795825518539:0000000000000030:0000000000000000:message:msg_523c86fc-7ae8-4009-b246-1155b027d13a"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcDsrWN00X9tj8j1J4",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_523c86fc-7ae8-4009-b246-1155b027d13a",
+        "orderKey": "v1:0001795825518542:0000000000000031:0000000000000000:part:prt_g0VcDsrWN00X9tj8j1J4",
+        "type": "text",
+        "text": "请另外发表一个题为“北仓交接金额图·自动时间刻度 20261128”的版本供中英文界面复核，仍只使用刚才 events.csv 的四条记录，保留退款和零额。时间轴保持真实时区换算后的先后，但让原生图表自行选择时间刻度与格式，不在规格中写死日期模板或自定义刻度文字；金额仍为逐条金额。悬停的“真实发生时间”请显示可读的UTC日期时间，不要显示毫秒数，同时保留每条原始时间戳便于核对。只阅读和发表，不执行脚本、不改文件、不委派。"
+      }
+    ]
+  },
+  {
+    "info": {
+      "id": "msg_g0VcDsrYF00zF3IVH4TO",
+      "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+      "author": "work",
+      "role": "assistant",
+      "time": {
+        "created": 1795825518655,
+        "completed": 1795825537369
+      },
+      "parentID": "msg_523c86fc-7ae8-4009-b246-1155b027d13a",
+      "acceptedInputMessageIDs": [
+        "msg_523c86fc-7ae8-4009-b246-1155b027d13a"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "work",
+      "finish": "tool-calls",
+      "orderKey": "v1:0001795825518655:0000000000000030:0000000000000000:message:msg_g0VcDsrYF00zF3IVH4TO"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcDsrlZ009bOq5034i",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDsrYF00zF3IVH4TO",
+        "orderKey": "v1:0001795825519481:0000000000000031:0000000000000000:part:prt_g0VcDsrlZ009bOq5034i",
+        "type": "step-start"
+      },
+      {
+        "id": "prt_g0VcDssHk00zeKfVdDmh",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDsrYF00zF3IVH4TO",
+        "orderKey": "v1:0001795825521476:0000000000000031:0000000000000000:part:prt_g0VcDssHk00zeKfVdDmh",
+        "type": "text",
+        "text": "我会沿用刚才读取的四条记录，另外发表一个由原生图表自动选择时间刻度与格式的版本；悬停中的真实发生时间将显示为可读的 UTC 日期时间，并保留原始时间戳。",
+        "time": {
+          "start": 1795825521476,
+          "end": 1795825523007
+        }
+      },
+      {
+        "id": "prt_g0VcDssgW00mO7pAzCYm",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDsrYF00zF3IVH4TO",
+        "orderKey": "v1:0001795825537234:0000000000000031:0000000000000000:part:prt_g0VcDssgW00mO7pAzCYm",
+        "type": "tool",
+        "callID": "call_e238c21ae2584ab7818ff944df21f9b7",
+        "tool": "publish_interactive_artifact",
+        "state": {
+          "status": "completed",
+          "input": {
+            "artifact": {
+              "schemaVersion": "1",
+              "title": "北仓交接金额图·自动时间刻度 20261128",
+              "content": {
+                "renderer": "chart@1",
+                "spec": {
+                  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                  "description": "来源：当前项目 events.csv 中此前读取的全部四条记录。真实时刻按各条原始时间戳的时区偏移换算，横轴统一采用 UTC，时间刻度及格式由原生图表自动选择。悬停真实发生时间为可读 UTC 文本，原始时间戳完整保留。金额逐条呈现，不作利润、币种或业务趋势推断。",
+                  "width": "container",
+                  "height": 340,
+                  "layer": [
+                    {
+                      "mark": {
+                        "type": "rule",
+                        "color": "#808080",
+                        "strokeDash": [
+                          4,
+                          4
+                        ]
+                      },
+                      "encoding": {
+                        "y": {
+                          "datum": 0,
+                          "type": "quantitative"
+                        }
+                      }
+                    },
+                    {
+                      "mark": {
+                        "type": "point",
+                        "filled": true,
+                        "size": 140
+                      },
+                      "encoding": {
+                        "x": {
+                          "field": "真实时刻UTC",
+                          "type": "temporal",
+                          "scale": {
+                            "type": "utc"
+                          },
+                          "axis": {
+                            "title": "真实发生时间 / Event time (UTC)"
+                          }
+                        },
+                        "y": {
+                          "field": "金额",
+                          "type": "quantitative",
+                          "scale": {
+                            "zero": true
+                          },
+                          "axis": {
+                            "title": "逐条金额 / Amount per record",
+                            "format": ".2f"
+                          }
+                        },
+                        "color": {
+                          "field": "类型",
+                          "type": "nominal",
+                          "legend": {
+                            "title": "类型 / Type"
+                          }
+                        },
+                        "tooltip": [
+                          {
+                            "field": "记录编号",
+                            "type": "nominal",
+                            "title": "记录编号 / Record ID"
+                          },
+                          {
+                            "field": "类型",
+                            "type": "nominal",
+                            "title": "类型 / Type"
+                          },
+                          {
+                            "field": "金额",
+                            "type": "quantitative",
+                            "title": "金额 / Amount",
+                            "format": ".2f"
+                          },
+                          {
+                            "field": "真实发生时间",
+                            "type": "nominal",
+                            "title": "真实发生时间 / Event time (UTC)"
+                          },
+                          {
+                            "field": "原始时间戳",
+                            "type": "nominal",
+                            "title": "原始时间戳 / Original timestamp"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "data": [
+                  {
+                    "记录编号": "R01",
+                    "类型": "普通订单",
+                    "金额": 12.5,
+                    "真实时刻UTC": "2026-11-29T04:30:00Z",
+                    "真实发生时间": "2026-11-29 04:30:00 UTC",
+                    "原始时间戳": "2026-11-28T23:30:00-05:00"
+                  },
+                  {
+                    "记录编号": "R02",
+                    "类型": "退款",
+                    "金额": -2.5,
+                    "真实时刻UTC": "2026-11-28T11:00:00Z",
+                    "真实发生时间": "2026-11-28 11:00:00 UTC",
+                    "原始时间戳": "2026-11-29T01:00:00+14:00"
+                  },
+                  {
+                    "记录编号": "R03",
+                    "类型": "免费样品",
+                    "金额": 0,
+                    "真实时刻UTC": "2026-11-28T18:00:00Z",
+                    "真实发生时间": "2026-11-28 18:00:00 UTC",
+                    "原始时间戳": "2026-11-28T18:00:00Z"
+                  },
+                  {
+                    "记录编号": "R04",
+                    "类型": "普通订单",
+                    "金额": 8,
+                    "真实时刻UTC": "2026-11-28T11:30:00Z",
+                    "真实发生时间": "2026-11-28 11:30:00 UTC",
+                    "原始时间戳": "2026-11-27T23:30:00-12:00"
+                  }
+                ]
+              }
+            }
+          },
+          "output": "{\"artifactID\":\"art_g0VcDswPG00OSZq6eFK4\",\"renderer\":\"chart@1\"}",
+          "title": "北仓交接金额图·自动时间刻度 20261128",
+          "metadata": {
+            "artifactID": "art_g0VcDswPG00OSZq6eFK4",
+            "renderer": "chart@1",
+            "truncated": false
+          },
+          "time": {
+            "start": 1795825523012,
+            "end": 1795825537321
+          }
+        }
+      },
+      {
+        "id": "prt_g0VcDswPH00Ww5zBBC4n",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDsrYF00zF3IVH4TO",
+        "orderKey": "v1:0001795825537323:0000000000000031:0000000000000000:part:prt_g0VcDswPH00Ww5zBBC4n",
+        "type": "interactive-artifact",
+        "toolPartID": "prt_g0VcDssgW00mO7pAzCYm",
+        "artifactID": "art_g0VcDswPG00OSZq6eFK4"
+      },
+      {
+        "id": "prt_g0VcDswPO00EjiWKS4Is",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDsrYF00zF3IVH4TO",
+        "orderKey": "v1:0001795825537326:0000000000000031:0000000000000000:part:prt_g0VcDswPO00EjiWKS4Is",
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 40434,
+          "input": 342,
+          "output": 796,
+          "reasoning": 0,
+          "cache": {
+            "read": 39296,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    ]
+  },
+  {
+    "info": {
+      "id": "msg_g0VcDswQX00i87JKiaFn",
+      "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+      "author": "work",
+      "role": "assistant",
+      "time": {
+        "created": 1795825537397,
+        "completed": 1795825544673
+      },
+      "parentID": "msg_523c86fc-7ae8-4009-b246-1155b027d13a",
+      "acceptedInputMessageIDs": [
+        "msg_523c86fc-7ae8-4009-b246-1155b027d13a"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "work",
+      "finish": "stop",
+      "orderKey": "v1:0001795825537397:0000000000000030:0000000000000000:message:msg_g0VcDswQX00i87JKiaFn"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcDswWI00Dm2Si3iwY",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDswQX00i87JKiaFn",
+        "orderKey": "v1:0001795825537754:0000000000000031:0000000000000000:part:prt_g0VcDswWI00Dm2Si3iwY",
+        "type": "step-start"
+      },
+      {
+        "id": "prt_g0VcDsxH400R4GfFU6lW",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDswQX00i87JKiaFn",
+        "orderKey": "v1:0001795825540654:0000000000000031:0000000000000000:part:prt_g0VcDsxH400R4GfFU6lW",
+        "type": "text",
+        "text": "已另外发表 **“北仓交接金额图·自动时间刻度 20261128”**，原版本保留。\n\n- 时间轴统一使用 UTC，刻度与日期格式由原生图表自动选择，未指定日期模板或自定义刻度文字。\n- 四条记录逐条呈现，保留退款 `-2.50` 和零额样品；真实先后仍为 R02 → R04 → R03 → R01。\n- 悬停的“真实发生时间”显示可读 UTC 日期时间，不显示毫秒数，并保留每条原始时间戳；轴标题和悬停标签采用中英文对照。\n\n可通过卡片展开查看、使用原生菜单导出图片。此次仅使用刚才已读取的 `events.csv` 数据并发表，未执行脚本、修改文件或委派。",
+        "time": {
+          "start": 1795825540654,
+          "end": 1795825544438
+        }
+      },
+      {
+        "id": "prt_g0VcDsyJH005V8NBa7uz",
+        "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+        "messageID": "msg_g0VcDswQX00i87JKiaFn",
+        "orderKey": "v1:0001795825544635:0000000000000031:0000000000000000:part:prt_g0VcDsyJH005V8NBa7uz",
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 40665,
+          "input": 154,
+          "output": 191,
+          "reasoning": 0,
+          "cache": {
+            "read": 40320,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    ]
+  }
+]

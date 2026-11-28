@@ -1,0 +1,232 @@
+{
+  "id": "art_g0VcE60C9003r3XgLZKN",
+  "sessionID": "ses_hV8Hny04csS1HZGu02GX",
+  "messageID": "msg_g0VcE5sfs00CWytF3Deg",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "北仓交接时区复核看板 20261128",
+    "renderer": "dashboard@1",
+    "metrics": [
+      {
+        "id": "all-records",
+        "label": "全量记录数（固定，不随筛选）",
+        "value": 4,
+        "unit": "笔"
+      },
+      {
+        "id": "all-net",
+        "label": "全量金额净额（逐笔相加，含退款及样品；固定）",
+        "value": "18.00"
+      },
+      {
+        "id": "all-refund",
+        "label": "全量退款金额（保留负数；固定）",
+        "value": "-2.50"
+      },
+      {
+        "id": "all-zero",
+        "label": "全量零金额样品记录数（固定）",
+        "value": 1,
+        "unit": "笔"
+      }
+    ],
+    "filters": [
+      {
+        "id": "record-type",
+        "label": "记录类型（两图联动）",
+        "field": "类型",
+        "values": [
+          "普通订单",
+          "退款",
+          "免费样品"
+        ]
+      },
+      {
+        "id": "utc-date",
+        "label": "UTC 日期（按换算后时刻；两图联动）",
+        "field": "UTC日期",
+        "values": [
+          "2026-11-28",
+          "2026-11-29"
+        ]
+      }
+    ],
+    "views": [
+      {
+        "id": "individual-amounts",
+        "title": "筛选后每笔金额 · 真实发生时间（UTC；悬停核对原始记录）",
+        "spec": {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 140
+          },
+          "encoding": {
+            "x": {
+              "field": "UTC时刻",
+              "type": "temporal",
+              "title": "真实发生时间（UTC）",
+              "scale": {
+                "type": "utc"
+              }
+            },
+            "y": {
+              "field": "金额",
+              "type": "quantitative",
+              "title": "每笔金额（币种未提供）",
+              "scale": {
+                "zero": true
+              }
+            },
+            "color": {
+              "field": "类型",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "普通订单",
+                  "退款",
+                  "免费样品"
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "记录编号",
+                "type": "nominal",
+                "title": "记录编号"
+              },
+              {
+                "field": "类型",
+                "type": "nominal",
+                "title": "类型"
+              },
+              {
+                "field": "金额",
+                "type": "quantitative",
+                "title": "金额",
+                "format": ".2f"
+              },
+              {
+                "field": "原始时间戳",
+                "type": "nominal",
+                "title": "原始时区时间戳"
+              },
+              {
+                "field": "UTC可读时刻",
+                "type": "nominal",
+                "title": "真实发生时间（UTC）"
+              },
+              {
+                "field": "UTC日期",
+                "type": "nominal",
+                "title": "UTC 日期"
+              }
+            ]
+          }
+        },
+        "span": "full"
+      },
+      {
+        "id": "type-net",
+        "title": "筛选后按类型汇总净额 · 含负数退款与零金额样品",
+        "spec": {
+          "mark": {
+            "type": "bar"
+          },
+          "encoding": {
+            "x": {
+              "field": "类型",
+              "type": "nominal",
+              "title": "记录类型",
+              "sort": [
+                "普通订单",
+                "退款",
+                "免费样品"
+              ]
+            },
+            "y": {
+              "aggregate": "sum",
+              "field": "金额",
+              "type": "quantitative",
+              "title": "筛选内金额净额（币种未提供）",
+              "scale": {
+                "zero": true
+              }
+            },
+            "color": {
+              "field": "类型",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "普通订单",
+                  "退款",
+                  "免费样品"
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "类型",
+                "type": "nominal",
+                "title": "类型"
+              },
+              {
+                "aggregate": "sum",
+                "field": "金额",
+                "type": "quantitative",
+                "title": "筛选内该类型净额",
+                "format": ".2f"
+              },
+              {
+                "aggregate": "count",
+                "type": "quantitative",
+                "title": "筛选内该类型记录数"
+              }
+            ]
+          }
+        },
+        "span": "full"
+      }
+    ],
+    "data": [
+      {
+        "记录编号": "R01",
+        "类型": "普通订单",
+        "金额": 12.5,
+        "原始时间戳": "2026-11-28T23:30:00-05:00",
+        "UTC时刻": "2026-11-29T04:30:00Z",
+        "UTC可读时刻": "2026-11-29 04:30:00 UTC",
+        "UTC日期": "2026-11-29"
+      },
+      {
+        "记录编号": "R02",
+        "类型": "退款",
+        "金额": -2.5,
+        "原始时间戳": "2026-11-29T01:00:00+14:00",
+        "UTC时刻": "2026-11-28T11:00:00Z",
+        "UTC可读时刻": "2026-11-28 11:00:00 UTC",
+        "UTC日期": "2026-11-28"
+      },
+      {
+        "记录编号": "R03",
+        "类型": "免费样品",
+        "金额": 0,
+        "原始时间戳": "2026-11-28T18:00:00Z",
+        "UTC时刻": "2026-11-28T18:00:00Z",
+        "UTC可读时刻": "2026-11-28 18:00:00 UTC",
+        "UTC日期": "2026-11-28"
+      },
+      {
+        "记录编号": "R04",
+        "类型": "普通订单",
+        "金额": 8,
+        "原始时间戳": "2026-11-27T23:30:00-12:00",
+        "UTC时刻": "2026-11-28T11:30:00Z",
+        "UTC可读时刻": "2026-11-28 11:30:00 UTC",
+        "UTC日期": "2026-11-28"
+      }
+    ]
+  },
+  "timeCreated": 1795828650145,
+  "timeUpdated": 1795828650145
+}

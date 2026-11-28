@@ -1,5 +1,5 @@
 // ── i18n module ──
-// sanitizeLocale, record, localeValue, fillTemplate, t, tc, localeTag.
+// sanitizeLocale, record, localeValue, translationTemplate, fillTemplate, t, tc, localeTag.
 // Extends with loadLocale / setLocale / getLocale for module-level usage.
 
 import { appStore, setLocaleState, setI18nReady } from "../store/app"
@@ -105,14 +105,19 @@ export function fillTemplate(text: string, vars: Record<string, any> = {}): stri
   })
 }
 
-export function t(key: string, vars?: Record<string, any>): string {
+/** Capture a catalog template before its values are known. */
+export function translationTemplate(key: string): string {
   const value = runtimeLocaleValue(key, "string")
-  if (value === undefined) return fillTemplate(key, vars)
+  if (value === undefined) return key
   if (typeof value !== "string") {
     reportMissingI18nKey(key, "string")
-    return fillTemplate(key, vars)
+    return key
   }
-  return fillTemplate(value, vars)
+  return value
+}
+
+export function t(key: string, vars?: Record<string, any>): string {
+  return fillTemplate(translationTemplate(key), vars)
 }
 
 export function tArray(key: string): string[] {

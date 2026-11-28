@@ -1,0 +1,103 @@
+{
+  "scope": "Actual public fields; opaque Provider reasoning/protocol metadata omitted only from evidence. Product messages unchanged.",
+  "fullAPIComparisons": [
+    {
+      "artifactID": "art_g0VcE60C9003r3XgLZKN",
+      "object": "artifact",
+      "fullAPIObjectIdentity": "equal before evidence projection"
+    },
+    {
+      "artifactID": "art_g0VcE60C9003r3XgLZKN",
+      "object": "messages",
+      "fullAPIObjectIdentity": "equal before evidence projection"
+    },
+    {
+      "artifactID": "art_g0VcDswPG00OSZq6eFK4",
+      "object": "artifact",
+      "fullAPIObjectIdentity": "equal before evidence projection"
+    },
+    {
+      "artifactID": "art_g0VcDswPG00OSZq6eFK4",
+      "object": "messages",
+      "fullAPIObjectIdentity": "equal before evidence projection"
+    },
+    {
+      "artifactID": "art_g0Vc98WuM00U3GWzHFlO",
+      "object": "artifact",
+      "fullAPIObjectIdentity": "equal before evidence projection"
+    },
+    {
+      "artifactID": "art_g0Vc98WuM00U3GWzHFlO",
+      "object": "messages",
+      "fullAPIObjectIdentity": "equal before evidence projection"
+    }
+  ],
+  "files": [
+    {
+      "file": "run149-art_g0VcE60C9003r3XgLZKN-messages.json",
+      "sourceMessages": 5,
+      "projectedMessages": 5,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcE5uS6002PPhNd9Ca",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run151-art_g0VcE60C9003r3XgLZKN-messages.json",
+      "sourceMessages": 5,
+      "projectedMessages": 5,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcE5uS6002PPhNd9Ca",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run149-art_g0VcDswPG00OSZq6eFK4-messages.json",
+      "sourceMessages": 7,
+      "projectedMessages": 7,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcDs8rx00Ujv4endup",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run151-art_g0VcDswPG00OSZq6eFK4-messages.json",
+      "sourceMessages": 7,
+      "projectedMessages": 7,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcDs8rx00Ujv4endup",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run149-art_g0Vc98WuM00U3GWzHFlO-messages.json",
+      "sourceMessages": 4,
+      "projectedMessages": 4,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0Vc98RWn00Pyu1BhtHU",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run151-art_g0Vc98WuM00U3GWzHFlO-messages.json",
+      "sourceMessages": 4,
+      "projectedMessages": 4,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0Vc98RWn00Pyu1BhtHU",
+          "type": "reasoning"
+        }
+      ]
+    }
+  ]
+}

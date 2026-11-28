@@ -6286,6 +6286,18 @@ configuration retain native override semantics. Global Vega locale setters are
 not part of this lifecycle. The shared publication guidance keeps timestamp
 fields temporal across axes and tooltips, with original text in a separate field
 and timezone labels matching the actual encoding semantics.
+The same helper supplies a LocalizedVegaView through Embed's public viewClass.
+Each instance captures its accessibility language from the existing catalog;
+translationTemplate captures unexpanded strings while t keeps immediate value
+interpolation. Locked Vega Scenegraph/Scale patches let native guide, mark and
+domain captions consume that instance's phrases through its owning group
+context, including nested views. Native domain formatting, truncation and
+authored description/ARIA overrides retain their existing precedence. Both
+rendered and exported SVG use that same native generator. The View root uses
+the artifact/view title as its default description and a localized role
+description. The locked Embed patch gives its native export summary the same
+existing action label as its details container. No global accessibility locale,
+English-string rewriting or separate export description path supplies it.
 Dashboard publication guidance also gives categorical color encodings the same
 ordered explicit domain from the full inline data across views, so filtering
 keeps each category's palette identity. Long-text record verification uses a

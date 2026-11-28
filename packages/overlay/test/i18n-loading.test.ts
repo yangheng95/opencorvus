@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { loadAllLocales, t } from "../src/utils/i18n"
+import { fillTemplate, loadAllLocales, setLocale, t, translationTemplate } from "../src/utils/i18n"
 
 const originalFetch = globalThis.fetch
 afterEach(() => {
@@ -37,13 +37,25 @@ describe("locale data loading", () => {
     const urls: string[] = []
     globalThis.fetch = (async (input: RequestInfo | URL) => {
       urls.push(String(input))
-      return Response.json({ contract: { value: "loaded catalog" } })
+      return Response.json({
+        contract: {
+          value: "loaded catalog",
+          greeting: String(input).endsWith("en-US.json") ? "Hello {{name}}" : "你好，{{name}}",
+        },
+      })
     }) as typeof fetch
     await loadAllLocales()
     expect(new Set(urls)).toEqual(
       new Set(["zh-CN", "en-US"].map((locale) => new URL(`../src/i18n/${locale}.json`, import.meta.url).href)),
     )
     expect(t("contract.value")).toBe("loaded catalog")
+    await setLocale("en-US")
+    const captured = translationTemplate("contract.greeting")
+    expect(captured).toBe("Hello {{name}}")
+    expect(t("contract.greeting", { name: "Ada" })).toBe("Hello Ada")
+    await setLocale("zh-CN")
+    expect(t("contract.greeting", { name: "林" })).toBe("你好，林")
+    expect(fillTemplate(captured, { name: "Grace" })).toBe("Hello Grace")
     await loadAllLocales()
     expect(t("contract.value")).toBe("loaded catalog")
   })

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [图表无障碍描述的实例语言](records/2026-11/2026-11-28-chart-accessible-language.md)
 - [带时区交接看板的真实筛选与多视图](records/2026-11/2026-11-28-dashboard-time-review.md)
 - [交接图表的时间语义与完整阅读](records/2026-11/2026-11-28-chart-locale-formatting.md)
 - [带时区交接记录表的日期排序](records/2026-11/2026-11-28-table-date-order.md)

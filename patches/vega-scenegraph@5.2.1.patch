@@ -1,0 +1,374 @@
+diff --git a/build/vega-scenegraph.js b/build/vega-scenegraph.js
+index 43c7f42f43a104e052b738c722835fbcd2c0c777..eb719fd0b7af2cc0609e838fccd0a768328fdd34 100644
+--- a/build/vega-scenegraph.js
++++ b/build/vega-scenegraph.js
+@@ -3561,6 +3561,7 @@ const ARIA_ROLE = 'role';
+ const ARIA_ROLEDESCRIPTION = 'aria-roledescription';
+ const GRAPHICS_OBJECT = 'graphics-object';
+ const GRAPHICS_SYMBOL = 'graphics-symbol';
++
+ const bundle = (role, roledesc, label) => ({
+   [ARIA_ROLE]: role,
+   [ARIA_ROLEDESCRIPTION]: roledesc,
+@@ -3569,25 +3570,57 @@ const bundle = (role, roledesc, label) => ({
+ 
+ // these roles are covered by related roles
+ // we can ignore them, no need to generate attributes
+-const AriaIgnore = toSet(['axis-domain', 'axis-grid', 'axis-label', 'axis-tick', 'axis-title', 'legend-band', 'legend-entry', 'legend-gradient', 'legend-label', 'legend-title', 'legend-symbol', 'title']);
++const AriaIgnore = toSet([
++  'axis-domain',
++  'axis-grid',
++  'axis-label',
++  'axis-tick',
++  'axis-title',
++  'legend-band',
++  'legend-entry',
++  'legend-gradient',
++  'legend-label',
++  'legend-title',
++  'legend-symbol',
++  'title'
++]);
++
++// A custom View may provide one instance-scoped accessibility locale.
++// Follow the native group context so nested guides use their owning dataflow.
++const defaultAriaDescriptions = {
++  role: role => role,
++  mark: type => `${type} mark`,
++  container: type => `${type} mark container`,
++  title: text => `Title text '${text}'`,
++  subtitle: text => `Subtitle text '${text}'`,
++  axis: (xy, title, type, domain) => `${xy}-axis`
++    + (title ? ` titled '${title}'` : '')
++    + ` for a ${type} scale with ${domain}`,
++  legend: (type, title, props, domain) => capitalize(`${type || ''} legend`.trim())
++    + (title ? ` titled '${title}'` : '')
++    + ` for ${channelCaption(props)} with ${domain}`
++};
++
++function ariaDescriptions(mark) {
++  let group = mark.group || mark.items[0];
++  while (group) {
++    if (group.context) return group.context.dataflow.ariaLocale || defaultAriaDescriptions;
++    group = group.mark && group.mark.group;
++  }
++  return defaultAriaDescriptions;
++}
+ 
+ // aria attribute generators for guide roles
+ const AriaGuides = {
+-  'axis': {
+-    desc: 'axis',
+-    caption: axisCaption
+-  },
+-  'legend': {
+-    desc: 'legend',
+-    caption: legendCaption
+-  },
++  'axis': {desc: 'axis', caption: axisCaption},
++  'legend': {desc: 'legend', caption: legendCaption},
+   'title-text': {
+     desc: 'title',
+-    caption: item => `Title text '${titleCaption(item)}'`
++    caption: (item, descriptions) => descriptions.title(titleCaption(item))
+   },
+   'title-subtitle': {
+     desc: 'subtitle',
+-    caption: item => `Subtitle text '${titleCaption(item)}'`
++    caption: (item, descriptions) => descriptions.subtitle(titleCaption(item))
+   }
+ };
+ 
+@@ -3597,64 +3630,100 @@ const AriaEncode = {
+   ariaRoleDescription: ARIA_ROLEDESCRIPTION,
+   description: ARIA_LABEL
+ };
++
+ function ariaItemAttributes(emit, item) {
+   const hide = item.aria === false;
+   emit(ARIA_HIDDEN, hide || undefined);
++
+   if (hide || item.description == null) {
+     for (const prop in AriaEncode) {
+       emit(AriaEncode[prop], undefined);
+     }
+   } else {
+     const type = item.mark.marktype;
+-    emit(ARIA_LABEL, item.description);
+-    emit(ARIA_ROLE, item.ariaRole || (type === 'group' ? GRAPHICS_OBJECT : GRAPHICS_SYMBOL));
+-    emit(ARIA_ROLEDESCRIPTION, item.ariaRoleDescription || `${type} mark`);
++    emit(
++      ARIA_LABEL,
++      item.description
++    );
++    emit(
++      ARIA_ROLE,
++      item.ariaRole || (type === 'group' ? GRAPHICS_OBJECT : GRAPHICS_SYMBOL)
++    );
++    emit(
++      ARIA_ROLEDESCRIPTION,
++      item.ariaRoleDescription || ariaDescriptions(item.mark).mark(type)
++    );
+   }
+ }
++
+ function ariaMarkAttributes(mark) {
+-  return mark.aria === false ? {
+-    [ARIA_HIDDEN]: true
+-  } : AriaIgnore[mark.role] ? null : AriaGuides[mark.role] ? ariaGuide(mark, AriaGuides[mark.role]) : ariaMark(mark);
++  const descriptions = ariaDescriptions(mark);
++  return mark.aria === false ? { [ARIA_HIDDEN]: true }
++    : AriaIgnore[mark.role] ? null
++    : AriaGuides[mark.role] ? ariaGuide(mark, AriaGuides[mark.role], descriptions)
++    : ariaMark(mark, descriptions);
+ }
+-function ariaMark(mark) {
++
++function ariaMark(mark, descriptions) {
+   const type = mark.marktype;
+-  const recurse = type === 'group' || type === 'text' || mark.items.some(_ => _.description != null && _.aria !== false);
+-  return bundle(recurse ? GRAPHICS_OBJECT : GRAPHICS_SYMBOL, `${type} mark container`, mark.description);
+-}
+-function ariaGuide(mark, opt) {
++  const recurse = (
++    type === 'group' ||
++    type === 'text' ||
++    mark.items.some(_ => _.description != null && _.aria !== false)
++  );
++  return bundle(
++    recurse ? GRAPHICS_OBJECT : GRAPHICS_SYMBOL,
++    descriptions.container(type),
++    mark.description
++  );
++}
++
++function ariaGuide(mark, opt, descriptions) {
+   try {
+     const item = mark.items[0],
+-      caption = opt.caption || (() => '');
+-    return bundle(opt.role || GRAPHICS_SYMBOL, opt.desc, mark.description || item.description || caption(item));
++          caption = opt.caption || (() => '');
++    return bundle(
++      opt.role || GRAPHICS_SYMBOL,
++      descriptions.role(opt.desc),
++      mark.description || item.description || caption(item, descriptions)
++    );
+   } catch (err) {
+     return null;
+   }
+ }
++
+ function titleCaption(item) {
+   return array(item.text).join(' ');
+ }
+-function axisCaption(item) {
++
++function axisCaption(item, descriptions) {
+   const datum = item.datum,
+-    orient = item.orient,
+-    title = datum.title ? extractTitle(item) : null,
+-    ctx = item.context,
+-    scale = ctx.scales[datum.scale].value,
+-    locale = ctx.dataflow.locale(),
+-    type = scale.type,
+-    xy = orient === 'left' || orient === 'right' ? 'Y' : 'X';
+-  return `${xy}-axis` + (title ? ` titled '${title}'` : '') + ` for a ${isDiscrete(type) ? 'discrete' : type} scale` + ` with ${domainCaption(locale, scale, item)}`;
+-}
+-function legendCaption(item) {
++        orient = item.orient,
++        title = datum.title ? extractTitle(item) : null,
++        ctx = item.context,
++        scale = ctx.scales[datum.scale].value,
++        locale = ctx.dataflow.locale(),
++        type = scale.type,
++        xy = (orient === 'left' || orient === 'right') ? 'Y' : 'X';
++
++  return descriptions.axis(xy, title, isDiscrete(type) ? 'discrete' : type,
++    domainCaption(locale, scale, item, descriptions.domain));
++}
++
++function legendCaption(item, descriptions) {
+   const datum = item.datum,
+-    title = datum.title ? extractTitle(item) : null,
+-    type = `${datum.type || ''} legend`.trim(),
+-    scales = datum.scales,
+-    props = Object.keys(scales),
+-    ctx = item.context,
+-    scale = ctx.scales[scales[props[0]]].value,
+-    locale = ctx.dataflow.locale();
+-  return capitalize(type) + (title ? ` titled '${title}'` : '') + ` for ${channelCaption(props)}` + ` with ${domainCaption(locale, scale, item)}`;
++        title = datum.title ? extractTitle(item) : null,
++        type = datum.type,
++        scales = datum.scales,
++        props = Object.keys(scales),
++        ctx = item.context,
++        scale = ctx.scales[scales[props[0]]].value,
++        locale = ctx.dataflow.locale();
++
++  return descriptions.legend(type, title, props,
++    domainCaption(locale, scale, item, descriptions.domain));
+ }
++
+ function extractTitle(item) {
+   try {
+     return array(peek(item.items).items[0].text).join(' ');
+@@ -3662,14 +3731,18 @@ function extractTitle(item) {
+     return null;
+   }
+ }
++
+ function channelCaption(props) {
+   props = props.map(p => p + (p === 'fill' || p === 'stroke' ? ' color' : ''));
+-  return props.length < 2 ? props[0] : props.slice(0, -1).join(', ') + ' and ' + peek(props);
++  return props.length < 2 ? props[0]
++    : props.slice(0, -1).join(', ') + ' and ' + peek(props);
+ }
++
+ function capitalize(s) {
+   return s.length ? s[0].toUpperCase() + s.slice(1) : s;
+ }
+ 
++
+ const innerText = val => (val + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+ const attrText = val => innerText(val).replace(/"/g, '&quot;').replace(/\t/g, '&#x9;').replace(/\n/g, '&#xA;').replace(/\r/g, '&#xD;');
+ function markup() {
+diff --git a/src/util/aria.js b/src/util/aria.js
+index 352e5f10219f60995c09d0311b3f2d63f68f6eca..c018166b395e359551e61a3eb54496252d4d16ff 100644
+--- a/src/util/aria.js
++++ b/src/util/aria.js
+@@ -31,17 +31,42 @@ const AriaIgnore = toSet([
+   'title'
+ ]);
+ 
++// A custom View may provide one instance-scoped accessibility locale.
++// Follow the native group context so nested guides use their owning dataflow.
++const defaultAriaDescriptions = {
++  role: role => role,
++  mark: type => `${type} mark`,
++  container: type => `${type} mark container`,
++  title: text => `Title text '${text}'`,
++  subtitle: text => `Subtitle text '${text}'`,
++  axis: (xy, title, type, domain) => `${xy}-axis`
++    + (title ? ` titled '${title}'` : '')
++    + ` for a ${type} scale with ${domain}`,
++  legend: (type, title, props, domain) => capitalize(`${type || ''} legend`.trim())
++    + (title ? ` titled '${title}'` : '')
++    + ` for ${channelCaption(props)} with ${domain}`
++};
++
++function ariaDescriptions(mark) {
++  let group = mark.group || mark.items[0];
++  while (group) {
++    if (group.context) return group.context.dataflow.ariaLocale || defaultAriaDescriptions;
++    group = group.mark && group.mark.group;
++  }
++  return defaultAriaDescriptions;
++}
++
+ // aria attribute generators for guide roles
+ const AriaGuides = {
+   'axis': {desc: 'axis', caption: axisCaption},
+   'legend': {desc: 'legend', caption: legendCaption},
+   'title-text': {
+     desc: 'title',
+-    caption: item => `Title text '${titleCaption(item)}'`
++    caption: (item, descriptions) => descriptions.title(titleCaption(item))
+   },
+   'title-subtitle': {
+     desc: 'subtitle',
+-    caption: item => `Subtitle text '${titleCaption(item)}'`
++    caption: (item, descriptions) => descriptions.subtitle(titleCaption(item))
+   }
+ };
+ 
+@@ -72,19 +97,20 @@ export function ariaItemAttributes(emit, item) {
+     );
+     emit(
+       ARIA_ROLEDESCRIPTION,
+-      item.ariaRoleDescription || `${type} mark`
++      item.ariaRoleDescription || ariaDescriptions(item.mark).mark(type)
+     );
+   }
+ }
+ 
+ export function ariaMarkAttributes(mark) {
++  const descriptions = ariaDescriptions(mark);
+   return mark.aria === false ? { [ARIA_HIDDEN]: true }
+     : AriaIgnore[mark.role] ? null
+-    : AriaGuides[mark.role] ? ariaGuide(mark, AriaGuides[mark.role])
+-    : ariaMark(mark);
++    : AriaGuides[mark.role] ? ariaGuide(mark, AriaGuides[mark.role], descriptions)
++    : ariaMark(mark, descriptions);
+ }
+ 
+-function ariaMark(mark) {
++function ariaMark(mark, descriptions) {
+   const type = mark.marktype;
+   const recurse = (
+     type === 'group' ||
+@@ -93,19 +119,19 @@ function ariaMark(mark) {
+   );
+   return bundle(
+     recurse ? GRAPHICS_OBJECT : GRAPHICS_SYMBOL,
+-    `${type} mark container`,
++    descriptions.container(type),
+     mark.description
+   );
+ }
+ 
+-function ariaGuide(mark, opt) {
++function ariaGuide(mark, opt, descriptions) {
+   try {
+     const item = mark.items[0],
+           caption = opt.caption || (() => '');
+     return bundle(
+       opt.role || GRAPHICS_SYMBOL,
+-      opt.desc,
+-      mark.description || item.description || caption(item)
++      descriptions.role(opt.desc),
++      mark.description || item.description || caption(item, descriptions)
+     );
+   } catch (err) {
+     return null;
+@@ -116,7 +142,7 @@ function titleCaption(item) {
+   return array(item.text).join(' ');
+ }
+ 
+-function axisCaption(item) {
++function axisCaption(item, descriptions) {
+   const datum = item.datum,
+         orient = item.orient,
+         title = datum.title ? extractTitle(item) : null,
+@@ -126,26 +152,22 @@ function axisCaption(item) {
+         type = scale.type,
+         xy = (orient === 'left' || orient === 'right') ? 'Y' : 'X';
+ 
+-  return `${xy}-axis`
+-    + (title ? ` titled '${title}'` : '')
+-    + ` for a ${isDiscrete(type) ? 'discrete' : type} scale`
+-    + ` with ${domainCaption(locale, scale, item)}`;
++  return descriptions.axis(xy, title, isDiscrete(type) ? 'discrete' : type,
++    domainCaption(locale, scale, item, descriptions.domain));
+ }
+ 
+-function legendCaption(item) {
++function legendCaption(item, descriptions) {
+   const datum = item.datum,
+         title = datum.title ? extractTitle(item) : null,
+-        type = `${datum.type || ''} legend`.trim(),
++        type = datum.type,
+         scales = datum.scales,
+         props = Object.keys(scales),
+         ctx = item.context,
+         scale = ctx.scales[scales[props[0]]].value,
+         locale = ctx.dataflow.locale();
+ 
+-  return capitalize(type)
+-    + (title ? ` titled '${title}'` : '')
+-    + ` for ${channelCaption(props)}`
+-    + ` with ${domainCaption(locale, scale, item)}`;
++  return descriptions.legend(type, title, props,
++    domainCaption(locale, scale, item, descriptions.domain));
+ }
+ 
+ function extractTitle(item) {

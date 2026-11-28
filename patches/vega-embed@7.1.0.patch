@@ -1,0 +1,24 @@
+diff --git a/build/embed.js b/build/embed.js
+index 76bc666217d2a4cee5df3e004669d51033f5fb49..2770d55369edaf14d74e542d37edffed51b3df03 100644
+--- a/build/embed.js
++++ b/build/embed.js
+@@ -2854,6 +2854,7 @@ async function _embed(el, spec, opts = {}, loader) {
+             wrapper = details;
+             const summary = document.createElement('summary');
+             summary.innerHTML = SVG_CIRCLES;
++      summary.setAttribute('aria-label', i18n.CLICK_TO_VIEW_ACTIONS);
+             details.append(summary);
+             documentClickHandler = (ev) => {
+                 if (!details.contains(ev.target)) {
+diff --git a/src/embed.ts b/src/embed.ts
+index f65fb02379cdc6a7dbef4531becf2a6fb8b3a0b6..6c58f097172d3c802c6ec2bf6ce0ee32b2a6f8d8 100644
+--- a/src/embed.ts
++++ b/src/embed.ts
+@@ -451,6 +451,7 @@ async function _embed(
+       wrapper = details;
+       const summary = document.createElement('summary');
+       summary.innerHTML = SVG_CIRCLES;
++      summary.setAttribute('aria-label', i18n.CLICK_TO_VIEW_ACTIONS);
+ 
+       details.append(summary);
+ 

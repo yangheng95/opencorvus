@@ -1,0 +1,304 @@
+{
+  "id": "art_g0Vc98WuM00U3GWzHFlO",
+  "sessionID": "ses_hzGdJgnW9b1ZUoONagHU",
+  "messageID": "msg_g0Vc98PmH00qkPJo3F6g",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "销售分析｜框选订单与区域联动",
+    "renderer": "chart@1",
+    "spec": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "数据来源：本次读取的项目根目录 sales.csv 全部5条订单。左侧拖拽框选，右侧仅汇总选中订单；左侧双击清除框选、恢复全量。每条记录计1笔，含负数退款和零金额；净额为带符号金额之和，先以整数分汇总再换算两位小数。币种、日期未提供。",
+      "title": {
+        "text": "订单金额 × 区域净额与订单数",
+        "subtitle": [
+          "左侧拖拽框选订单 → 右侧同步汇总；左侧双击恢复全量。悬停查看明细。",
+          "口径：每条记录计1笔（含退款、零金额）；净额按带符号金额求和。币种及日期未提供。"
+        ],
+        "anchor": "start",
+        "subtitleFontSize": 12,
+        "subtitlePadding": 8
+      },
+      "spacing": 32,
+      "hconcat": [
+        {
+          "width": 330,
+          "height": 290,
+          "title": "① 订单金额点图｜拖拽框选",
+          "params": [
+            {
+              "name": "orders_brush",
+              "select": {
+                "type": "interval",
+                "encodings": [
+                  "x",
+                  "y"
+                ],
+                "clear": "dblclick",
+                "translate": true,
+                "zoom": false
+              }
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 150
+          },
+          "encoding": {
+            "x": {
+              "field": "金额",
+              "type": "quantitative",
+              "title": "订单金额（币种未提供）",
+              "scale": {
+                "zero": true,
+                "nice": true
+              },
+              "axis": {
+                "format": ".2f"
+              }
+            },
+            "y": {
+              "field": "订单编号",
+              "type": "nominal",
+              "sort": [
+                "A001",
+                "A002",
+                "A003",
+                "A004",
+                "A005"
+              ],
+              "title": "原订单编号"
+            },
+            "color": {
+              "field": "区域",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "华东",
+                  "华南"
+                ],
+                "range": [
+                  "#2563EB",
+                  "#D97706"
+                ]
+              },
+              "legend": {
+                "title": "区域"
+              }
+            },
+            "opacity": {
+              "condition": {
+                "param": "orders_brush",
+                "value": 1
+              },
+              "value": 0.2
+            },
+            "tooltip": [
+              {
+                "field": "订单编号",
+                "type": "nominal"
+              },
+              {
+                "field": "区域",
+                "type": "nominal"
+              },
+              {
+                "field": "金额",
+                "type": "quantitative",
+                "format": ".2f"
+              },
+              {
+                "field": "备注",
+                "type": "nominal"
+              }
+            ]
+          }
+        },
+        {
+          "width": 330,
+          "height": 290,
+          "title": "② 所选订单｜区域净额 + 订单数",
+          "transform": [
+            {
+              "filter": {
+                "param": "orders_brush",
+                "empty": true
+              }
+            },
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "金额分",
+                  "as": "区域净额分"
+                },
+                {
+                  "op": "count",
+                  "as": "订单数"
+                }
+              ],
+              "groupby": [
+                "区域"
+              ]
+            },
+            {
+              "calculate": "datum['区域净额分'] / 100",
+              "as": "区域净额"
+            },
+            {
+              "calculate": "format(datum['区域净额'], '.2f') + '  ｜  ' + datum['订单数'] + '笔'",
+              "as": "净额与笔数"
+            }
+          ],
+          "encoding": {
+            "y": {
+              "field": "区域",
+              "type": "nominal",
+              "sort": [
+                "华东",
+                "华南"
+              ],
+              "title": null
+            },
+            "x": {
+              "field": "区域净额",
+              "type": "quantitative",
+              "title": "区域净额（标签：净额｜订单数）",
+              "scale": {
+                "domain": [
+                  -5,
+                  40
+                ],
+                "nice": false,
+                "zero": true
+              },
+              "axis": {
+                "format": ".2f"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "区域",
+                "type": "nominal"
+              },
+              {
+                "field": "区域净额",
+                "type": "quantitative",
+                "format": ".2f"
+              },
+              {
+                "field": "订单数",
+                "type": "quantitative",
+                "format": "d"
+              }
+            ]
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "bar",
+                "size": 42
+              },
+              "encoding": {
+                "color": {
+                  "field": "区域",
+                  "type": "nominal",
+                  "scale": {
+                    "domain": [
+                      "华东",
+                      "华南"
+                    ],
+                    "range": [
+                      "#2563EB",
+                      "#D97706"
+                    ]
+                  },
+                  "legend": null
+                }
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "align": "left",
+                "dx": 8,
+                "fontSize": 13,
+                "color": "#111827"
+              },
+              "encoding": {
+                "text": {
+                  "field": "净额与笔数",
+                  "type": "nominal"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "resolve": {
+        "scale": {
+          "x": "independent",
+          "y": "independent"
+        }
+      },
+      "config": {
+        "view": {
+          "stroke": null
+        },
+        "axis": {
+          "labelFontSize": 12,
+          "titleFontSize": 12
+        },
+        "title": {
+          "fontSize": 16
+        },
+        "background": "#FFFFFF"
+      }
+    },
+    "data": [
+      {
+        "订单编号": "A001",
+        "区域": "华东",
+        "金额": 10.1,
+        "金额分": 1010,
+        "备注": "普通订单",
+        "原序": 1
+      },
+      {
+        "订单编号": "A002",
+        "区域": "华东",
+        "金额": 20.2,
+        "金额分": 2020,
+        "备注": "中文客户",
+        "原序": 2
+      },
+      {
+        "订单编号": "A003",
+        "区域": "华东",
+        "金额": -2.05,
+        "金额分": -205,
+        "备注": "退款",
+        "原序": 3
+      },
+      {
+        "订单编号": "A004",
+        "区域": "华南",
+        "金额": 0,
+        "金额分": 0,
+        "备注": "免费样品",
+        "原序": 4
+      },
+      {
+        "订单编号": "A005",
+        "区域": "华南",
+        "金额": 7.35,
+        "金额分": 735,
+        "备注": "普通订单",
+        "原序": 5
+      }
+    ]
+  },
+  "timeCreated": 1795755370870,
+  "timeUpdated": 1795755370870
+}

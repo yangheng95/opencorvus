@@ -5,6 +5,7 @@ import { observeAppliedTheme } from "../../services/theme"
 import { artifactVegaLocale } from "../../services/artifact-vega-locale"
 import { artifactVisualTheme, type ArtifactVisualTheme } from "./theme-color"
 import { INLINE_VEGA_EMBED_OPTIONS } from "./vega-embed-policy"
+import { LocalizedVegaView } from "./localized-vega-view"
 import { localeTag, sanitizeLocale, t } from "../../utils/i18n"
 import { topLayerPortalMount } from "../../utils/top-layer"
 
@@ -13,9 +14,11 @@ type ViewState = ReturnType<Result["view"]["getState"]> & { subcontext?: ViewSta
 
 function artifactVegaConfig(
   theme: ArtifactVisualTheme,
+  label: string,
   source: Record<string, unknown> = {},
 ): Record<string, unknown> {
   const defaults = {
+    description: label,
     locale: artifactVegaLocale(sanitizeLocale(localeTag())),
     autosize: { type: "fit", contains: "padding" },
     background: theme.surface,
@@ -123,6 +126,7 @@ export function createInlineVegaView(input: {
   host: () => HTMLDivElement | undefined
   observed: () => Element | undefined
   source: () => Record<string, unknown>
+  label: () => string
   data: () => Record<string, unknown>[]
   measure: () => Size
   error: (message: string) => void
@@ -206,10 +210,11 @@ export function createInlineVegaView(input: {
             width: nextSource.width ?? measured.width,
             height: nextSource.height ?? measured.height,
           } : {}),
-          config: artifactVegaConfig(artifactVisualTheme(host),
+          config: artifactVegaConfig(artifactVisualTheme(host), input.label(),
             config && typeof config === "object" && !Array.isArray(config) ? config as Record<string, unknown> : {}),
         } as unknown as Parameters<typeof vegaEmbed>[1], {
           ...INLINE_VEGA_EMBED_OPTIONS,
+          viewClass: LocalizedVegaView,
           tooltip: { ...INLINE_VEGA_EMBED_OPTIONS.tooltip, id: tooltipID },
           i18n: {
             CLICK_TO_VIEW_ACTIONS: t("artifact.chart.actions"),
@@ -254,6 +259,7 @@ export function createInlineVegaView(input: {
   })
   createEffect(() => {
     localeTag()
+    input.label()
     repaint = true
     schedule()
   })

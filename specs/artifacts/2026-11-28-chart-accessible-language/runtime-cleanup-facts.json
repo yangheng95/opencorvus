@@ -1,0 +1,51 @@
+{
+  "status": "passed",
+  "services": [
+    {
+      "label": "run149",
+      "originalExecHandle": 91130,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_h8I3qURXtfv6hy3g3dEv",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    },
+    {
+      "label": "run150",
+      "originalExecHandle": 94852,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hV7rL6bTshCbGPzWck6O",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    },
+    {
+      "label": "run151",
+      "originalExecHandle": 35628,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hxXxtE2QcX3jLhK1ElaD",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    }
+  ],
+  "ownedPort51776": "retired",
+  "ownedTab241805431": "closed through bound browser API",
+  "preferences": "restored zh-CN; system theme unchanged",
+  "limitation": "old tabs241805392/241805428 unbound; neither represented as closed"
+}

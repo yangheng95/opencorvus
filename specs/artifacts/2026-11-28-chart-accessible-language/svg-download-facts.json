@@ -1,0 +1,91 @@
+{
+  "file": "visualization (11).svg",
+  "bytes": 19715,
+  "root": {
+    "version": "1.1",
+    "class": "marks",
+    "width": "700",
+    "height": "340",
+    "viewBox": "0 0 700 340"
+  },
+  "nativeAttributes": [
+    {
+      "class": "mark-group role-frame root",
+      "role": "graphics-object",
+      "aria-roledescription": "分组标记组"
+    },
+    {
+      "class": "mark-group role-axis",
+      "role": "graphics-symbol",
+      "aria-roledescription": "坐标轴",
+      "aria-label": "X 轴“真实发生时间 / Event time (UTC)”，UTC 时间刻度，取值从 星期六, 28 十一月 2026, 11:00:00 UTC 到 星期日, 29 十一月 2026, 04:30:00 UTC"
+    },
+    {
+      "class": "mark-group role-axis",
+      "role": "graphics-symbol",
+      "aria-roledescription": "坐标轴",
+      "aria-label": "Y 轴“逐条金额 / Amount per record”，线性刻度，取值从 −4.00 到 14.00"
+    },
+    {
+      "class": "mark-rule role-mark layer_0_marks",
+      "role": "graphics-symbol",
+      "aria-roledescription": "参考线标记组"
+    },
+    {
+      "class": "mark-symbol role-mark layer_1_marks",
+      "role": "graphics-object",
+      "aria-roledescription": "数据点标记组"
+    },
+    {
+      "aria-label": "真实时刻UTC: 十一月 29, 2026; 金额: 12.50; 类型: 普通订单; 记录编号 / Record ID: R01; 类型 / Type: 普通订单; 金额 / Amount: 12.50; 真实发生时间 / Event time (UTC): 2026-11-29 04:30:00 UTC; 原始时间戳 / Original timestamp: 2026-11-28T23:30:00-05:00",
+      "role": "graphics-symbol",
+      "aria-roledescription": "point",
+      "transform": "translate(548,23.16666666666668)",
+      "d": "M5.916,0A5.916,5.916,0,1,1,-5.916,0A5.916,5.916,0,1,1,5.916,0",
+      "fill": "#24724a",
+      "stroke-width": "2",
+      "opacity": "0.7"
+    },
+    {
+      "aria-label": "真实时刻UTC: 十一月 28, 2026; 金额: −2.50; 类型: 退款; 记录编号 / Record ID: R02; 类型 / Type: 退款; 金额 / Amount: −2.50; 真实发生时间 / Event time (UTC): 2026-11-28 11:00:00 UTC; 原始时间戳 / Original timestamp: 2026-11-29T01:00:00+14:00",
+      "role": "graphics-symbol",
+      "aria-roledescription": "point",
+      "transform": "translate(0,254.83333333333331)",
+      "d": "M5.916,0A5.916,5.916,0,1,1,-5.916,0A5.916,5.916,0,1,1,5.916,0",
+      "fill": "#8f570c",
+      "stroke-width": "2",
+      "opacity": "0.7"
+    },
+    {
+      "aria-label": "真实时刻UTC: 十一月 28, 2026; 金额: 0.00; 类型: 免费样品; 记录编号 / Record ID: R03; 类型 / Type: 免费样品; 金额 / Amount: 0.00; 真实发生时间 / Event time (UTC): 2026-11-28 18:00:00 UTC; 原始时间戳 / Original timestamp: 2026-11-28T18:00:00Z",
+      "role": "graphics-symbol",
+      "aria-roledescription": "point",
+      "transform": "translate(219.20000000000002,216.22222222222223)",
+      "d": "M5.916,0A5.916,5.916,0,1,1,-5.916,0A5.916,5.916,0,1,1,5.916,0",
+      "fill": "#0969da",
+      "stroke-width": "2",
+      "opacity": "0.7"
+    },
+    {
+      "aria-label": "真实时刻UTC: 十一月 28, 2026; 金额: 8.00; 类型: 普通订单; 记录编号 / Record ID: R04; 类型 / Type: 普通订单; 金额 / Amount: 8.00; 真实发生时间 / Event time (UTC): 2026-11-28 11:30:00 UTC; 原始时间戳 / Original timestamp: 2026-11-27T23:30:00-12:00",
+      "role": "graphics-symbol",
+      "aria-roledescription": "point",
+      "transform": "translate(15.657142857142857,92.66666666666667)",
+      "d": "M5.916,0A5.916,5.916,0,1,1,-5.916,0A5.916,5.916,0,1,1,5.916,0",
+      "fill": "#24724a",
+      "stroke-width": "2",
+      "opacity": "0.7"
+    },
+    {
+      "class": "mark-group role-legend",
+      "role": "graphics-symbol",
+      "aria-roledescription": "图例",
+      "aria-label": "符号图例“类型 / Type”，用于填充颜色，3 个值：免费样品, 普通订单, 退款"
+    },
+    {
+      "class": "mark-group role-scope",
+      "role": "graphics-object",
+      "aria-roledescription": "分组标记组"
+    }
+  ]
+}
