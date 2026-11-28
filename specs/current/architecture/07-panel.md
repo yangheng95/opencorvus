@@ -1294,14 +1294,15 @@ turn-artifact consumers retain their existing visible-output contracts.
 Message cancellation derives from the canonical `MessageAbortedError` shape,
 through one shared presentation reader. Main and Side projections retain the
 aborted terminal reason. Message-level cancellation uses a neutral stopped
-notice with localized guidance. Its Details and copy action preserve the
-original reason and complete cancellation data, including when only a reason
-is available; the copy tooltip names the action. Member history carries the
-same classification with the original Message identity. Other assistant errors
-use a localized unfinished-response heading and follow-up guidance. Their complete
-original reason and additional details remain in one expandable error diagnostic,
-including failures that have no additional details; copy controls keep the original
-reason/details text. The underlying Message/Tool facts stay intact.
+notice with localized guidance. The original reason is directly visible in one
+named, keyboard-focusable reading region, with native scrolling for long content.
+Additional diagnostic or cancellation data uses the existing Details disclosure;
+its guidance and trigger appear when those details exist. Copy retains both the
+original reason and complete details, including when only a reason is available;
+the copy tooltip names the action. Member history carries the same classification
+with the original Message identity. Other assistant errors use the same reason
+and details presentation with a localized unfinished-response heading. The
+underlying Message/Tool facts stay intact.
 
 Review selection is exact group/path. Material request identity includes endpoints,
 objects, evidence and receipts in memory; ambiguous shorthand is a precise error.

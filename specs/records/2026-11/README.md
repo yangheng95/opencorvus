@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [有限复合值的真实模型声明](2026-11-28-finite-composite-domain.md)
 - [PDF整页阅读与缩放](2026-11-28-pdf-fit-page.md)
 - [有限字面值工具声明的类型投影](2026-11-28-untyped-literal-schema.md)
 - [共用判别值的工具输入完整性](2026-11-28-shared-discriminator-input.md)

@@ -1,0 +1,93 @@
+{
+  "label": "run166",
+  "requests": 8,
+  "state": "exited",
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795863646158
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795863644858
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795863764851
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795863688210
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795863689131
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795863691197
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795863695069
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795863847047
+      }
+    }
+  ],
+  "providerDrain": {
+    "startedAt": 1795863999155,
+    "settledAt": 1795863999155,
+    "allReadersSettled": true
+  },
+  "credentialCleanup": "passed"
+}

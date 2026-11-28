@@ -1,0 +1,107 @@
+{
+  "runs": [
+    {
+      "label": "run166",
+      "state": "exited",
+      "exitCode": 0,
+      "requests": 8,
+      "model": "openai/gpt-6.1-sol",
+      "preflight": {
+        "sessionID": "ses_hFwXT1ZaqZ23yWxBHkUJ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "officePackageVerification": {
+        "status": "passed",
+        "managedFiles": 5,
+        "runtimeVersion": "1.0.158"
+      },
+      "providerDrain": {
+        "startedAt": 1795863999155,
+        "settledAt": 1795863999155,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed"
+    },
+    {
+      "label": "run167",
+      "state": "exited",
+      "exitCode": 0,
+      "requests": 8,
+      "model": "openai/gpt-6.1-sol",
+      "preflight": {
+        "sessionID": "ses_hJk9FUquPjXxwLa7FY9l",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "officePackageVerification": {
+        "status": "passed",
+        "managedFiles": 5,
+        "runtimeVersion": "1.0.158"
+      },
+      "providerDrain": {
+        "startedAt": 1795864321498,
+        "settledAt": 1795864321498,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed"
+    },
+    {
+      "label": "run168",
+      "state": "exited",
+      "exitCode": 0,
+      "requests": 5,
+      "model": "openai/gpt-6.1-sol",
+      "preflight": {
+        "sessionID": "ses_hG3lSCqMv7rRceXzgxb3",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "officePackageVerification": {
+        "status": "passed",
+        "managedFiles": 5,
+        "runtimeVersion": "1.0.158"
+      },
+      "providerDrain": {
+        "startedAt": 1795864936095,
+        "settledAt": 1795864936095,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed"
+    }
+  ],
+  "joinedServiceHandles": [
+    91668,
+    27927,
+    54855
+  ],
+  "joinedSubmissionHandles": [
+    79030,
+    17820,
+    85502
+  ],
+  "allJoinedExitCodes": 0,
+  "port51776": "retired",
+  "ownedTab512": "close followed by later inventory confirmed absent",
+  "oldUnboundTabs": [
+    "479",
+    "428"
+  ],
+  "servedCandidateMain": "main-CGFCTeL5.js",
+  "backendTypeOriginalHandle": 26037,
+  "overlayTypeOriginalHandle": 11452,
+  "buildOriginalHandle": 91070,
+  "checks": "18backend contracts51assertions;2locales3432keys;CSS9460references269globaltokens;7524module build and renderer surface;docs354ops26groups;architecture20",
+  "UI": "native desktop interactions and screenshots personally reviewed;0UI automation tests",
+  "limitations": [
+    "Provider rejects composite const; no projection or domain change",
+    "local SDK HTTP contracts distinct from actual Provider replays",
+    "desktop only"
+  ]
+}

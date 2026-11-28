@@ -1,0 +1,30 @@
+$ bun script/run-tests.ts test/provider-stream-error.test.ts
+    Finished `release` profile [optimized] target(s) in 0.04s
+[1/1] START test/provider-stream-error.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) typed nested and flat stream events expose Provider message and code [2.77ms]
+(pass) actual overload maps to a readable APIError with its diagnostic body [1.65ms]
+(pass) SDK stream overload retains its typed Provider diagnostic and redacted source payload [1.44ms]
+(pass) SDK context code reaches the current overflow recovery classification [0.42ms]
+(pass) SDK validation wrappers retain typed Provider diagnostics with structural redaction [0.99ms]
+(pass) ordinary SDK value validation retains its explicit Unknown error contract [0.37ms]
+(pass) SDK-wrapped context errors retain overflow classification and diagnostic body [0.40ms]
+(pass) actual SDK preserves nested error packets without sequence metadata before output [45.44ms]
+(pass) actual SDK preserves nested error packets without sequence metadata after output [11.83ms]
+(pass) actual SDK preserves flat error packets without sequence metadata before output [9.94ms]
+(pass) actual SDK preserves flat error packets without sequence metadata after output [8.93ms]
+(pass) real SDK HTTP errors before output enter the canonical Provider error contract [8.76ms]
+(pass) real SDK HTTP errors after output enter the canonical Provider error contract [10.50ms]
+(pass) stream diagnostics use structured redaction and retain ordinary coordinates [0.37ms]
+(pass) flat quota and context failures retain their explicit contracts [0.29ms]
+(pass) consumed output followed by a raw Provider error settles as an explicit failed activity [3.44ms]
+(pass) consumed output followed by a SDK Provider error settles as an explicit failed activity [0.55ms]
+(pass) consumed output followed by a SDK validation Provider error settles as an explicit failed activity [0.39ms]
+
+ 18 pass
+ 0 fail
+ 51 expect() calls
+Ran 18 tests across 1 file. [2.44s]
+[1/1] DONE test/provider-stream-error.test.ts exit=0 duration=3.14s

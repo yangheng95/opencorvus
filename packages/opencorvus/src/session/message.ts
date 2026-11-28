@@ -5,7 +5,7 @@ import { createHash } from "node:crypto"
 import z from "zod"
 import { DIRECTORY_REFERENCE_MIME, LOCAL_DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { APICallError, convertToModelMessages, LoadAPIKeyError, StreamProviderError, type ModelMessage, type UIMessage } from "ai"
+import { APICallError, convertToModelMessages, LoadAPIKeyError, type ModelMessage, type UIMessage } from "ai"
 import { RangeSchema } from "./range"
 import { formatPatchEvidence } from "@/snapshot/types"
 import { SnapshotEmptyTreeError, SnapshotIntegrityError } from "@/snapshot/errors"
@@ -1820,8 +1820,6 @@ export namespace Message {
             mismatches: [...((e as Error & { mismatches: string[] }).mismatches)],
           },
         }
-      case e instanceof Error && !StreamProviderError.isInstance(e):
-        return new NamedError.Unknown({ message: e.toString() }, { cause: e }).toObject()
       default:
         try {
           const parsed = ProviderError.parseStreamError(e)
@@ -1847,7 +1845,7 @@ export namespace Message {
             ).toObject()
           }
         } catch {}
-        return new NamedError.Unknown({ message: JSON.stringify(e) }, { cause: e }).toObject()
+        return new NamedError.Unknown({ message: e instanceof Error ? e.toString() : JSON.stringify(e) }, { cause: e }).toObject()
     }
   }
 }

@@ -1,0 +1,113 @@
+{
+  "info": {
+    "author": "work",
+    "role": "assistant",
+    "time": {
+      "created": 1795864049193,
+      "completed": 1795864053123
+    },
+    "parentID": "msg_accf4e70-7688-444e-ab73-2afdc5ee1934",
+    "acceptedInputMessageIDs": [
+      "msg_accf4e70-7688-444e-ab73-2afdc5ee1934"
+    ],
+    "modelID": "gpt-6.1-sol",
+    "providerID": "openai",
+    "agent": "work",
+    "path": {
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north"
+    },
+    "cost": 0,
+    "tokens": {
+      "total": 42144,
+      "input": 378,
+      "output": 38,
+      "reasoning": 0,
+      "cache": {
+        "read": 41728,
+        "write": 0
+      }
+    },
+    "billing": {
+      "status": "priced"
+    },
+    "structured": {
+      "source": "settlement-review.csv",
+      "recordCount": 6,
+      "netAmount": 17.65,
+      "marker": null
+    },
+    "finish": "stop",
+    "orderKey": "v1:0001795864049193:0000000000000030:0000000000000000:message:msg_g0VcGUX6X00ClVgWbevm",
+    "id": "msg_g0VcGUX6X00ClVgWbevm",
+    "sessionID": "ses_-zUNjVUuVzzAxPkyGqa5",
+    "resolvedRole": "work",
+    "channel": "assistant",
+    "agentID": "work",
+    "sessionAgentID": "work",
+    "originSource": ""
+  },
+  "parts": [
+    {
+      "id": "prt_g0VcGUXIQ007yY1SvTx8",
+      "sessionID": "ses_-zUNjVUuVzzAxPkyGqa5",
+      "messageID": "msg_g0VcGUX6X00ClVgWbevm",
+      "orderKey": "v1:0001795864049930:0000000000000031:0000000000000000:part:prt_g0VcGUXIQ007yY1SvTx8",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VcGUXsx008Tlu514gD",
+      "sessionID": "ses_-zUNjVUuVzzAxPkyGqa5",
+      "messageID": "msg_g0VcGUX6X00ClVgWbevm",
+      "type": "tool",
+      "callID": "call_2ab81263f953411c8b98dfaef1cc7208",
+      "tool": "StructuredOutput",
+      "state": {
+        "status": "completed",
+        "input": {
+          "source": "settlement-review.csv",
+          "recordCount": 6,
+          "netAmount": 17.65,
+          "marker": null
+        },
+        "output": "Structured output captured successfully.",
+        "title": "Structured Output",
+        "metadata": {
+          "valid": true
+        },
+        "time": {
+          "start": 1795864052195,
+          "end": 1795864053076
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0ed8c1693b0737f9016b0ab5f3e27887d0a39df622e28c00cb"
+        }
+      },
+      "orderKey": "v1:0001795864052792:0000000000000031:0000000000000000:part:prt_g0VcGUXsx008Tlu514gD"
+    },
+    {
+      "id": "prt_g0VcGUY7D00jxtgoWVgK",
+      "sessionID": "ses_-zUNjVUuVzzAxPkyGqa5",
+      "messageID": "msg_g0VcGUX6X00ClVgWbevm",
+      "orderKey": "v1:0001795864053079:0000000000000031:0000000000000000:part:prt_g0VcGUY7D00jxtgoWVgK",
+      "type": "step-finish",
+      "reason": "tool-calls",
+      "cost": 0,
+      "tokens": {
+        "total": 42144,
+        "input": 378,
+        "output": 38,
+        "reasoning": 0,
+        "cache": {
+          "read": 41728,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      }
+    }
+  ]
+}

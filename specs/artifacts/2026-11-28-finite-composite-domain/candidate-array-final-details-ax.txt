@@ -1,0 +1,5 @@
+Browser tab: 241805512, Title: "OpenCorvus", URL: "http://127.0.0.1:51776/ui/?sessionID=ses_-zUNjVUv0zzx0uanz0SF&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-north&experience=work".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~										195 button (expanded) 错误详情, Secondary Actions: Collapse
++										209 text {"type":"error","error":{"message":"Invalid schema for function 'StructuredOutput': Error at #/properties/marker: Unexpected constant value: [\"记录数\",\"带符号净额\"]","type":"invalid_request_error","param":"tools[41].parameters","code":"invalid_function_parameters"}}
+The focused UI element is 195 button (expanded) 错误详情, Secondary Actions: Collapse

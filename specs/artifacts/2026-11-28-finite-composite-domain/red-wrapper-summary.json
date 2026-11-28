@@ -1,0 +1,9 @@
+{
+  "originalCommand": "bun run test test/provider-stream-error.test.ts --test-name-pattern=SDK validation wrappers|ordinary SDK value validation|SDK-wrapped context|without sequence metadata",
+  "originalExitCode": 1,
+  "passed": 1,
+  "failed": 6,
+  "filtered": 10,
+  "assertions": 16,
+  "originalCompleteLog": "original-bytes.zip/red-wrapper-contracts.txt"
+}

@@ -3,7 +3,7 @@ import { decodeProviderStreamError } from "@opencorvus-ai/transport-protocol"
 import { ProviderError } from "@/provider/error"
 import { Message } from "@/session/message"
 import { collectLLMText, DefaultLLMActivityPolicy, type LLMActivityEvent } from "@/llm/activity"
-import { APICallError, StreamProviderError, streamText } from "ai"
+import { APICallError, StreamProviderError, TypeValidationError, streamText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
 
 // Shape captured from the actual skill-loader-341 Provider occurrence.
@@ -67,6 +67,73 @@ test("SDK context code reaches the current overflow recovery classification", ()
   })
 })
 
+test("SDK validation wrappers retain typed Provider diagnostics with structural redaction", () => {
+  const packet = { type: "error", error: { type: "invalid_request_error", code: "invalid_function_parameters",
+    message: "The declared constant is unsupported.", param: "tools[41].parameters" }, password: "SYNTHETIC VALIDATION VALUE" }
+  const error = new TypeValidationError({ value: packet, cause: new Error("sequence_number is required") })
+  expect(ProviderError.parseStreamError(error)).toEqual({ type: "api_error", message: packet.error.message,
+    isRetryable: false, responseBody: JSON.stringify({ ...packet, password: "<redacted>" }) })
+  expect(Message.fromError(error, { providerID: "openai" })).toEqual({ name: "APIError", data: {
+    message: packet.error.message, isRetryable: false, responseBody: JSON.stringify({ ...packet, password: "<redacted>" }),
+  } })
+  expect(DefaultLLMActivityPolicy.classify(error, {})).toBe("provider_stream_error")
+})
+
+test("ordinary SDK value validation retains its explicit Unknown error contract", () => {
+  const error = new TypeValidationError({ value: { recordCount: "six" }, cause: new Error("recordCount must be an integer") })
+  expect(Message.fromError(error, { providerID: "openai" })).toEqual({ name: "UnknownError", data: { message: error.toString() } })
+  expect(DefaultLLMActivityPolicy.classify(error, {})).toBe("unknown")
+})
+
+test("SDK-wrapped context errors retain overflow classification and diagnostic body", () => {
+  const packet = { type: "error", code: "context_length_exceeded", message: "Declared capacity was exceeded." }
+  const error = new TypeValidationError({ value: packet, cause: new Error("sequence_number is required") })
+  expect(Message.fromError(error, { providerID: "openai" })).toEqual({ name: "ContextOverflowError", data: {
+    message: packet.message, responseBody: JSON.stringify(packet),
+  } })
+  expect(DefaultLLMActivityPolicy.classify(error, {})).toBe("context_overflow")
+})
+
+for (const nested of [true, false]) for (const outputStarted of [false, true]) {
+  test(`actual SDK preserves ${nested ? "nested" : "flat"} error packets without sequence metadata ${outputStarted ? "after" : "before"} output`, async () => {
+    const failure = { type: "invalid_request_error", code: "invalid_function_parameters",
+      message: "Invalid schema for function 'StructuredOutput': Unexpected constant value.", param: "tools[41].parameters" }
+    const packet = nested ? { type: "error", error: failure } : { ...failure, type: "error" }
+    const requests: Array<{ model: string; stream: boolean }> = []
+    const server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch(request) {
+      requests.push(await request.json() as { model: string; stream: boolean })
+      const events = [...(outputStarted ? [
+        { type: "response.created", response: { id: "validation-contract", created_at: 1, model: "validation-contract" } },
+        { type: "response.output_item.added", output_index: 0, item: { type: "message", id: "partial-contract" } },
+        { type: "response.output_text.delta", item_id: "partial-contract", output_index: 0, delta: "Retained partial output." },
+      ] : []), packet]
+      return new Response(events.map(event => `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`).join(""), {
+        headers: { "content-type": "text/event-stream" },
+      })
+    } })
+    try {
+      const provider = createOpenAI({ apiKey: "local-validation-contract", baseURL: new URL("v1", server.url).toString() })
+      const callbackErrors: unknown[] = []
+      const result = streamText({ model: provider.responses("validation-contract"), prompt: "Read the current record.", maxRetries: 0,
+        onError: ({ error }) => { callbackErrors.push(error) },
+      })
+      const errors: unknown[] = []; const text: string[] = []
+      for await (const part of result.fullStream) {
+        if (part.type === "error") errors.push(part.error)
+        if (part.type === "text-delta") text.push(part.text)
+      }
+      expect(requests.map(({model,stream}) => ({model,stream}))).toEqual([{model:"validation-contract",stream:true}])
+      expect(text).toEqual(outputStarted ? ["Retained partial output."] : [])
+      expect(callbackErrors).toEqual(errors)
+      expect(errors.map(error => ({ sdkValidation: TypeValidationError.isInstance(error),
+        canonical: Message.fromError(error, { providerID: "openai" }), classification: DefaultLLMActivityPolicy.classify(error, {}),
+      }))).toEqual([{ sdkValidation: true, canonical: { name: "APIError", data: {
+        message: failure.message, isRetryable: false, responseBody: JSON.stringify(packet),
+      } }, classification: "provider_stream_error" }])
+    } finally { await server.stop(true) }
+  })
+}
+
 for (const outputStarted of [false, true]) test(`real SDK HTTP errors ${outputStarted ? "after" : "before"} output enter the canonical Provider error contract`, async () => {
   const requests: Array<{ model: string; stream: boolean }> = []
   const server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch(request) {
@@ -129,6 +196,7 @@ test("flat quota and context failures retain their explicit contracts", () => {
 for (const [label, error] of [
   ["raw", overload],
   ["SDK", new StreamProviderError({ message: overload.error.message, type: overload.error.type, code: overload.error.code, data: overload })],
+  ["SDK validation", new TypeValidationError({ value: { type: "error", error: overload.error }, cause: new Error("sequence_number is required") })],
 ] as const) test(`consumed output followed by a ${label} Provider error settles as an explicit failed activity`, async () => {
   const events: LLMActivityEvent[] = []
   const deltas: string[] = []

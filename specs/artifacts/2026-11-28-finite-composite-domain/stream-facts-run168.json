@@ -1,0 +1,63 @@
+{
+  "label": "run168",
+  "requests": 5,
+  "state": "exited",
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795864340696
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795864340021
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795864765877
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795864685718
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "aborted",
+        "at": 1795864718227
+      }
+    }
+  ],
+  "providerDrain": {
+    "startedAt": 1795864936095,
+    "settledAt": 1795864936095,
+    "allReadersSettled": true
+  },
+  "credentialCleanup": "passed"
+}

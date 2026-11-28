@@ -1,4 +1,4 @@
-import { APICallError, StreamProviderError } from "ai"
+import { APICallError, StreamProviderError, TypeValidationError } from "ai"
 import { decodeProviderStreamError } from "@opencorvus-ai/transport-protocol"
 import { STATUS_CODES } from "http"
 import { createScanner, parseTree, type Node as JSONNode } from "jsonc-parser"
@@ -409,7 +409,7 @@ export namespace ProviderError {
       type: "error",
       error: { type: input.type, code: input.code, message: input.message },
       data: input.data,
-    } : input)
+    } : TypeValidationError.isInstance(input) ? input.value : input)
     if (!decoded) return
     const body = decoded.body
     const responseBody = redactSensitiveProviderPayload(JSON.stringify(body))

@@ -1,0 +1,63 @@
+{
+  "info": {
+    "author": "work",
+    "role": "assistant",
+    "time": {
+      "created": 1795864042336,
+      "completed": 1795864046497
+    },
+    "error": {
+      "name": "APIError",
+      "data": {
+        "message": "Invalid schema for function 'StructuredOutput': Error at #/properties/marker: Unexpected constant value: {\"source\":\"settlement-review.csv\",\"currency\":null,\"description\":\"按原符号核对\"}",
+        "isRetryable": false,
+        "responseBody": "{\"type\":\"error\",\"error\":{\"message\":\"Invalid schema for function 'StructuredOutput': Error at #/properties/marker: Unexpected constant value: {\\\"source\\\":\\\"settlement-review.csv\\\",\\\"currency\\\":null,\\\"description\\\":\\\"按原符号核对\\\"}\",\"type\":\"invalid_request_error\",\"param\":\"tools[41].parameters\",\"code\":\"invalid_function_parameters\"}}"
+      }
+    },
+    "failureOccurrence": {
+      "session_id": "ses_-zUNjVUulzzXM1YqBT1A",
+      "assistant_message_id": "msg_g0VcGUVJw00pkXW7lNB6",
+      "error_name": "APIError"
+    },
+    "parentID": "msg_4430756a-02d9-4063-bca4-1c2dd51e389a",
+    "acceptedInputMessageIDs": [
+      "msg_4430756a-02d9-4063-bca4-1c2dd51e389a"
+    ],
+    "modelID": "gpt-6.1-sol",
+    "providerID": "openai",
+    "agent": "work",
+    "path": {
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north"
+    },
+    "cost": 0,
+    "tokens": {
+      "total": 0,
+      "input": 0,
+      "output": 0,
+      "reasoning": 0,
+      "cache": {
+        "read": 0,
+        "write": 0
+      }
+    },
+    "finish": "error",
+    "orderKey": "v1:0001795864042336:0000000000000030:0000000000000000:message:msg_g0VcGUVJw00pkXW7lNB6",
+    "id": "msg_g0VcGUVJw00pkXW7lNB6",
+    "sessionID": "ses_-zUNjVUulzzXM1YqBT1A",
+    "resolvedRole": "work",
+    "channel": "assistant",
+    "agentID": "work",
+    "sessionAgentID": "work",
+    "originSource": ""
+  },
+  "parts": [
+    {
+      "id": "prt_g0VcGUW8F00KwTe1skNN",
+      "sessionID": "ses_-zUNjVUulzzXM1YqBT1A",
+      "messageID": "msg_g0VcGUVJw00pkXW7lNB6",
+      "orderKey": "v1:0001795864045455:0000000000000031:0000000000000000:part:prt_g0VcGUW8F00KwTe1skNN",
+      "type": "step-start"
+    }
+  ]
+}

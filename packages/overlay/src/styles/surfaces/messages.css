@@ -388,6 +388,17 @@
   color: var(--text-soft);
 }
 
+.msg-assistant-error__reason {
+  margin: var(--ui-gap-xs) 0;
+  max-height: calc(var(--ui-font-body) * var(--ui-line-height-normal) * 4);
+  overflow: auto;
+  font-family: inherit;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-normal);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .msg-assistant-error__details pre {
   margin: var(--ui-gap-sm) 0 0;
   font-family: var(--mono);

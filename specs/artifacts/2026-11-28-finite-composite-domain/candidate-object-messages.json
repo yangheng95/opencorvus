@@ -1,0 +1,163 @@
+[
+  {
+    "info": {
+      "author": "user",
+      "role": "user",
+      "time": {
+        "created": 1795864041651
+      },
+      "format": {
+        "type": "json_schema",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string"
+            },
+            "recordCount": {
+              "type": "integer"
+            },
+            "netAmount": {
+              "type": "number"
+            },
+            "marker": {
+              "const": {
+                "source": "settlement-review.csv",
+                "currency": null,
+                "description": "按原符号核对"
+              }
+            }
+          },
+          "required": [
+            "source",
+            "recordCount",
+            "netAmount",
+            "marker"
+          ],
+          "additionalProperties": false
+        },
+        "retryCount": 2
+      },
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "tools": {
+        "delegate_agent": true,
+        "panel_expert_squad_inspect": true,
+        "panel_query_task": true,
+        "panel_query_task_artifacts": true,
+        "panel_create_task": true,
+        "panel_wake_mission": true,
+        "panel_wake_work": true,
+        "panel_send_task_message": true,
+        "panel_respond_interaction": true,
+        "panel_cancel_task": true,
+        "panel_update_checks": true,
+        "panel_select_workspace": true,
+        "panel_update_goal": true,
+        "panel_delete_goal": true,
+        "question": true,
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "search_code": true,
+        "edit": true,
+        "write": true,
+        "apply_patch": true,
+        "todo": true,
+        "schedule": true
+      },
+      "extra": {
+        "project_memory_user_input": {
+          "version": 1,
+          "surface": "session.prompt",
+          "literalText": "请只读当前项目settlement-review.csv，逐行核对记录数与带符号金额总和，退款保留负号，零金额样品计数，不推断币种或利润。按给定结构交接：source填写真实文件名，recordCount和netAmount填写实算数值；marker遵守给定有限域。本人直接完成，不改文件、不执行脚本、不创建任务/专家团、不委派。"
+        },
+        "publicSessionPromptIdentity": {
+          "version": 1,
+          "fingerprint": "dea77edf20707e2abadcb75a616a15d98461cc9cac1d32e2e21b2a68a336a63a"
+        },
+        "surface": "right-sidebar",
+        "source": "right-sidebar-conversation",
+        "experience": "work"
+      },
+      "orderKey": "v1:0001795864041651:0000000000000030:0000000000000000:message:msg_4430756a-02d9-4063-bca4-1c2dd51e389a",
+      "id": "msg_4430756a-02d9-4063-bca4-1c2dd51e389a",
+      "sessionID": "ses_-zUNjVUulzzXM1YqBT1A"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcGUV8t00LKZNIlAeG",
+        "sessionID": "ses_-zUNjVUulzzXM1YqBT1A",
+        "messageID": "msg_4430756a-02d9-4063-bca4-1c2dd51e389a",
+        "orderKey": "v1:0001795864041653:0000000000000031:0000000000000000:part:prt_g0VcGUV8t00LKZNIlAeG",
+        "type": "text",
+        "text": "请只读当前项目settlement-review.csv，逐行核对记录数与带符号金额总和，退款保留负号，零金额样品计数，不推断币种或利润。按给定结构交接：source填写真实文件名，recordCount和netAmount填写实算数值；marker遵守给定有限域。本人直接完成，不改文件、不执行脚本、不创建任务/专家团、不委派。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ee43706e26c5699a8f83b0cda9aff88ed3c4a0b97838c582a1c57c28a3ec3b77.json",
+          "catalog_snapshot_hash": "ee43706e26c5699a8f83b0cda9aff88ed3c4a0b97838c582a1c57c28a3ec3b77"
+        }
+      }
+    ]
+  },
+  {
+    "info": {
+      "author": "work",
+      "role": "assistant",
+      "time": {
+        "created": 1795864042336,
+        "completed": 1795864046497
+      },
+      "error": {
+        "name": "APIError",
+        "data": {
+          "message": "Invalid schema for function 'StructuredOutput': Error at #/properties/marker: Unexpected constant value: {\"source\":\"settlement-review.csv\",\"currency\":null,\"description\":\"按原符号核对\"}",
+          "isRetryable": false,
+          "responseBody": "{\"type\":\"error\",\"error\":{\"message\":\"Invalid schema for function 'StructuredOutput': Error at #/properties/marker: Unexpected constant value: {\\\"source\\\":\\\"settlement-review.csv\\\",\\\"currency\\\":null,\\\"description\\\":\\\"按原符号核对\\\"}\",\"type\":\"invalid_request_error\",\"param\":\"tools[41].parameters\",\"code\":\"invalid_function_parameters\"}}"
+        }
+      },
+      "failureOccurrence": {
+        "session_id": "ses_-zUNjVUulzzXM1YqBT1A",
+        "assistant_message_id": "msg_g0VcGUVJw00pkXW7lNB6",
+        "error_name": "APIError"
+      },
+      "parentID": "msg_4430756a-02d9-4063-bca4-1c2dd51e389a",
+      "acceptedInputMessageIDs": [
+        "msg_4430756a-02d9-4063-bca4-1c2dd51e389a"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "work",
+      "path": {
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 0,
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "finish": "error",
+      "orderKey": "v1:0001795864042336:0000000000000030:0000000000000000:message:msg_g0VcGUVJw00pkXW7lNB6",
+      "id": "msg_g0VcGUVJw00pkXW7lNB6",
+      "sessionID": "ses_-zUNjVUulzzXM1YqBT1A"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VcGUW8F00KwTe1skNN",
+        "sessionID": "ses_-zUNjVUulzzXM1YqBT1A",
+        "messageID": "msg_g0VcGUVJw00pkXW7lNB6",
+        "orderKey": "v1:0001795864045455:0000000000000031:0000000000000000:part:prt_g0VcGUW8F00KwTe1skNN",
+        "type": "step-start"
+      }
+    ]
+  }
+]
