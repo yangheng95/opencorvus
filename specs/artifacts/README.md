@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [共用判别值输入完整性证据](2026-11-28-shared-discriminator-input/README.md)
 - [通用工具空值与原生文档证据](2026-11-28-tool-null-semantics/README.md)
 - [嵌套工具输入与工作簿证据](2026-11-28-nested-office-input-review/README.md)
 - [跨工作表结算核对证据](2026-11-28-cross-sheet-settlement-review/README.md)

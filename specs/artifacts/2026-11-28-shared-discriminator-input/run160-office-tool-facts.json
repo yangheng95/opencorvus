@@ -1,0 +1,514 @@
+[
+  {
+    "id": "prt_g0VcEzvTh006zeI40YSh",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts"
+      },
+      "output": "<skill_content name=\"work-artifacts\">\n# Skill: work-artifacts\n\n# Work Artifacts\n\nProduce the requested editable file as the deliverable and use fresh derived\nrenders as review evidence. Never substitute an outline, HTML page, screenshot\ncollection, or semantic Interactive Artifact for the requested source file.\n\n## Workflow\n\n1. Read `references/common-lifecycle.md`.\n2. Read the matching profile reference before authoring:\n   `references/office-presentation.md`, `references/office-document.md`, or\n   `references/office-spreadsheet.md`.\n3. Call `work_artifact_author` with an exact qualified `profile` and a complete\n   typed plan.\n4. Inspect the returned canonical attachment with `work_artifact_inspect`.\n5. Validate that exact attachment with `work_artifact_validate`.\n6. Inspect every fresh render. Repair the typed authoring plan and repeat the\n   full lifecycle when a render is incomplete or visually weak.\n7. Read `references/review.md` and resolve confirmed review findings.\n8. Give `work_artifact_deliver` the exact final validation receipt. Delivery\n   revalidates and rerenders the candidate; only the current authorized Work\n   conversation or Expert Squad delivery owner publishes it.\n\nWhen the user requests a project file path, save the exact delivered source with\nthe ordinary `write` tool using `attachmentUrl` and `filePath`. This preserves the\nbinary bytes; it does not invoke an Office runtime or replace the canonical source.\n\nRead `references/security.md` before using user-supplied images or handling a\nrequest involving external links, macros, embedded objects, media, templates,\nor an existing file.\n\nBase directory for this skill: file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-vN8ljL/runner-32260-XefI2X/artifact-delivery/runtime/cache/builtin-skills/601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7\nLoad a relative supporting file by calling `skill` again with `name: \"work-artifacts\"` and the exact `file` path below. Do not pass the materialized base directory to the project `read` tool.\nNote: file list is sampled.\n\n<skill_files>\n<file>PROVENANCE.md</file>\n<file>references/common-lifecycle.md</file>\n<file>references/office-document.md</file>\n<file>references/office-presentation.md</file>\n<file>references/office-spreadsheet.md</file>\n<file>references/review.md</file>\n<file>references/security.md</file>\n</skill_files>\n</skill_content>",
+      "title": "Loaded skill: work-artifacts",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "agent": "work",
+        "scope": "session",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795841978381,
+        "end": 1795841978954
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcEzxNy00eynxL8oPH",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts",
+        "file": "references/common-lifecycle.md"
+      },
+      "output": "<skill_file name=\"work-artifacts\" path=\"references/common-lifecycle.md\">\n1: # Work Artifact lifecycle\n2: \n3: - Treat the requested editable file as the primary deliverable.\n4: - Use only profiles listed by the mounted typed tool schema. Do not infer\n5:   support from a filename extension, installed viewer, or underlying binary.\n6: - Keep authoring input complete, ordered, bounded, and tied to the intended\n7:   audience, purpose, format, sources, and acceptance criteria.\n8: - Use canonical attachments instead of local filesystem paths or remote URLs.\n9: - Validate the exact authored attachment. Preserve the returned validation\n10:   receipt with its source, runtime, and render digests.\n11: - Review the actual fresh renders. A successful command, zero issue count,\n12:   schema result, or file existence is not visual acceptance.\n13: - Deliver only with the exact receipt for the final candidate. Never alter a\n14:   receipt or reuse one after reauthoring.\n15: - Final delivery re-renders the source and binds every ordered page image to\n16:   the reviewed receipt. If rendering changes, validate the same source again,\n17:   inspect all fresh images, and deliver with that new receipt.\n\n(End of file - total 17 lines)\n</skill_file>",
+      "title": "Loaded skill file: references/common-lifecycle.md",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "file": "references/common-lifecycle.md",
+        "agent": "work",
+        "scope": "session",
+        "preview": "# Work Artifact lifecycle\n\n- Treat the requested editable file as the primary deliverable.\n- Use only profiles listed by the mounted typed tool schema. Do not infer\n  support from a filename extension, installed viewer, or underlying binary.\n- Keep authoring input complete, ordered, bounded, and tied to the intended\n  audience, purpose, format, sources, and acceptance criteria.\n- Use canonical attachments instead of local filesystem paths or remote URLs.\n- Validate the exact authored attachment. Preserve the returned validation\n  receipt with its source, runtime, and render digests.\n- Review the actual fresh renders. A successful command, zero issue count,\n  schema result, or file existence is not visual acceptance.\n- Deliver only with the exact receipt for the final candidate. Never alter a\n  receipt or reuse one after reauthoring.\n- Final delivery re-renders the source and binds every ordered page image to\n  the reviewed receipt. If rendering changes, validate the same source again,\n  inspect all fresh images, and deliver with that new receipt.",
+        "truncated": false,
+        "lines": 17,
+        "totalLines": 17
+      },
+      "time": {
+        "start": 1795841985714,
+        "end": 1795841986230
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcEzyT6003LO6j9yb4",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts",
+        "file": "references/office-spreadsheet.md"
+      },
+      "output": "<skill_file name=\"work-artifacts\" path=\"references/office-spreadsheet.md\">\n1: # Qualified office.spreadsheet@1 profile\n2: \n3: Create a new editable XLSX from `filename`, `locale`, and 1–8 ordered `sheets`.\n4: Each sheet has a unique Excel `name`, 1–12 column headings, and 1–40 data rows.\n5: Every row must have exactly one value per column: string, finite number,\n6: boolean, or null for a blank cell. Strings remain strings, including leading\n7: zeros and text starting with `=`. Formulas, charts, macros, external links,\n8: templates and editing existing workbooks are outside this profile.\n9: \n10: Keep totals numeric and label their units. Calculate requested totals from the\n11: actual source data before authoring. Inspect and validate the exact canonical\n12: source, then review every worksheet PNG for complete rows, headings, numeric\n13: values, totals and readable widths. Reauthor the full plan when needed.\n14: \n15: Deliver the source URL, exact completed validation receipt and localized title.\n16: XLSX is the primary deliverable; the derived PDF is a review preview. Do not\n17: claim Microsoft Excel pixel fidelity or formula recalculation support.\n\n(End of file - total 17 lines)\n</skill_file>",
+      "title": "Loaded skill file: references/office-spreadsheet.md",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "file": "references/office-spreadsheet.md",
+        "agent": "work",
+        "scope": "session",
+        "preview": "# Qualified office.spreadsheet@1 profile\n\nCreate a new editable XLSX from `filename`, `locale`, and 1–8 ordered `sheets`.\nEach sheet has a unique Excel `name`, 1–12 column headings, and 1–40 data rows.\nEvery row must have exactly one value per column: string, finite number,\nboolean, or null for a blank cell. Strings remain strings, including leading\nzeros and text starting with `=`. Formulas, charts, macros, external links,\ntemplates and editing existing workbooks are outside this profile.\n\nKeep totals numeric and label their units. Calculate requested totals from the\nactual source data before authoring. Inspect and validate the exact canonical\nsource, then review every worksheet PNG for complete rows, headings, numeric\nvalues, totals and readable widths. Reauthor the full plan when needed.\n\nDeliver the source URL, exact completed validation receipt and localized title.\nXLSX is the primary deliverable; the derived PDF is a review preview. Do not\nclaim Microsoft Excel pixel fidelity or formula recalculation support.",
+        "truncated": false,
+        "lines": 17,
+        "totalLines": 17
+      },
+      "time": {
+        "start": 1795841989876,
+        "end": 1795841990441
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcEzzyY00GzGEtvTJl",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "settlement-review.csv"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north\\settlement-review.csv</path>\n<type>file</type>\n<content>1: 记录编号,类型,金额\n2: N01,普通订单,15.20\n3: N02,退款,-4.85\n4: N03,免费样品,0.00\n5: N04,普通订单,6.35\n6: N05,退款,-1.15\n7: N06,普通订单,2.10\n\n(End of file - total 7 lines)\n</content>",
+      "title": "settlement-review.csv",
+      "metadata": {
+        "preview": "记录编号,类型,金额\nN01,普通订单,15.20\nN02,退款,-4.85\nN03,免费样品,0.00\nN04,普通订单,6.35\nN05,退款,-1.15\nN06,普通订单,2.10",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 7,
+        "totalLines": 7
+      },
+      "time": {
+        "start": 1795841995670,
+        "end": 1795841995902
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcF00rj00V3hwFTrZ2",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts",
+        "file": "references/review.md"
+      },
+      "output": "<skill_file name=\"work-artifacts\" path=\"references/review.md\">\n1: # Presentation review\n2: \n3: Inspect every fresh PNG: each PPTX slide, DOCX page, or XLSX worksheet.\n4: For DOCX/XLSX also open the derived PDF preview. Verify complete paragraphs,\n5: rows, columns, numeric totals and page boundaries against the requested source.\n6: \n7: For every slide, verify required content, clipping, readability, hierarchy,\n8: alignment, spacing, contrast, chart categories/series/units/scale, image aspect\n9: ratio and alt text, placeholders, blank regions, and required sources.\n10: \n11: Do not put heterogeneous units such as currency, counts, and percentages on a\n12: single raw-value axis. Use separate charts, a clearly labelled and justified\n13: secondary axis, or an explicit normalized-index comparison. Keep source and\n14: provenance notes as text, never as dummy chart categories or series. Repair a\n15: chart when scale dominance makes any meaningful series illegible.\n16: \n17: Across the deck, verify narrative order, visual consistency, intentional\n18: density, requested conclusion/action, filename, and title.\n19: \n20: An independent child review is advisory evidence. The parent Work conversation\n21: owns corrections, final validation, exact receipt selection, and delivery.\n\n(End of file - total 21 lines)\n</skill_file>",
+      "title": "Loaded skill file: references/review.md",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "file": "references/review.md",
+        "agent": "work",
+        "scope": "session",
+        "preview": "# Presentation review\n\nInspect every fresh PNG: each PPTX slide, DOCX page, or XLSX worksheet.\nFor DOCX/XLSX also open the derived PDF preview. Verify complete paragraphs,\nrows, columns, numeric totals and page boundaries against the requested source.\n\nFor every slide, verify required content, clipping, readability, hierarchy,\nalignment, spacing, contrast, chart categories/series/units/scale, image aspect\nratio and alt text, placeholders, blank regions, and required sources.\n\nDo not put heterogeneous units such as currency, counts, and percentages on a\nsingle raw-value axis. Use separate charts, a clearly labelled and justified\nsecondary axis, or an explicit normalized-index comparison. Keep source and\nprovenance notes as text, never as dummy chart categories or series. Repair a\nchart when scale dominance makes any meaningful series illegible.\n\nAcross the deck, verify narrative order, visual consistency, intentional\ndensity, requested conclusion/action, filename, and title.\n\nAn independent child review is advisory evidence. The parent Work conversation",
+        "truncated": false,
+        "lines": 21,
+        "totalLines": 21
+      },
+      "time": {
+        "start": 1795841999091,
+        "end": 1795841999426
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcF02om00YaAikGTkb",
+    "tool": "work_artifact_author",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.spreadsheet@1",
+        "filename": "北仓参数完整性复验.xlsx",
+        "locale": "zh-CN",
+        "sheets": [
+          {
+            "name": "原始记录",
+            "columns": [
+              "记录编号",
+              "类型",
+              "金额"
+            ],
+            "rows": [
+              [
+                "N01",
+                "普通订单",
+                15.2
+              ],
+              [
+                "N02",
+                "退款",
+                -4.85
+              ],
+              [
+                "N03",
+                "免费样品",
+                0
+              ],
+              [
+                "N04",
+                "普通订单",
+                6.35
+              ],
+              [
+                "N05",
+                "退款",
+                -1.15
+              ],
+              [
+                "N06",
+                "普通订单",
+                2.1
+              ]
+            ]
+          },
+          {
+            "name": "分类汇总",
+            "columns": [
+              "记录类型",
+              "笔数",
+              "金额（保留正负号）",
+              "币种"
+            ],
+            "rows": [
+              [
+                "普通订单",
+                3,
+                23.65,
+                "未知"
+              ],
+              [
+                "退款",
+                2,
+                -6,
+                "未知"
+              ],
+              [
+                "免费样品",
+                1,
+                0,
+                "未知"
+              ],
+              [
+                "合计（净额）",
+                6,
+                17.65,
+                "未知"
+              ]
+            ]
+          },
+          {
+            "name": "核对说明",
+            "columns": [
+              "项目",
+              "说明"
+            ],
+            "rows": [
+              [
+                "数据来源",
+                "仅使用当前项目 settlement-review.csv；原始记录按源文件顺序保留。"
+              ],
+              [
+                "字段范围",
+                "源文件仅有记录编号、类型、金额三个字段，未提供币种或成本。"
+              ],
+              [
+                "币种",
+                "未知；不得推断具体货币。"
+              ],
+              [
+                "笔数口径",
+                "按记录行计数，共6笔；零金额免费样品也计数，不等同于订单数量。"
+              ],
+              [
+                "金额口径",
+                "按原始正负号求和；退款为负数。净额为17.65，不是利润。"
+              ],
+              [
+                "逐笔核对",
+                "15.20 − 4.85 + 0.00 + 6.35 − 1.15 + 2.10 = 17.65。"
+              ],
+              [
+                "分类复核",
+                "普通订单：15.20 + 6.35 + 2.10 = 23.65；退款：−4.85 − 1.15 = −6.00；免费样品：0.00。"
+              ],
+              [
+                "总计复核",
+                "分类笔数：3 + 2 + 1 = 6；分类金额：23.65 − 6.00 + 0.00 = 17.65，与逐笔合计一致。"
+              ],
+              [
+                "使用限制",
+                "汇总为静态数值，不含公式联动；修改原始记录后需重新计算并核对汇总。"
+              ],
+              [
+                "数值保存",
+                "金额以数值保存；显示时省略末尾零不改变金额，如15.2等于15.20。"
+              ]
+            ]
+          }
+        ]
+      },
+      "output": "{\"profile\":\"office.spreadsheet@1\",\"source\":{\"sha\":\"c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx\",\"mime\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"size\":6580,\"filename\":\"北仓参数完整性复验.xlsx\"},\"next\":\"Inspect and validate this exact source URL. Review every returned render before delivery.\"}",
+      "title": "Authored 北仓参数完整性复验.xlsx",
+      "metadata": {
+        "profile": "office.spreadsheet@1",
+        "sourceSha": "c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795842006596,
+        "end": 1795842027808
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcF090300kxVH9171O",
+    "tool": "work_artifact_inspect",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.spreadsheet@1",
+        "source_url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx"
+      },
+      "output": "{\"source\":{\"sha\":\"c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx\",\"mime\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"size\":6580,\"filename\":\"北仓参数完整性复验.xlsx\"},\"content\":{\"success\":true,\"data\":{\"sheets\":[{\"name\":\"原始记录\",\"rows\":[{\"row\":1,\"cells\":{\"A1\":\"记录编号\",\"B1\":\"类型\",\"C1\":\"金额\"}},{\"row\":2,\"cells\":{\"A2\":\"N01\",\"B2\":\"普通订单\",\"C2\":\"15.2\"}},{\"row\":3,\"cells\":{\"A3\":\"N02\",\"B3\":\"退款\",\"C3\":\"-4.85\"}},{\"row\":4,\"cells\":{\"A4\":\"N03\",\"B4\":\"免费样品\",\"C4\":\"0\"}},{\"row\":5,\"cells\":{\"A5\":\"N04\",\"B5\":\"普通订单\",\"C5\":\"6.35\"}},{\"row\":6,\"cells\":{\"A6\":\"N05\",\"B6\":\"退款\",\"C6\":\"-1.15\"}},{\"row\":7,\"cells\":{\"A7\":\"N06\",\"B7\":\"普通订单\",\"C7\":\"2.1\"}}]},{\"name\":\"分类汇总\",\"rows\":[{\"row\":1,\"cells\":{\"A1\":\"记录类型\",\"B1\":\"笔数\",\"C1\":\"金额（保留正负号）\",\"D1\":\"币种\"}},{\"row\":2,\"cells\":{\"A2\":\"普通订单\",\"B2\":\"3\",\"C2\":\"23.65\",\"D2\":\"未知\"}},{\"row\":3,\"cells\":{\"A3\":\"退款\",\"B3\":\"2\",\"C3\":\"-6\",\"D3\":\"未知\"}},{\"row\":4,\"cells\":{\"A4\":\"免费样品\",\"B4\":\"1\",\"C4\":\"0\",\"D4\":\"未知\"}},{\"row\":5,\"cells\":{\"A5\":\"合计（净额）\",\"B5\":\"6\",\"C5\":\"17.65\",\"D5\":\"未知\"}}]},{\"name\":\"核对说明\",\"rows\":[{\"row\":1,\"cells\":{\"A1\":\"项目\",\"B1\":\"说明\"}},{\"row\":2,\"cells\":{\"A2\":\"数据来源\",\"B2\":\"仅使用当前项目 settlement-review.csv；原始记录按源文件顺序保留。\"}},{\"row\":3,\"cells\":{\"A3\":\"字段范围\",\"B3\":\"源文件仅有记录编号、类型、金额三个字段，未提供币种或成本。\"}},{\"row\":4,\"cells\":{\"A4\":\"币种\",\"B4\":\"未知；不得推断具体货币。\"}},{\"row\":5,\"cells\":{\"A5\":\"笔数口径\",\"B5\":\"按记录行计数，共6笔；零金额免费样品也计数，不等同于订单数量。\"}},{\"row\":6,\"cells\":{\"A6\":\"金额口径\",\"B6\":\"按原始正负号求和；退款为负数。净额为17.65，不是利润。\"}},{\"row\":7,\"cells\":{\"A7\":\"逐笔核对\",\"B7\":\"15.20 − 4.85 + 0.00 + 6.35 − 1.15 + 2.10 = 17.65。\"}},{\"row\":8,\"cells\":{\"A8\":\"分类复核\",\"B8\":\"普通订单：15.20 + 6.35 + 2.10 = 23.65；退款：−4.85 − 1.15 = −6.00；免费样品：0.00。\"}},{\"row\":9,\"cells\":{\"A9\":\"总计复核\",\"B9\":\"分类笔数：3 + 2 + 1 = 6；分类金额：23.65 − 6.00 + 0.00 = 17.65，与逐笔合计一致。\"}},{\"row\":10,\"cells\":{\"A10\":\"使用限制\",\"B10\":\"汇总为静态数值，不含公式联动；修改原始记录后需重新计算并核对汇总。\"}},{\"row\":11,\"cells\":{\"A11\":\"数值保存\",\"B11\":\"金额以数值保存；显示时省略末尾零不改变金额，如15.2等于15.20。\"}}]}]}},\"inspection\":{\"entryCount\":12,\"uncompressedBytes\":13251,\"sheetCount\":3},\"profile\":\"office.spreadsheet@1\",\"next\":\"Validate this exact source URL before delivery.\"}",
+      "title": "Inspected 北仓参数完整性复验.xlsx",
+      "metadata": {
+        "profile": "office.spreadsheet@1",
+        "sourceSha": "c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2",
+        "entryCount": 12,
+        "uncompressedBytes": 13251,
+        "sheetCount": 3,
+        "truncated": false
+      },
+      "time": {
+        "start": 1795842030359,
+        "end": 1795842038726
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcF0BxW00RpKvELXEe",
+    "tool": "work_artifact_validate",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.spreadsheet@1",
+        "source_url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx"
+      },
+      "output": "{\"source\":{\"sha\":\"c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx\",\"mime\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"size\":6580,\"filename\":\"北仓参数完整性复验.xlsx\"},\"inspection\":{\"unitCount\":3,\"entryCount\":12,\"uncompressedBytes\":13251},\"validation\":{\"success\":true,\"data\":{\"count\":0,\"errors\":[]}},\"issues\":{\"success\":true,\"data\":{\"count\":0,\"issues\":[]}},\"renders\":[{\"page\":1,\"sha\":\"c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea.png\",\"mime\":\"image/png\",\"size\":13371,\"filename\":\"xlsx-page-1.png\"},{\"page\":2,\"sha\":\"ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136.png\",\"mime\":\"image/png\",\"size\":15043,\"filename\":\"xlsx-page-2.png\"},{\"page\":3,\"sha\":\"ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69.png\",\"mime\":\"image/png\",\"size\":68597,\"filename\":\"xlsx-page-3.png\"}],\"preview\":{\"sha\":\"3db16a8220466670e362e09ca7b70424cb6cb1381103504f7aa4c8ec8497d4c5\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/3db16a8220466670e362e09ca7b70424cb6cb1381103504f7aa4c8ec8497d4c5.pdf\",\"mime\":\"application/pdf\",\"size\":368115,\"filename\":\"北仓参数完整性复验-preview.pdf\"},\"resource_usage\":{\"input_bytes\":6580,\"runtime_output_bytes\":19837,\"render_bytes\":465126,\"wall_clock_ms\":10860},\"validation_receipt\":{\"sha\":\"96142ed2c37e4592a315a42886cb16a4f8e0605f24cf26dc038272762c3a1b91\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/96142ed2c37e4592a315a42886cb16a4f8e0605f24cf26dc038272762c3a1b91.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1509,\"filename\":\"work-artifact-validation-receipt.json\"},\"validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.spreadsheet@1\",\"source_url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx\",\"source_sha\":\"c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"renderer\":{\"id\":\"officecli-html-browser@1\",\"version\":\"157.0.8103.38\",\"playwright_version\":\"1.59.1\",\"node_version\":\"25.7.0\"},\"resource_usage\":{\"input_bytes\":6580,\"runtime_output_bytes\":19837,\"render_bytes\":465126,\"wall_clock_ms\":10860},\"renders\":[{\"page\":1,\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea.png\",\"sha\":\"c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea\"},{\"page\":2,\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136.png\",\"sha\":\"ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136\"},{\"page\":3,\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69.png\",\"sha\":\"ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69\"}],\"preview\":{\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/3db16a8220466670e362e09ca7b70424cb6cb1381103504f7aa4c8ec8497d4c5.pdf\",\"sha\":\"3db16a8220466670e362e09ca7b70424cb6cb1381103504f7aa4c8ec8497d4c5\"}},\"next\":\"Inspect every render, then deliver this exact source and receipt.\"}",
+      "title": "Validated 北仓参数完整性复验.xlsx",
+      "metadata": {
+        "profile": "office.spreadsheet@1",
+        "sourceSha": "c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2",
+        "pageCount": 3,
+        "receiptSha": "96142ed2c37e4592a315a42886cb16a4f8e0605f24cf26dc038272762c3a1b91",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795842041734,
+        "end": 1795842054288
+      },
+      "attachments": [
+        {
+          "id": "prt_g0VcF0FDt001oPGF010R",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0BC800WhYt3f3Er",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/96142ed2c37e4592a315a42886cb16a4f8e0605f24cf26dc038272762c3a1b91.json"
+        },
+        {
+          "id": "prt_g0VcF0FDt01mUv1eevl6",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0BC800WhYt3f3Er",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-1.png",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea.png"
+        },
+        {
+          "id": "prt_g0VcF0FDt02DGPQp1ngU",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0BC800WhYt3f3Er",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-2.png",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136.png"
+        },
+        {
+          "id": "prt_g0VcF0FDt03N8zuh8XXz",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0BC800WhYt3f3Er",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-3.png",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69.png"
+        }
+      ]
+    }
+  },
+  {
+    "id": "prt_g0VcF0G0o0050pMpU5b9",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/3db16a8220466670e362e09ca7b70424cb6cb1381103504f7aa4c8ec8497d4c5.pdf"
+      },
+      "output": "PDF read successfully",
+      "title": "北仓参数完整性复验-preview.pdf",
+      "metadata": {
+        "preview": "PDF read successfully",
+        "truncated": false,
+        "loaded": [],
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      },
+      "time": {
+        "start": 1795842057314,
+        "end": 1795842058724
+      },
+      "attachments": [
+        {
+          "id": "prt_g0VcF0GNV00RRYBGeVE8",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0FFM00oYMKwizYv",
+          "type": "file",
+          "mime": "application/pdf",
+          "filename": "北仓参数完整性复验-preview.pdf",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/3db16a8220466670e362e09ca7b70424cb6cb1381103504f7aa4c8ec8497d4c5.pdf"
+        }
+      ]
+    }
+  },
+  {
+    "id": "prt_g0VcF0J5R00jo8XbUx7z",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.spreadsheet@1",
+        "title": "北仓参数完整性复验.xlsx",
+        "source_url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx",
+        "validation_receipt_url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/96142ed2c37e4592a315a42886cb16a4f8e0605f24cf26dc038272762c3a1b91.json",
+        "validation_receipt_sha": "96142ed2c37e4592a315a42886cb16a4f8e0605f24cf26dc038272762c3a1b91"
+      },
+      "output": "{\"artifactID\":\"art_g0VcF0NZa00vC10KCf2Z\",\"source\":{\"sha\":\"c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx\",\"mime\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"size\":6580,\"filename\":\"北仓参数完整性复验.xlsx\"},\"preview\":{\"sha\":\"2a0e63e9137d928bbabc0c3f34d9970586d7319aea4479466704aa08542916a2\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/2a0e63e9137d928bbabc0c3f34d9970586d7319aea4479466704aa08542916a2.pdf\",\"mime\":\"application/pdf\",\"size\":368115,\"filename\":\"北仓参数完整性复验-preview.pdf\"},\"renders\":[{\"page\":1,\"sha\":\"c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea.png\",\"mime\":\"image/png\",\"size\":13371,\"filename\":\"xlsx-page-1.png\"},{\"page\":2,\"sha\":\"ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136.png\",\"mime\":\"image/png\",\"size\":15043,\"filename\":\"xlsx-page-2.png\"},{\"page\":3,\"sha\":\"ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69.png\",\"mime\":\"image/png\",\"size\":68597,\"filename\":\"xlsx-page-3.png\"}],\"final_validation_receipt\":{\"sha\":\"56ac7729b71b5566169d8fb002ab26153a303c23cf8fb1834557e292a2e0e4cf\",\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/56ac7729b71b5566169d8fb002ab26153a303c23cf8fb1834557e292a2e0e4cf.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1509,\"filename\":\"work-artifact-validation-receipt.json\"},\"final_validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.spreadsheet@1\",\"source_url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx\",\"source_sha\":\"c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"renderer\":{\"id\":\"officecli-html-browser@1\",\"version\":\"157.0.8103.38\",\"playwright_version\":\"1.59.1\",\"node_version\":\"25.7.0\"},\"resource_usage\":{\"input_bytes\":6580,\"runtime_output_bytes\":19837,\"render_bytes\":465126,\"wall_clock_ms\":10714},\"renders\":[{\"page\":1,\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea.png\",\"sha\":\"c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea\"},{\"page\":2,\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136.png\",\"sha\":\"ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136\"},{\"page\":3,\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69.png\",\"sha\":\"ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69\"}],\"preview\":{\"url\":\"/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/2a0e63e9137d928bbabc0c3f34d9970586d7319aea4479466704aa08542916a2.pdf\",\"sha\":\"2a0e63e9137d928bbabc0c3f34d9970586d7319aea4479466704aa08542916a2\"}},\"fidelity\":\"OfficeCLI package validation and local browser-derived review; Microsoft Office pixel fidelity is not claimed.\"}",
+      "title": "北仓参数完整性复验.xlsx",
+      "metadata": {
+        "artifactID": "art_g0VcF0NZa00vC10KCf2Z",
+        "renderer": "file-preview@1",
+        "profile": "office.spreadsheet@1",
+        "sourceSha": "c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2",
+        "pageCount": 3,
+        "validationReceiptSha": "56ac7729b71b5566169d8fb002ab26153a303c23cf8fb1834557e292a2e0e4cf",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795842069133,
+        "end": 1795842086385
+      },
+      "attachments": [
+        {
+          "id": "prt_g0VcF0NZe00MbWU8Ji8c",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0GOy00xlV8VMmQl",
+          "type": "file",
+          "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "filename": "北仓参数完整性复验.xlsx",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c05305fd53b0f2121e688364f2954b25edff47ed31c5fccd89837e18a81653f2.xlsx"
+        },
+        {
+          "id": "prt_g0VcF0NZe01ditPLoDjI",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0GOy00xlV8VMmQl",
+          "type": "file",
+          "mime": "application/pdf",
+          "filename": "北仓参数完整性复验-preview.pdf",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/2a0e63e9137d928bbabc0c3f34d9970586d7319aea4479466704aa08542916a2.pdf"
+        },
+        {
+          "id": "prt_g0VcF0NZe020dj9a4tLi",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0GOy00xlV8VMmQl",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/56ac7729b71b5566169d8fb002ab26153a303c23cf8fb1834557e292a2e0e4cf.json"
+        },
+        {
+          "id": "prt_g0VcF0NZe03PR0j1MljZ",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0GOy00xlV8VMmQl",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-1.png",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/c527d08ea45327b60376d4fa6cb9c232eb5750eeb16d6e99f9b2ec948ac895ea.png"
+        },
+        {
+          "id": "prt_g0VcF0NZe04R7sW2OeEd",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0GOy00xlV8VMmQl",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-2.png",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ad6b306c762ddc55f573ba2d69cf20fe34d1e184ceaaa256e14cba93ec99a136.png"
+        },
+        {
+          "id": "prt_g0VcF0NZe05t1boZgWsS",
+          "sessionID": "ses_hj9qUBhWOC2b9wgTCEns",
+          "messageID": "msg_g0VcF0GOy00xlV8VMmQl",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-3.png",
+          "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/ef48ff02d65b3f3a620378657f76357c532c934a5ebaf4e9dc0991c6fbf68f69.png"
+        }
+      ]
+    }
+  }
+]

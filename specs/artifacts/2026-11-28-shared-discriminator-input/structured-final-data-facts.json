@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "sessionID": "ses_-zUNkxY3Gzzr3DErUUCy",
+  "inputMessageID": "msg_9e58ba4f-d66e-4cb1-aadc-f0a17f7e2d70",
+  "assistantMessageID": "msg_g0VcF2TNz00VwBUeRzdh",
+  "finish": "stop",
+  "completeStructuredResult": {
+    "source": "settlement-review.csv",
+    "result": {
+      "kind": "settlement",
+      "recordCount": 6,
+      "netAmount": 17.65,
+      "byType": [
+        {
+          "type": "普通订单",
+          "count": 3,
+          "netAmount": 23.65
+        },
+        {
+          "type": "退款",
+          "count": 2,
+          "netAmount": -6
+        },
+        {
+          "type": "免费样品",
+          "count": 1,
+          "netAmount": 0
+        }
+      ],
+      "options": {
+        "currency": null
+      }
+    }
+  },
+  "sourceRows": 6,
+  "groups": {
+    "普通订单": {
+      "count": 3,
+      "netAmount": "23.65"
+    },
+    "退款": {
+      "count": 2,
+      "netAmount": "-6.00"
+    },
+    "免费样品": {
+      "count": 1,
+      "netAmount": "0.00"
+    }
+  },
+  "realTypedToolPart": "prt_g0VcF2UP800vIUvUwdXJ",
+  "publicExactIdentityReplay": {
+    "httpStatus": 200,
+    "assistantMessageID": "msg_g0VcF2TNz00VwBUeRzdh",
+    "completePersistedMessages": "equals original completed messages"
+  }
+}

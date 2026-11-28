@@ -1,0 +1,69 @@
+{
+  "source": "Observed tool results, not a generated test log",
+  "initialUnionRed": {
+    "exit": 1,
+    "cases": 13,
+    "pass": 8,
+    "fail": 5,
+    "assertions": 23,
+    "isolatedRoot": "opencorvus-test-run-7bEyMd"
+  },
+  "terminalRed": {
+    "originalExecHandle": 3101,
+    "joinedExit": 1,
+    "cases": 1,
+    "fail": 1,
+    "isolatedRoot": "opencorvus-test-run-8kuUVY"
+  },
+  "passingContracts": [
+    {
+      "originalExec": "5622c0",
+      "files": 2,
+      "cases": 22,
+      "assertions": 35,
+      "exit": 0
+    },
+    {
+      "originalExecHandle": 45935,
+      "files": 3,
+      "cases": 28,
+      "assertions": 76,
+      "joinedExit": 0
+    },
+    {
+      "individualFilesFromOriginalExecHandle": 4129,
+      "files": [
+        "scheduler-reply-boundary",
+        "acp-prompt-response"
+      ],
+      "cases": 13,
+      "assertions": 27,
+      "individualFileExit": 0,
+      "wholeCommandExit": 1,
+      "wholeCommandFailure": "New test used wrong SQL parameter key; corrected before final base-budget/recovery run."
+    },
+    {
+      "originalExecHandle": 50246,
+      "files": 2,
+      "cases": 10,
+      "assertions": 36,
+      "joinedExit": 0
+    },
+    {
+      "originalExecHandle": 15070,
+      "files": 1,
+      "cases": 1,
+      "assertions": 1,
+      "filtered": 20,
+      "joinedExit": 0,
+      "thenBackendTypecheckExit": 0
+    }
+  ],
+  "totalPassingCases": 74,
+  "totalPassingAssertions": 175,
+  "limitations": [
+    "Local stream contracts do not themselves prove live Provider end-to-end behavior.",
+    "Actual new Office and structured tasks provide that separate evidence.",
+    "No UI automated tests were added or run."
+  ]
+}

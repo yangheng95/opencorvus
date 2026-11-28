@@ -2,9 +2,11 @@ import { expect, test } from "bun:test"
 import Ajv from "ajv"
 import Ajv2019 from "ajv/dist/2019"
 import Ajv2020 from "ajv/dist/2020"
-import { asSchema, jsonSchema, tool, type ToolExecutionOptions } from "ai"
+import { asSchema, jsonSchema, tool, InvalidToolInputError, type ToolExecutionOptions } from "ai"
+import z from "zod"
 import type { Provider } from "../src/provider/provider"
 import { SessionLoop } from "../src/session/loop"
+import { Message } from "../src/session/message"
 
 const model = {
   id: "gpt-6.1-sol",
@@ -125,4 +127,224 @@ test.each([
   )
   expect(validate(input), JSON.stringify(validate.errors)).toBe(true)
   expect(await prepared.execute!(input, options)).toEqual({ preserved: null })
+})
+
+test.each([false, true])(
+  "preserves canonical nullable data with a shared discriminator, nullable first=%s",
+  async (nullableFirst) => {
+    const branches = [false, true].map((nullable) => ({
+      type: "object",
+      properties: {
+        kind: { const: "record" },
+        options: {
+          type: "object",
+          properties: { value: nullable ? { type: ["string", "null"] } : { type: "string" } },
+          additionalProperties: false,
+        },
+      },
+      required: ["kind", "options"],
+      additionalProperties: false,
+    }))
+    if (nullableFirst) branches.reverse()
+    expect(
+      await captureStructured(
+        {
+          type: "object",
+          properties: { result: { anyOf: branches } },
+          required: ["result"],
+          additionalProperties: false,
+        },
+        { result: { kind: "record", options: { value: null } } },
+      ),
+    ).toEqual({
+      result: { kind: "record", options: { value: null } },
+    })
+  },
+)
+
+test("preserves real extra data authorized by an open object branch", async () => {
+  expect(
+    await captureStructured(
+      {
+        type: "object",
+        properties: {
+          result: {
+            anyOf: [
+              {
+                type: "object",
+                properties: { kind: { const: "note" }, text: { type: "string" } },
+                required: ["kind", "text"],
+                additionalProperties: true,
+              },
+              {
+                type: "object",
+                properties: { kind: { const: "data" }, rows: { type: "array", items: { type: "string" } } },
+                required: ["kind", "rows"],
+                additionalProperties: false,
+              },
+            ],
+          },
+        },
+        required: ["result"],
+        additionalProperties: false,
+      },
+      { result: { kind: "note", text: "交接", rows: ["N01"], total: null } },
+    ),
+  ).toEqual({
+    result: { kind: "note", text: "交接", rows: ["N01"], total: null },
+  })
+})
+
+test("returns the typed canonical input error for an active foreign field in a closed constant branch", async () => {
+  const prepared = SessionLoop.prepareProviderTool({
+    name: "closed_record_contract",
+    source: "registry",
+    model,
+    tool: tool({
+      inputSchema: z.union([
+        z.object({ kind: z.literal("note"), text: z.string() }).strict(),
+        z.object({ kind: z.literal("data"), rows: z.array(z.string()) }).strict(),
+      ]),
+      execute: async (input) => input,
+    }),
+  })
+  await expect(
+    prepared.execute!({ operation: { kind: "note", text: "交接", rows: ["N01"] } }, options),
+  ).rejects.toBeInstanceOf(InvalidToolInputError)
+})
+
+test("preserves real null while materializing a separate optional placeholder across shared-constant branches", async () => {
+  const branches = [false, true].map((nullable) => ({
+    type: "object",
+    properties: {
+      kind: { const: "record" },
+      options: {
+        type: "object",
+        properties: { value: nullable ? { type: ["string", "null"] } : { type: "string" }, hint: { type: "string" } },
+        additionalProperties: false,
+      },
+    },
+    required: ["kind", "options"],
+    additionalProperties: false,
+  }))
+  expect(
+    await captureStructured(
+      {
+        type: "object",
+        properties: { result: { anyOf: branches } },
+        required: ["result"],
+        additionalProperties: false,
+      },
+      { result: { kind: "record", options: { value: null, hint: null } } },
+    ),
+  ).toEqual({
+    result: { kind: "record", options: { value: null } },
+  })
+})
+
+test("returns the canonical typed error for incomparable null interpretations", async () => {
+  const prepared = SessionLoop.prepareProviderTool({
+    name: "incomparable_record_contract",
+    source: "registry",
+    model,
+    tool: tool({
+      inputSchema: z.union([
+        z
+          .object({ kind: z.literal("record"), alpha: z.string().nullable().optional(), beta: z.string().optional() })
+          .strict(),
+        z
+          .object({ kind: z.literal("record"), alpha: z.string().optional(), beta: z.string().nullable().optional() })
+          .strict(),
+      ]),
+      execute: async (input) => input,
+    }),
+  })
+  await expect(
+    prepared.execute!({ operation: { kind: "record", alpha: null, beta: null } }, options),
+  ).rejects.toBeInstanceOf(InvalidToolInputError)
+})
+
+test("materializes a recognized foreign null placeholder for the selected closed branch", async () => {
+  const prepared = SessionLoop.prepareProviderTool({
+    name: "closed_placeholder_contract",
+    source: "registry",
+    model,
+    tool: tool({
+      inputSchema: z.union([
+        z.object({ kind: z.literal("note"), text: z.string() }).strict(),
+        z.object({ kind: z.literal("data"), rows: z.array(z.string()) }).strict(),
+      ]),
+      execute: async (input) => input,
+    }),
+  })
+  expect(await prepared.execute!({ operation: { kind: "note", text: "交接", rows: null } }, options)).toEqual({
+    kind: "note",
+    text: "交接",
+  })
+})
+
+test("materializes referenced branches while preserving the complete outer constraint", async () => {
+  expect(
+    await captureStructured(
+      {
+        type: "object",
+        properties: {
+          result: {
+            anyOf: [{ $ref: "#/$defs/text" }, { $ref: "#/$defs/nullable" }],
+            allOf: [{ required: ["value"] }],
+          },
+        },
+        required: ["result"],
+        additionalProperties: false,
+        $defs: Object.fromEntries(
+          ["text", "nullable"].map((name) => [
+            name,
+            {
+              type: "object",
+              properties: {
+                kind: { const: "record" },
+                value: { type: name === "text" ? "string" : ["string", "null"] },
+                hint: { type: "string" },
+              },
+              required: ["kind"],
+              additionalProperties: false,
+            },
+          ]),
+        ),
+      },
+      { result: { kind: "record", value: null, hint: null } },
+    ),
+  ).toEqual({ result: { kind: "record", value: null } })
+})
+
+test("returns the structured output error when materialized candidates violate oneOf exclusivity", async () => {
+  const branch = {
+    type: "object",
+    properties: { kind: { const: "record" }, hint: { type: "string" } },
+    required: ["kind"],
+    additionalProperties: false,
+  }
+  await expect(
+    captureStructured(
+      {
+        type: "object",
+        properties: {
+          result: {
+            oneOf: [
+              branch,
+              {
+                type: "object",
+                properties: { kind: { const: "record" } },
+                required: ["kind"],
+                additionalProperties: false,
+              },
+            ],
+          },
+        },
+        required: ["result"],
+        additionalProperties: false,
+      },
+      { result: { kind: "record", hint: null } },
+    ),
+  ).rejects.toBeInstanceOf(Message.StructuredOutputPayloadError)
 })

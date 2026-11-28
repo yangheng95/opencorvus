@@ -1982,7 +1982,9 @@ export namespace SessionLoop {
       retainAssistantOnToolContinuation: Boolean(taskRootActivation),
       stopAfterAssistantCompletion: Boolean(taskRootActivation),
       beforeAssistantCompletion(message) {
-        if (structured !== undefined) message.structured = structured
+        if (structured === undefined) return
+        message.structured = structured
+        if (message.finish === "tool-calls" && !message.error) message.finish = "stop"
       },
       retainAssistantForNextProviderStep:
         taskRootActivation && taskRootSemanticTurnLimit !== undefined

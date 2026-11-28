@@ -1,0 +1,54 @@
+{
+  "label": "run160",
+  "pid": 17108,
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery",
+  "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+  "model": "openai/gpt-6.1-sol",
+  "sourceRun": "run159",
+  "auditPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\run160-model-request-audit.json",
+  "startedAt": 1795841872567,
+  "state": "exited",
+  "requests": 19,
+  "officePackageVerification": {
+    "status": "passed",
+    "managedFiles": 5,
+    "runtimeVersion": "1.0.158"
+  },
+  "officeEnvironment": {
+    "executable": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261127-sales-workbook\\host\\bin\\officecli.exe",
+    "identity": {
+      "id": "officecli",
+      "label": "OfficeCLI v1.0.158",
+      "lockRevision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+      "version": "1.0.158",
+      "packageSha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f"
+    },
+    "browserExecutable": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "nodeSidecar": {
+      "nodeExecutable": "node.exe",
+      "playwrightRequirePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\playwright@1.59.1\\node_modules\\playwright\\index.js",
+      "packaged": false
+    },
+    "nodeVersion": "v25.7.0"
+  },
+  "preflight": {
+    "sessionID": "ses_hygJ7xj7OMqHo5TtxUmk",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "url": "http://127.0.0.1:51776/",
+  "uiURL": "http://127.0.0.1:51776/ui/",
+  "stopReason": "owned_stop_request",
+  "providerDrain": {
+    "startedAt": 1795842536499,
+    "settledAt": 1795842536499,
+    "allReadersSettled": true
+  },
+  "finishedAt": 1795842536627,
+  "exitCode": 0,
+  "credentialCleanup": "passed",
+  "originalExecHandle": 86653,
+  "originalExecJoinedExitCode": 0
+}

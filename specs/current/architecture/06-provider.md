@@ -240,8 +240,10 @@ SDK 命名空间映射，辅助调用不得使用空选项遗漏 `store` 等服�
 `providerOptions()` 命名空间封装前设置 `parallelToolCalls: false`。这是 `tool-call-policy.ts` 拥有的
 Provider 执行策略，不是 Structured Outputs 或 `tools[].strict` 声明；Provider-bound schema 继续作为
 best-effort function definition，并由 canonical Zod schema 在执行前完成最终校验与默认值 materialization。
-对象联合的提供方物化沿同一个数据入口处理：递归读取anyOf/oneOf的对象叶候选，本地引用始终对原声明根解析，路径内递归联合不会无限展开。先使用明确常量判别；没有匹配判别字段时，只有必需字段、常量及实际有效字段能唯一确定封闭对象形状才选择该分支，清除该分支的可选空占位。真实可空字面值保持为null；冲突或多义形状交由原规范校验器返回错误，不猜业务含义。发布电子表格的字面值/公式单元格使用此明确联合声明，不依靠提供方不可见的跨字段自定义校验。
-可选属性对null的完整约束由schema-nullability的同一判定提供给投影和执行物化。布尔schema直接按定义处理；明确非空类型且无引用或nullable扩展时直接判定排除null；其余由现有Ajv按原根JSON Pointer编译子约束并验证null，覆盖const、enum、无约束和组合条件。原根按声明的draft-07/2019-09/2020-12选择对应验证器，本地引用保持原作用域；弱根上下文缓存一次树处理中的编译和节点结果，不保证每次重新转换得到的schema对象跨调用命中。判定不强制类型、不写默认值或修改数据，完整规范工具校验继续拥有最终错误合同。
+对象联合的提供方物化沿同一个数据入口处理：递归读取anyOf/oneOf的对象叶候选，本地引用始终对原声明根解析，路径内递归联合不会无限展开。原约束已接受的值保持原样；其余候选只消除可选非空属性的null占位，以及封闭对象中已知兄弟分支属性的null占位，保留开放对象额外数据与所有实际非空字段。候选必须通过原根完整联合约束；仅接受能保留所有其他有效候选字段和值的结果，相同结果等价。无有效候选或删除结果互不包含时交回原输入，由原规范校验器返回错误，不按常量或分支顺序猜选。真实可空字面值保持为null。发布电子表格的字面值/公式单元格使用此明确联合声明，不依靠提供方不可见的跨字段自定义校验。
+可选属性对null的完整约束由schema-nullability的同一判定提供给投影和执行物化。布尔schema直接按定义处理；明确非空类型且无引用或nullable扩展时直接判定排除null；其余由现有Ajv按原根JSON Pointer编译子约束并验证null，覆盖const、enum、无约束和组合条件。完整联合候选复用同一个原根编译上下文验证值；在同一输入位置循环引用的联合明确报schema错误，推进到子输入值的正常递归保持有效。原根按声明的draft-07/2019-09/2020-12选择对应验证器，本地引用保持原作用域；弱根上下文缓存一次树处理中的编译和节点结果，不保证每次重新转换得到的schema对象跨调用命中。判定不强制类型、不写默认值或修改数据，完整规范工具校验继续拥有最终错误合同。
+
+条件StructuredOutput响应编码器成功捕获规范值后，由现有最终assistant写入钩子保存structured字段；若Provider步以tool-calls结束且无规范错误，同一assistant最终分类为stop。真实step-finish仍保留Provider原原因。完整工具结果收敛、acceptedInputMessageIDs与原TypeScript/SQL回复判定、Task决策、权限恢复和错误优先级保持同一合同，不把普通工具步当最终回复或合成另一条消息。
 Zod 开放 record 的 provider projection 必须保留可接受非空 JSON map 的语义。当前 SDK 7 保留
 `additionalProperties` 的真实值 schema；未知值采用空 schema `{}`，不再修补旧 SDK 的 `false` 投影。该策略只串行化
 单个 Provider step 内的 Tool calls，不得串行化不同 Session、Task、Agent、Project 或 scheduler

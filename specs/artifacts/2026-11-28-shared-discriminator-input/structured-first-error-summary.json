@@ -1,0 +1,6 @@
+{
+  "sessionID": "ses_-zUNkzjEzzz9DOywRsGQ",
+  "finish": "error",
+  "error": "AI_TypeValidationError: Type validation failed: Value: {\"type\":\"error\",\"error\":{\"message\":\"Invalid schema for function 'StructuredOutput': At schema path /properties/result/anyOf/0/properties/kind, schema must specify a type\",\"type\":\"invalid_request_error\",\"param\":\"tools[41].parameters\",\"code\":\"invalid_function_parameters\"}}.",
+  "classification": "Observed Provider schema-subset rejection; untyped const investigation remains next batch."
+}

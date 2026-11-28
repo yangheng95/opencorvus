@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [共用判别值的工具输入完整性](records/2026-11/2026-11-28-shared-discriminator-input.md)
 - [通用工具空值语义与原生交接文档](records/2026-11/2026-11-28-tool-null-semantics.md)
 - [嵌套工具输入与原生工作簿交付](records/2026-11/2026-11-28-nested-office-input-review.md)
 - [跨工作表结算核对的真实任务](records/2026-11/2026-11-28-cross-sheet-settlement-review.md)

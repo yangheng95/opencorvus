@@ -31,13 +31,28 @@ export function schemaAllowsNull(schema: unknown, root: unknown): boolean {
   }
   const cached = context.results.get(schema)
   if (cached !== undefined) return cached
+  const result = schemaAcceptsValue(schema, null, root)
+  context.results.set(schema, result)
+  return result
+}
+
+/** Validate a value without changing it or moving references out of their original scope. */
+export function schemaAcceptsValue(schema: unknown, value: unknown, root: unknown): boolean {
+  if (typeof schema === "boolean") return schema
+  if (!schema || typeof schema !== "object" || Array.isArray(schema)) return false
+  if (!root || typeof root !== "object" || Array.isArray(root)) {
+    throw new Error("Tool input validation requires an original schema root")
+  }
+  let context = contexts.get(root)
+  if (!context) {
+    context = createContext(root)
+    contexts.set(root, context)
+  }
   const pointer = context.pointers.get(schema)
   if (pointer === undefined) throw new Error("Tool input constraint is outside its original schema root")
   const validate = context.ajv.getSchema(ROOT_KEY + "#" + pointer)
   if (!validate) throw new Error("Tool input constraint could not be compiled at " + pointer)
-  const result = validate(null) === true
-  context.results.set(schema, result)
-  return result
+  return validate(value) === true
 }
 
 function createContext(root: object) {

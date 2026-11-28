@@ -8,6 +8,12 @@ import type { Provider as ProviderType } from "../../src/provider/provider"
 import { Session } from "../../src/session"
 import { LLM } from "../../src/session/llm"
 import { SessionPrompt } from "../../src/session/prompt"
+import { MessageStore } from "../../src/session/message-store"
+import { Database } from "../../src/storage/db"
+import {
+  completedSchedulerWakeReplyExistsInTransaction,
+  settledSchedulerWakeReplyExistsInTransaction,
+} from "../../src/protocol/session-wake-state"
 import { normalizedProviderToolDefinition } from "../../src/capability/reveal-owner"
 import { capabilityRevealBaseDefinitions } from "../../src/capability/reveal-receipt"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
@@ -89,12 +95,12 @@ test("a real structured turn admits StructuredOutput into the immutable revision
             }
             yield {
               type: "finish-step",
-              finishReason: "stop",
+              finishReason: "tool-calls",
               usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
             }
             yield {
               type: "finish",
-              finishReason: "stop",
+              finishReason: "tool-calls",
               totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
             }
           })(),
@@ -122,6 +128,24 @@ test("a real structured turn admits StructuredOutput into the immutable revision
         })
         await SessionPrompt.waitForFinish(session.id, project.path)
         expect(assistant.info.structured).toEqual({ answer: "ok" })
+        expect(assistant.info.finish).toBe("stop")
+        const persisted = await MessageStore.get({ sessionID: session.id, messageID: assistant.info.id })
+        expect(persisted.info).toMatchObject({ finish: "stop", structured: { answer: "ok" } })
+        expect(persisted.parts.filter((part) => part.type === "step-finish").map((part) => part.reason)).toEqual([
+          "tool-calls",
+        ])
+        const identity = { sessionID: session.id, messageID: assistant.info.parentID }
+        expect(
+          Database.use((db) => ({
+            completed: completedSchedulerWakeReplyExistsInTransaction(db, identity),
+            settled: settledSchedulerWakeReplyExistsInTransaction(db, identity),
+          })),
+        ).toEqual({ completed: true, settled: true })
+        const replay = await SessionPrompt.loop({
+          sessionID: session.id,
+          reply_to_message_id: assistant.info.parentID,
+        })
+        expect(replay.info.id).toBe(assistant.info.id)
         expect(observedBaseChars).toBeGreaterThan(0)
       } finally {
         stream.mockRestore()

@@ -148,7 +148,7 @@ test("resolves nested object leaves and their payload references from the origin
   ).toEqual({ kind: "data", payload: { value: null } })
 })
 
-test("reaches a valid object leaf through a recursive union reference", () => {
+test("returns the explicit schema error for a union recurring at the same input location", () => {
   const schema = jsonSchema({
     anyOf: [{ $ref: "#/$defs/nested" }],
     $defs: {
@@ -161,9 +161,30 @@ test("reaches a valid object leaf through a recursive union reference", () => {
       },
     },
   })
+  expect(() => materializeToolExecutionInput(schema, { operation: { kind: "data", note: null } })).toThrow(
+    new Error("Tool input schema has a recursive union without advancing the input location"),
+  )
+})
+
+test("materializes a recursive union that advances to child input values", () => {
+  const schema = jsonSchema({
+    anyOf: [{ $ref: "#/$defs/data" }],
+    $defs: {
+      data: {
+        type: "object",
+        additionalProperties: false,
+        required: ["kind"],
+        properties: {
+          kind: { const: "data" },
+          note: { type: "string" },
+          children: { type: "array", items: { anyOf: [{ $ref: "#/$defs/data" }] } },
+        },
+      },
+    },
+  })
   expect(
     materializeToolExecutionInput(schema, {
-      operation: { kind: "data", note: null },
+      operation: { kind: "data", note: null, children: [{ kind: "data", note: null }] },
     }),
-  ).toEqual({ kind: "data" })
+  ).toEqual({ kind: "data", children: [{ kind: "data" }] })
 })
