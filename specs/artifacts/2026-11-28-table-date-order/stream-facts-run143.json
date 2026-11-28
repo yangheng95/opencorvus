@@ -1,0 +1,33 @@
+{
+  "label": "run143",
+  "requests": 2,
+  "state": "exited",
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795824632990
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795824631566
+      }
+    }
+  ],
+  "providerDrain": {
+    "startedAt": 1795824803955,
+    "settledAt": 1795824803955,
+    "allReadersSettled": true
+  },
+  "credentialCleanup": "passed"
+}

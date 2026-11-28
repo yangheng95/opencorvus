@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { createArtifactTablePresentation } from "../src/services/artifact-table"
+import { compareArtifactTableDates, createArtifactTablePresentation } from "../src/services/artifact-table"
 
 const columns = [
   { id: "id", dataType: "string" },
@@ -60,4 +60,41 @@ test("table uses the declared cells as its searchable fields", () => {
 
 test("table preserves mixed scalar types when formatting boolean columns", () => {
   expect([true, false, "false", 0, null].map((value) => zh.formatCell(value, "boolean"))).toEqual(["是", "否", "false", "0", "—"])
+})
+
+test("table dates order offset timestamps by their actual instant in either direction", () => {
+  const source = [
+    { id: "R01", date: "2026-11-28T23:30:00-05:00" },
+    { id: "R02", date: "2026-11-29T01:00:00+14:00" },
+    { id: "R03", date: "2026-11-28T18:00:00Z" },
+    { id: "R04", date: "2026-11-27T23:30:00-12:00" },
+  ]
+  expect(source.toSorted((a, b) => compareArtifactTableDates(a.date, b.date)).map((row) => row.id))
+    .toEqual(["R02", "R04", "R03", "R01"])
+  expect(source.toSorted((a, b) => compareArtifactTableDates(b.date, a.date)).map((row) => row.id))
+    .toEqual(["R01", "R03", "R04", "R02"])
+})
+
+test("table dates compare equivalent instants and date-only values consistently", () => {
+  expect(compareArtifactTableDates("2026-11-29T01:00:00+14:00", "2026-11-28T11:00:00Z")).toBe(0)
+  expect(compareArtifactTableDates("2026-11-28", "2026-11-28T00:00:00Z")).toBe(0)
+  expect(compareArtifactTableDates("2026-11-28", "2026-11-28T11:00:00Z")).toBe(-1)
+})
+
+test("table dates retain source order within the unparsed scalar group", () => {
+  const source = [
+    { id: "missing", date: undefined },
+    { id: "later", date: "2026-11-29T00:00:00Z" },
+    { id: "blank", date: "" },
+    { id: "null", date: null },
+    { id: "text", date: "待核对" },
+    { id: "earlier", date: "2026-11-28T00:00:00Z" },
+    { id: "boolean", date: true },
+  ]
+  expect(source.toSorted((a, b) => compareArtifactTableDates(a.date, b.date)).map((row) => row.id))
+    .toEqual(["earlier", "later", "missing", "blank", "null", "text", "boolean"])
+  expect(source.toSorted((a, b) => compareArtifactTableDates(b.date, a.date)).map((row) => row.id))
+    .toEqual(["missing", "blank", "null", "text", "boolean", "later", "earlier"])
+  expect(source.map((row) => zh.formatCell(row.date, "date")))
+    .toEqual(["—", "2026年11月29日", "", "—", "待核对", "2026年11月28日", "true"])
 })

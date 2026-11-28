@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [带时区交接记录表的日期排序](records/2026-11/2026-11-28-table-date-order.md)
 - [跨对话的项目记忆接续与真实交付](records/2026-11/2026-11-28-memory-session-continuity.md)
 - [记忆整理失败后的租约与可重试状态](records/2026-11/2026-11-28-memory-lease-settlement.md)
 - [交接文档的来源链接与授权读取](records/2026-11/2026-11-28-document-source-links.md)

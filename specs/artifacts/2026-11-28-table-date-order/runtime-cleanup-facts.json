@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "services": [
+    {
+      "label": "run142",
+      "pid": 10448,
+      "originalExecHandle": 50706,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hw1HlQobjcgV5Xf1JDSZ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "credentialAndCatalogCopies": "retired"
+    },
+    {
+      "label": "run143",
+      "pid": 33924,
+      "originalExecHandle": 12978,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hG4sF55ipuKkCEY8CSUr",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "credentialAndCatalogCopies": "retired"
+    }
+  ],
+  "ownedPort65359": "retired",
+  "ownedTab241805416": "closed through bound browser API",
+  "preferences": "zh-CN/system unchanged",
+  "priorLimitation": "old tab 241805392 remains unbound; not represented as closed",
+  "publicReopen": "complete actual messages and published artifact equal before/after candidate restart"
+}

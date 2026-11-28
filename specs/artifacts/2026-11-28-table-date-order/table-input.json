@@ -1,0 +1,37 @@
+{
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+  "projectID": "prj_hZ6Mj0J1wZUIfIIkFSeE",
+  "filename": "events.csv",
+  "original": "记录编号,类型,金额,发生时间\nR01,普通订单,12.50,2026-11-28T23:30:00-05:00\nR02,退款,-2.50,2026-11-29T01:00:00+14:00\nR03,免费样品,0.00,2026-11-28T18:00:00Z\nR04,普通订单,8.00,2026-11-27T23:30:00-12:00\n",
+  "request": "请只读当前项目新增的 events.csv，发表一份题为“北仓时区记录核对表 20261128”的交接表，让接班同事能在页面按列排序和筛选，并下载完整记录。保留文件原四列、原始记录顺序和每个原始时间戳；发生时间声明为日期列，金额声明为数值列。先保持原表顺序，后续由页面列操作查看真实发生时间先后和金额顺序。保留退款负数及零金额样品，不据金额推断利润、币种或未核实的业务事实。只阅读和发表，不执行脚本、不修改文件、不委派。",
+  "requestID": "35c9a2ba-3751-4733-bd01-cff87a2056f3",
+  "messageID": "msg_92673c5a-2d38-4de2-bc74-86182146c746",
+  "title": "北仓时区记录核对表 20261128",
+  "expected": {
+    "sourceOrder": [
+      "R01",
+      "R02",
+      "R03",
+      "R04"
+    ],
+    "dateAscending": [
+      "R02",
+      "R04",
+      "R03",
+      "R01"
+    ],
+    "dateDescending": [
+      "R01",
+      "R03",
+      "R04",
+      "R02"
+    ],
+    "amountAscending": [
+      "R02",
+      "R03",
+      "R04",
+      "R01"
+    ],
+    "netAmount": "18.00"
+  }
+}

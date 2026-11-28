@@ -5939,6 +5939,13 @@ term must match a declared cell in that row, in any order. Undeclared keys and
 other rows do not contribute. Native number formatting preserves the representable value's
 significant digits instead of applying the locale formatter's default three
 fraction digits; grouping and separators still follow the product locale.
+Declared date columns compare parsed instants, including timezone offsets,
+through a column sorting function in the native TanStack model. Display and
+comparison share the same scalar date parser. Equal instants retain source order;
+null, missing and unparseable values form a stable group after valid dates in
+ascending order, with group order reversed for descending. An explicit source
+cell comparator takes precedence, including canonical CSV text/decimal ordering.
+Original cells and complete-data exports retain their source values and order.
 Every declared column can participate, including boolean or
 initially empty columns. TanStack registers the whole-row predicate through the
 first declared column, evaluating it once per row while it reads all declared

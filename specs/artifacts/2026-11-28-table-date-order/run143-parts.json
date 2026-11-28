@@ -1,0 +1,122 @@
+[
+  {
+    "id": "prt_g0VcDms5B00naq0UM8Ft",
+    "sessionID": "ses_hV7uVj5I8G4UBDHAd283",
+    "messageID": "msg_g0VcDmr9700yKlTeua7s",
+    "type": "tool",
+    "callID": "call_1e68a35110194b75a22b0b8c84656d36",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "events.csv"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north\\events.csv</path>\n<type>file</type>\n<content>1: 记录编号,类型,金额,发生时间\n2: R01,普通订单,12.50,2026-11-28T23:30:00-05:00\n3: R02,退款,-2.50,2026-11-29T01:00:00+14:00\n4: R03,免费样品,0.00,2026-11-28T18:00:00Z\n5: R04,普通订单,8.00,2026-11-27T23:30:00-12:00\n\n(End of file - total 5 lines)\n</content>",
+      "title": "events.csv",
+      "metadata": {
+        "preview": "记录编号,类型,金额,发生时间\nR01,普通订单,12.50,2026-11-28T23:30:00-05:00\nR02,退款,-2.50,2026-11-29T01:00:00+14:00\nR03,免费样品,0.00,2026-11-28T18:00:00Z\nR04,普通订单,8.00,2026-11-27T23:30:00-12:00",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 5,
+        "totalLines": 5
+      },
+      "time": {
+        "start": 1795824090729,
+        "end": 1795824090925
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0957c51475dbdc4c016b0a19da994887d0b54cf465790d06f3"
+      }
+    },
+    "orderKey": "v1:0001795824090821:0000000000000031:0000000000000000:part:prt_g0VcDms5B00naq0UM8Ft"
+  },
+  {
+    "id": "prt_g0VcDmsj500Oh8rcsX6i",
+    "sessionID": "ses_hV7uVj5I8G4UBDHAd283",
+    "messageID": "msg_g0VcDms9c00FerdYS3Kf",
+    "type": "tool",
+    "callID": "call_cc8d6dbb7fdd4da39ddf1f7a6895ceab",
+    "tool": "publish_interactive_artifact",
+    "state": {
+      "status": "completed",
+      "input": {
+        "artifact": {
+          "schemaVersion": "1",
+          "title": "北仓时区记录核对表 20261128",
+          "content": {
+            "renderer": "table@1",
+            "columns": [
+              {
+                "id": "记录编号",
+                "label": "记录编号",
+                "dataType": "string"
+              },
+              {
+                "id": "类型",
+                "label": "类型",
+                "dataType": "string"
+              },
+              {
+                "id": "金额",
+                "label": "金额",
+                "dataType": "number"
+              },
+              {
+                "id": "发生时间",
+                "label": "发生时间",
+                "dataType": "date"
+              }
+            ],
+            "rows": [
+              {
+                "记录编号": "R01",
+                "类型": "普通订单",
+                "金额": 12.5,
+                "发生时间": "2026-11-28T23:30:00-05:00"
+              },
+              {
+                "记录编号": "R02",
+                "类型": "退款",
+                "金额": -2.5,
+                "发生时间": "2026-11-29T01:00:00+14:00"
+              },
+              {
+                "记录编号": "R03",
+                "类型": "免费样品",
+                "金额": 0,
+                "发生时间": "2026-11-28T18:00:00Z"
+              },
+              {
+                "记录编号": "R04",
+                "类型": "普通订单",
+                "金额": 8,
+                "发生时间": "2026-11-27T23:30:00-12:00"
+              }
+            ]
+          }
+        }
+      },
+      "output": "{\"artifactID\":\"art_g0VcDmu2E00q0MrzHBES\",\"renderer\":\"table@1\"}",
+      "title": "北仓时区记录核对表 20261128",
+      "metadata": {
+        "artifactID": "art_g0VcDmu2E00q0MrzHBES",
+        "renderer": "table@1",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795824093203,
+        "end": 1795824098237
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_05bbb55be2c7a2c2016b0a19dd0c9887d089457fd1cd5983c7"
+      }
+    },
+    "orderKey": "v1:0001795824098015:0000000000000031:0000000000000000:part:prt_g0VcDmsj500Oh8rcsX6i"
+  }
+]

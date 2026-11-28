@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "nativeDestination": "C:\\Users\\hengu\\Downloads\\北仓时区记录核对表 20261128.csv",
+  "bytes": 258,
+  "rows": 4,
+  "sourceOrder": [
+    "R01",
+    "R02",
+    "R03",
+    "R04"
+  ],
+  "netAmount": "18.00",
+  "allOriginalTimestamps": [
+    "2026-11-28T23:30:00-05:00",
+    "2026-11-29T01:00:00+14:00",
+    "2026-11-28T18:00:00Z",
+    "2026-11-27T23:30:00-12:00"
+  ],
+  "trigger": "native page CSV menu click while refund filter is active; see screenshot",
+  "comparison": "actual browser file against predetermined original input, numeric amounts compared as decimals"
+}

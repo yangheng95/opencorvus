@@ -12,7 +12,7 @@ import {
 import { For, Show, createEffect, createMemo, on } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import type { ArtifactExport } from "../../services/artifact-export"
-import { createArtifactTablePresentation } from "../../services/artifact-table"
+import { compareArtifactTableDates, createArtifactTablePresentation } from "../../services/artifact-table"
 import { conversationArtifactDisplayState, setConversationArtifactDisplayState } from "../../store/conversation-ui"
 import { localeTag, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
@@ -55,7 +55,13 @@ export function TableArtifact(props: {
             sortingFn: (left, right, columnID) =>
               props.compareCells!(left.getValue(columnID), right.getValue(columnID)),
           } satisfies Partial<ColumnDef<TableRow>>)
-        : {}),
+        : column.dataType === "date"
+          ? ({
+              sortingFn: (left, right, columnID) =>
+                compareArtifactTableDates(left.getValue(columnID), right.getValue(columnID)),
+              sortUndefined: false,
+            } satisfies Partial<ColumnDef<TableRow>>)
+          : {}),
     }))
   })
   const table = createSolidTable({
