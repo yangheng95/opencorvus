@@ -1,0 +1,54 @@
+{
+  "source": "Observed tool results, not a generated test log",
+  "initialRed": {
+    "toolChunk": "f1e726",
+    "cases": 3,
+    "pass": 0,
+    "fail": 3,
+    "assertions": 3,
+    "exit": 1,
+    "runtime": "opencorvus-test-run-qU0yPK",
+    "settled": true
+  },
+  "passingContracts": {
+    "literalFile": {
+      "toolChunk": "2c7ac8",
+      "cases": 5,
+      "assertions": 11,
+      "exit": 0
+    },
+    "otherFiveFiles": {
+      "originalExecHandle": 53098,
+      "cases": 50,
+      "assertions": 111,
+      "individualFileExits": 0,
+      "wholeCommandExit": 1,
+      "wholeCommandFailure": "New 2020-position fixture omitted required tuple/document fields; its old expected value ignored legitimate optional-null wrappers. Corrected only that fixture and reran original literal file."
+    },
+    "totalCases": 55,
+    "totalAssertions": 122
+  },
+  "backendTypecheck": {
+    "originalExecHandle": 47753,
+    "joinedExit": 0
+  },
+  "docs": {
+    "toolChunk": "037543",
+    "exit": 0,
+    "operations": 354,
+    "groups": 26,
+    "architectureDocuments": 20
+  },
+  "runtime": {
+    "originalExecHandle": 60912,
+    "joinedExit": 0,
+    "streamRequests": 5,
+    "nativeScreenshots": 2
+  },
+  "limitations": [
+    "Only the original untyped scalar-const business schema was exercised against the live Provider.",
+    "Object/array literals and mixed enums have local production schema/execution contracts, not a claim of arbitrary Provider-subset acceptance.",
+    "No live external MCP service or Gemini enum policy acceptance.",
+    "No UI automated tests added or run."
+  ]
+}

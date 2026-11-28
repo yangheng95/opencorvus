@@ -244,6 +244,8 @@ best-effort function definition，并由 canonical Zod schema 在执行前完成
 可选属性对null的完整约束由schema-nullability的同一判定提供给投影和执行物化。布尔schema直接按定义处理；明确非空类型且无引用或nullable扩展时直接判定排除null；其余由现有Ajv按原根JSON Pointer编译子约束并验证null，覆盖const、enum、无约束和组合条件。完整联合候选复用同一个原根编译上下文验证值；在同一输入位置循环引用的联合明确报schema错误，推进到子输入值的正常递归保持有效。原根按声明的draft-07/2019-09/2020-12选择对应验证器，本地引用保持原作用域；弱根上下文缓存一次树处理中的编译和节点结果，不保证每次重新转换得到的schema对象跨调用命中。判定不强制类型、不写默认值或修改数据，完整规范工具校验继续拥有最终错误合同。
 
 条件StructuredOutput响应编码器成功捕获规范值后，由现有最终assistant写入钩子保存structured字段；若Provider步以tool-calls结束且无规范错误，同一assistant最终分类为stop。真实step-finish仍保留Provider原原因。完整工具结果收敛、acceptedInputMessageIDs与原TypeScript/SQL回复判定、Task决策、权限恢复和错误优先级保持同一合同，不把普通工具步当最终回复或合成另一条消息。
+
+严格工具声明和根联合约束去重共用实际schema位置遍历，使用json-schema-traverse与同一primitive的2019/2020标准子schema入口；const、enum、default、examples中的JSON数据与schema映射名称不作为schema解释。可选属性null语义先在未修改原根计算，严格声明只修改独立副本。无显式type的有限const/enum域补其确定JSON类型集合，保留原值和其他全部约束，不猜无约束类型。去重只忽略实际schema注释，字面数据中的description/title等业务键仍决定值身份；相同约束的不同schema说明继续沿原选择合同。此投影不承诺Provider接受任意JSON Schema子集。
 Zod 开放 record 的 provider projection 必须保留可接受非空 JSON map 的语义。当前 SDK 7 保留
 `additionalProperties` 的真实值 schema；未知值采用空 schema `{}`，不再修补旧 SDK 的 `false` 投影。该策略只串行化
 单个 Provider step 内的 Tool calls，不得串行化不同 Session、Task、Agent、Project 或 scheduler

@@ -1,0 +1,71 @@
+[
+  {
+    "id": "prt_g0VcF7Aku000tgRTFE1W",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "settlement-review.csv"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north\\settlement-review.csv</path>\n<type>file</type>\n<content>1: 记录编号,类型,金额\n2: N01,普通订单,15.20\n3: N02,退款,-4.85\n4: N03,免费样品,0.00\n5: N04,普通订单,6.35\n6: N05,退款,-1.15\n7: N06,普通订单,2.10\n\n(End of file - total 7 lines)\n</content>",
+      "title": "settlement-review.csv",
+      "metadata": {
+        "preview": "记录编号,类型,金额\nN01,普通订单,15.20\nN02,退款,-4.85\nN03,免费样品,0.00\nN04,普通订单,6.35\nN05,退款,-1.15\nN06,普通订单,2.10",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 7,
+        "totalLines": 7
+      },
+      "time": {
+        "start": 1795843705404,
+        "end": 1795843706063
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcF7BYj00WHKN5o5M6",
+    "tool": "StructuredOutput",
+    "state": {
+      "status": "completed",
+      "input": {
+        "source": "settlement-review.csv",
+        "result": {
+          "kind": "settlement",
+          "recordCount": 6,
+          "netAmount": 17.65,
+          "byType": [
+            {
+              "type": "普通订单",
+              "count": 3,
+              "netAmount": 23.65
+            },
+            {
+              "type": "退款",
+              "count": 2,
+              "netAmount": -6
+            },
+            {
+              "type": "免费样品",
+              "count": 1,
+              "netAmount": 0
+            }
+          ],
+          "options": {
+            "currency": null
+          }
+        }
+      },
+      "output": "Structured output captured successfully.",
+      "title": "Structured Output",
+      "metadata": {
+        "valid": true
+      },
+      "time": {
+        "start": 1795843708493,
+        "end": 1795843710343
+      }
+    }
+  }
+]

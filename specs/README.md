@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [有限字面值工具声明的类型投影](records/2026-11/2026-11-28-untyped-literal-schema.md)
 - [共用判别值的工具输入完整性](records/2026-11/2026-11-28-shared-discriminator-input.md)
 - [通用工具空值语义与原生交接文档](records/2026-11/2026-11-28-tool-null-semantics.md)
 - [嵌套工具输入与原生工作簿交付](records/2026-11/2026-11-28-nested-office-input-review.md)

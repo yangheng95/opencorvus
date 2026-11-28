@@ -1,0 +1,61 @@
+{
+  "entries": [
+    {
+      "request": 3,
+      "entry": {
+        "index": 41,
+        "type": "function",
+        "type_state": "present",
+        "name_state": "observed",
+        "names": [
+          {
+            "path": "name",
+            "state": "present",
+            "value": "StructuredOutput"
+          }
+        ],
+        "schema_shapes": [
+          {
+            "path": "parameters",
+            "strict": "true",
+            "rootKind": "object",
+            "additionalProperties": "false",
+            "propertiesCount": 2,
+            "nullableCount": 0,
+            "unknownNullableCount": 0,
+            "requiredCount": 2
+          }
+        ]
+      }
+    },
+    {
+      "request": 4,
+      "entry": {
+        "index": 41,
+        "type": "function",
+        "type_state": "present",
+        "name_state": "observed",
+        "names": [
+          {
+            "path": "name",
+            "state": "present",
+            "value": "StructuredOutput"
+          }
+        ],
+        "schema_shapes": [
+          {
+            "path": "parameters",
+            "strict": "true",
+            "rootKind": "object",
+            "additionalProperties": "false",
+            "propertiesCount": 2,
+            "nullableCount": 0,
+            "unknownNullableCount": 0,
+            "requiredCount": 2
+          }
+        ]
+      }
+    }
+  ],
+  "qualification": "Actual audited function name and schema-shape projection; parameter leaf text is not retained by this auditor. Live original-schema success is the separate evidence."
+}

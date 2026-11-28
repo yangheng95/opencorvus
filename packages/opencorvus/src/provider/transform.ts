@@ -14,6 +14,7 @@ import { GLM_EVALUATION_TEMPERATURE, THINKING_MODEL_TOP_P } from "./sampling"
 import { requiresOpenAIStrictToolSchema } from "./strict-tool-schema"
 import { requiresSerializedOpenAIToolCalls } from "./tool-call-policy"
 import { schemaAllowsNull } from "./schema-nullability"
+import traverse from "json-schema-traverse"
 
 export namespace ProviderTransform {
   export const OUTPUT_TOKEN_MAX = Flag.OPENCORVUS_EXPERIMENTAL_OUTPUT_TOKEN_MAX || 64_000
@@ -415,7 +416,8 @@ export namespace ProviderTransform {
 
     const source = typeof record.filename === "string" ? record.filename : "inline file data URL"
     const dataUrlFromBytes = async (bytes: Buffer): Promise<{ dataUrl: string; note?: string }> => {
-      if (mediaInputModality(mediaType) !== "image") return { dataUrl: `data:${mediaType};base64,${bytes.toString("base64")}` }
+      if (mediaInputModality(mediaType) !== "image")
+        return { dataUrl: `data:${mediaType};base64,${bytes.toString("base64")}` }
       const prepared = await prepareModelImageInput({
         mime: mediaType,
         bytes,
@@ -1191,17 +1193,54 @@ export namespace ProviderTransform {
   ])
 
   function schemaValidationIdentity(value: unknown): string {
+    const schema = structuredClone(value)
+    visitSchemaObjects(schema, (node) => {
+      for (const key of JSON_SCHEMA_ANNOTATION_KEYS) delete node[key]
+    })
     const normalize = (item: unknown): unknown => {
       if (Array.isArray(item)) return item.map(normalize)
       if (!item || typeof item !== "object") return item
       return Object.fromEntries(
         Object.entries(item as Record<string, unknown>)
-          .filter(([key]) => !JSON_SCHEMA_ANNOTATION_KEYS.has(key))
           .sort(([left], [right]) => left.localeCompare(right))
           .map(([key, child]) => [key, normalize(child)]),
       )
     }
-    return JSON.stringify(normalize(value))
+    return JSON.stringify(normalize(schema))
+  }
+
+  /** Visit schema positions, keeping literal JSON data and mapping names opaque. */
+  function visitSchemaObjects(
+    schema: unknown,
+    visit: (node: Record<string, unknown>, pointer: string) => void,
+    prefix = "",
+  ): void {
+    if (!schema || typeof schema !== "object" || Array.isArray(schema)) return
+    traverse(schema, {
+      cb: {
+        post(node, pointer) {
+          const location = prefix + pointer
+          // The library covers draft-07. These standard applicators add schema
+          // positions in 2019-09/2020-12 without treating unknown data as schemas.
+          for (const [index, child] of (Array.isArray(node.prefixItems) ? node.prefixItems : []).entries()) {
+            visitSchemaObjects(child, visit, location + "/prefixItems/" + index)
+          }
+          if (node.dependentSchemas && typeof node.dependentSchemas === "object") {
+            for (const [key, child] of Object.entries(node.dependentSchemas)) {
+              visitSchemaObjects(
+                child,
+                visit,
+                location + "/dependentSchemas/" + key.replaceAll("~", "~0").replaceAll("/", "~1"),
+              )
+            }
+          }
+          for (const key of ["unevaluatedItems", "unevaluatedProperties", "contentSchema"]) {
+            visitSchemaObjects(node[key], visit, location + "/" + key)
+          }
+          visit(node, location)
+        },
+      },
+    })
   }
 
   function mergeEnumPropertySchemas(schemas: readonly Record<string, unknown>[]): Record<string, unknown> | undefined {
@@ -1247,9 +1286,8 @@ export namespace ProviderTransform {
     const unique = [...representatives.values()]
     if (unique.length === 1) return unique[0]
 
-    const records = unique.filter(
-      (schema): schema is Record<string, unknown> =>
-        Boolean(schema && typeof schema === "object" && !Array.isArray(schema)),
+    const records = unique.filter((schema): schema is Record<string, unknown> =>
+      Boolean(schema && typeof schema === "object" && !Array.isArray(schema)),
     )
     if (records.length === unique.length) {
       const mergedEnum = mergeEnumPropertySchemas(records)
@@ -1264,26 +1302,23 @@ export namespace ProviderTransform {
     if (schema.type) return schema
     const unionKey = Array.isArray(schema.anyOf) ? "anyOf" : Array.isArray(schema.oneOf) ? "oneOf" : undefined
     if (!unionKey) return schema
-    const variants = (schema[unionKey] as unknown[]).filter(
-      (variant): variant is Record<string, unknown> =>
-        Boolean(
-          variant &&
-            typeof variant === "object" &&
-            !Array.isArray(variant) &&
-            (variant as Record<string, unknown>).type === "object" &&
-            (variant as Record<string, unknown>).properties &&
-            typeof (variant as Record<string, unknown>).properties === "object" &&
-            !Array.isArray((variant as Record<string, unknown>).properties),
-        ),
+    const variants = (schema[unionKey] as unknown[]).filter((variant): variant is Record<string, unknown> =>
+      Boolean(
+        variant &&
+          typeof variant === "object" &&
+          !Array.isArray(variant) &&
+          (variant as Record<string, unknown>).type === "object" &&
+          (variant as Record<string, unknown>).properties &&
+          typeof (variant as Record<string, unknown>).properties === "object" &&
+          !Array.isArray((variant as Record<string, unknown>).properties),
+      ),
     )
     if (variants.length === 0) return schema
 
     const propertySchemas = new Map<string, unknown[]>()
     let requiredByEveryVariant: Set<string> | undefined
     for (const variant of variants) {
-      for (const [field, propertySchema] of Object.entries(
-        variant.properties as Record<string, unknown>,
-      )) {
+      for (const [field, propertySchema] of Object.entries(variant.properties as Record<string, unknown>)) {
         const definitions = propertySchemas.get(field) ?? []
         definitions.push(propertySchema)
         propertySchemas.set(field, definitions)
@@ -1304,10 +1339,7 @@ export namespace ProviderTransform {
       ...root,
       type: "object",
       properties: Object.fromEntries(
-        [...propertySchemas.entries()].map(([field, definitions]) => [
-          field,
-          mergeVariantPropertySchemas(definitions),
-        ]),
+        [...propertySchemas.entries()].map(([field, definitions]) => [field, mergeVariantPropertySchemas(definitions)]),
       ),
       required: [...(requiredByEveryVariant ?? [])],
     }
@@ -1391,39 +1423,53 @@ export namespace ProviderTransform {
   }
 
   function normalizeOpenAIStrictToolSchema(schema: JSONSchema7): JSONSchema7 {
-    return strictifyOpenAISchemaNode(schema, schema) as JSONSchema7
+    const omittedNulls = new Map<string, Set<string>>()
+    visitSchemaObjects(schema, (node, pointer) => {
+      const properties = node.properties
+      if (!properties || typeof properties !== "object" || Array.isArray(properties)) return
+      const required = new Set(
+        Array.isArray(node.required) ? node.required.filter((item) => typeof item === "string") : [],
+      )
+      omittedNulls.set(
+        pointer,
+        new Set(
+          Object.entries(properties)
+            .filter(([key, value]) => !required.has(key) && !schemaAllowsNull(value, schema))
+            .map(([key]) => key),
+        ),
+      )
+    })
+    const output = structuredClone(schema)
+    visitSchemaObjects(output, (node, pointer) => {
+      if (node.type === undefined) {
+        const values = Object.hasOwn(node, "const") ? [node.const] : Array.isArray(node.enum) ? node.enum : []
+        const types = unique(values.map(jsonLiteralType))
+        if (types.length > 0 && types.every((type) => type !== undefined)) {
+          node.type = types.length === 1 ? types[0] : types
+        }
+      }
+      const properties = node.properties
+      if (!properties || typeof properties !== "object" || Array.isArray(properties)) return
+      const strictProperties = Object.fromEntries(
+        Object.entries(properties).map(([key, value]) => [
+          key,
+          omittedNulls.get(pointer)?.has(key) ? nullableOpenAISchema(value) : value,
+        ]),
+      )
+      node.properties = strictProperties
+      node.required = Object.keys(strictProperties)
+      if (node.additionalProperties === undefined) node.additionalProperties = false
+    })
+    return output
   }
 
-  function strictifyOpenAISchemaNode(node: unknown, root: unknown): unknown {
-    if (Array.isArray(node)) return node.map((item) => strictifyOpenAISchemaNode(item, root))
-    if (!node || typeof node !== "object") return node
-
-    const input = node as Record<string, unknown>
-    const output: Record<string, unknown> = {}
-    for (const [key, value] of Object.entries(input)) {
-      if (key === "properties" && value && typeof value === "object" && !Array.isArray(value)) {
-        continue
-      }
-      output[key] = strictifyOpenAISchemaNode(value, root)
-    }
-
-    const properties = input.properties
-    if (properties && typeof properties === "object" && !Array.isArray(properties)) {
-      const required = new Set(
-        Array.isArray(input.required) ? input.required.filter((item) => typeof item === "string") : [],
-      )
-      const strictProperties: Record<string, unknown> = {}
-      for (const [key, value] of Object.entries(properties as Record<string, unknown>)) {
-        const strictValue = strictifyOpenAISchemaNode(value, root)
-        strictProperties[key] =
-          !required.has(key) && !schemaAllowsNull(value, root) ? nullableOpenAISchema(strictValue) : strictValue
-      }
-      output.properties = strictProperties
-      output.required = Object.keys(strictProperties)
-      if (output.additionalProperties === undefined) output.additionalProperties = false
-    }
-
-    return output
+  function jsonLiteralType(value: unknown): string | undefined {
+    if (value === null) return "null"
+    if (Array.isArray(value)) return "array"
+    if (typeof value === "object") return "object"
+    if (typeof value === "number") return Number.isFinite(value) ? "number" : undefined
+    if (typeof value === "string" || typeof value === "boolean") return typeof value
+    return undefined
   }
 
   function nullableOpenAISchema(schema: unknown): unknown {

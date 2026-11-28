@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [有限字面值声明投影证据](2026-11-28-untyped-literal-schema/README.md)
 - [共用判别值输入完整性证据](2026-11-28-shared-discriminator-input/README.md)
 - [通用工具空值与原生文档证据](2026-11-28-tool-null-semantics/README.md)
 - [嵌套工具输入与工作簿证据](2026-11-28-nested-office-input-review/README.md)

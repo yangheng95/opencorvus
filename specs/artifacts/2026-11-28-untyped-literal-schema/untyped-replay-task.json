@@ -1,0 +1,157 @@
+{
+  "sessionID": "ses_-zUNksqsNzzFAJmfS2fm",
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+  "request": {
+    "messageID": "msg_231d96c4-3f51-43c5-abb1-0a5a807a2d9c",
+    "model": {
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol"
+    },
+    "format": {
+      "type": "json_schema",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "settlement"
+                  },
+                  "recordCount": {
+                    "type": "integer"
+                  },
+                  "netAmount": {
+                    "type": "number"
+                  },
+                  "byType": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "count": {
+                          "type": "integer"
+                        },
+                        "netAmount": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "count",
+                        "netAmount"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "currency": {
+                        "type": "string"
+                      },
+                      "note": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "kind",
+                  "recordCount",
+                  "netAmount",
+                  "byType",
+                  "options"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "settlement"
+                  },
+                  "recordCount": {
+                    "type": "integer"
+                  },
+                  "netAmount": {
+                    "type": "number"
+                  },
+                  "byType": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "count": {
+                          "type": "integer"
+                        },
+                        "netAmount": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "count",
+                        "netAmount"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "currency": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "note": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "kind",
+                  "recordCount",
+                  "netAmount",
+                  "byType",
+                  "options"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "source",
+          "result"
+        ],
+        "additionalProperties": false
+      },
+      "retryCount": 2
+    },
+    "parts": [
+      {
+        "type": "text",
+        "text": "请只读当前项目 settlement-review.csv，完成供接班同事使用的结算数据交接。逐行核对原始记录，按类型统计笔数与净金额，再给出全部记录的总笔数与净金额。退款保持负数，零金额样品也计数，不将净金额称为利润。按给定结构输出：source填写真实文件名；result.options.currency填写源文件明确提供的币种，没有提供就保留null，不猜测；没有额外说明时result.options.note填写null。请本人直接完成，不委派、不创建专家团、不修改输入文件，不执行脚本。"
+      }
+    ]
+  },
+  "submittedThrough": "public session/message API; original failing business schema and prompt, fresh unique input identity",
+  "uiURL": "http://127.0.0.1:51776/ui/?sessionID=ses_-zUNksqsNzzFAJmfS2fm&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-north&experience=work"
+}
