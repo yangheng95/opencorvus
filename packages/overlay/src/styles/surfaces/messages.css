@@ -1982,7 +1982,9 @@ button.msg-source-chip .msg-source-chip__filename {
 }
 
 .msg-artifact-chart--vega {
-  height: calc(340px * var(--ui-scale));
+  height: auto;
+  min-height: calc(340px * var(--ui-scale));
+  max-height: calc(620px * var(--ui-scale));
 }
 
 .msg-artifact-vega {

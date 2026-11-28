@@ -14,8 +14,15 @@ export function ChartArtifact(props: { payload: ChartPayload }) {
     source: () => props.payload.spec,
     data: () => props.payload.data,
     measure: () => {
-      const width = Math.floor(host?.clientWidth ?? 0), height = Math.floor(host?.clientHeight ?? 0)
-      return { width: width > 0 ? Math.max(240, width - 40) : 0, height: height > 0 ? Math.max(220, height - 36) : 0 }
+      if (!host) return { width: 0, height: 0 }
+      const style = getComputedStyle(host)
+      const expanded = host.closest(".msg-artifact")?.matches(":popover-open")
+      // Natural inline content must not feed its rendered height back into the
+      // default plot size. The workspace has a real available-height boundary.
+      const availableHeight = expanded ? host.clientHeight : parseFloat(style.minHeight)
+      const width = Math.floor(host.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight))
+      const height = Math.floor(availableHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom))
+      return { width: width > 0 ? Math.max(240, width) : 0, height: height > 0 ? Math.max(220, height) : 0 }
     },
     error: setError,
   })

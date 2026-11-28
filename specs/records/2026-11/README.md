@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [交接图表的时间语义与完整阅读](2026-11-28-chart-locale-formatting.md)
 - [带时区交接记录表的日期排序](2026-11-28-table-date-order.md)
 - [跨对话的项目记忆接续与真实交付](2026-11-28-memory-session-continuity.md)
 - [记忆整理失败后的租约与可重试状态](2026-11-28-memory-lease-settlement.md)

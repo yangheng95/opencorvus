@@ -1,0 +1,70 @@
+{
+  "status": "passed",
+  "label": "run146",
+  "tasks": [
+    {
+      "id": "tsk_g00Vc6rEH000wydhL06W",
+      "status": "completed",
+      "completionDecision": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0Vc6t2nd000qWgoL5Eu",
+        "catalog_revision": 7,
+        "expected_sha256": "3330594992e3db0752f029fc169bc967294d512d49550355984c83985e0e05f7"
+      },
+      "samePublicTaskAsBefore": true
+    },
+    {
+      "id": "tsk_g00Vc6ygAw00kzz3NRpk",
+      "status": "completed",
+      "completionDecision": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0Vc70Abx005xM3QX1if",
+        "catalog_revision": 18,
+        "expected_sha256": "220f9c7e1c323300d1739b2c5e591ab98ed9a5e0eed8286be077ee001d6a05bd"
+      },
+      "samePublicTaskAsBefore": true
+    }
+  ],
+  "protectedTaskRows": {
+    "engine_task": 2,
+    "engine_artifact": 19,
+    "engine_artifact_version": 0,
+    "engine_task_creation_contract": 2
+  },
+  "resource": {
+    "taskID": "tsk_g00Vc6ygAw00kzz3NRpk",
+    "locator": {
+      "source": "task_artifact_resource",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_haW9BdBH559F4Yw143ch",
+          "task_id": "tsk_g00Vc6ygAw00kzz3NRpk",
+          "snapshot_id": "dc5c047a-98d9-5702-a51c-99ee41e49c60",
+          "manifest_sha256": "04664c8b54ca8205f9de19cd550ac9bd1d6b0511703759eeaa88bafa8156eef0"
+        },
+        "tree": "resources",
+        "path": "区域汇总.csv",
+        "media_type": "text/csv",
+        "bytes": 59,
+        "sha256": "e63cfcca3469e982ea2c74ab2a1c6625b2fadb85523e8bf2b3d0593709ff0cae"
+      }
+    },
+    "httpStatus": 200,
+    "headers": {
+      "Content-Disposition": "inline",
+      "Content-Range": "bytes 0-58/59",
+      "Content-Type": "text/csv",
+      "ETag": "\"sha256:e63cfcca3469e982ea2c74ab2a1c6625b2fadb85523e8bf2b3d0593709ff0cae\"",
+      "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "Vary": "Origin",
+      "x-opencorvus-request-id": "4ef00f4f-345f-4160-988d-df525f854d12",
+      "Date": "Sat, 28 Nov 2026 00:56:11 GMT",
+      "Content-Length": "59"
+    },
+    "bytes": 59,
+    "rows": 2,
+    "equalsProtectedOriginalFile": true
+  },
+  "baselineTiming": "all project files, five-table rows and original Task reference rows captured before128 launch; original completed public Task objects compared after current candidate startup"
+}

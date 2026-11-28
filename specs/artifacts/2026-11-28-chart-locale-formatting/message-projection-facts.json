@@ -1,0 +1,27 @@
+{
+  "scope": "reviewable actual public fields; opaque Provider reasoning/protocol metadata omitted from evidence only. Product messages and storage unchanged. Full API objects compared before projection. Task records omit redundant response bodies; visible messages and actual artifacts are archived separately.",
+  "files": [
+    {
+      "file": "run146-chart-messages.json",
+      "sourceMessages": 7,
+      "projectedMessages": 7,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcDs8rx00Ujv4endup",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run146-default-messages.json",
+      "sourceMessages": 7,
+      "projectedMessages": 7,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcDuyzc004vX6jWlC8",
+          "type": "reasoning"
+        }
+      ]
+    }
+  ]
+}

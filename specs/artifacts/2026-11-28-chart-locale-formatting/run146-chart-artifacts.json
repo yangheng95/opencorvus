@@ -1,0 +1,270 @@
+[
+  {
+    "id": "art_g0VcDsCUO00tNs09B8KT",
+    "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+    "messageID": "msg_g0VcDs7lZ006ndMSwP5m",
+    "payload": {
+      "schemaVersion": "1",
+      "title": "北仓交接记录金额图 20261128",
+      "renderer": "chart@1",
+      "spec": {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "来源：当前项目 events.csv，全部四条记录。横轴按时间戳各自的时区偏移换算为真实时刻，统一以 UTC 显示；悬停保留原始时间戳。金额不代表利润，不指定币种，不推断业务趋势。",
+        "width": "container",
+        "height": 340,
+        "layer": [
+          {
+            "mark": {
+              "type": "rule",
+              "color": "#808080",
+              "strokeDash": [
+                4,
+                4
+              ]
+            },
+            "encoding": {
+              "y": {
+                "datum": 0,
+                "type": "quantitative"
+              }
+            }
+          },
+          {
+            "mark": {
+              "type": "point",
+              "filled": true,
+              "size": 140
+            },
+            "encoding": {
+              "x": {
+                "field": "真实发生时间UTC",
+                "type": "temporal",
+                "scale": {
+                  "type": "utc"
+                },
+                "axis": {
+                  "title": "真实发生时间（UTC）",
+                  "format": "%m-%d %H:%M",
+                  "labelAngle": -25
+                }
+              },
+              "y": {
+                "field": "金额",
+                "type": "quantitative",
+                "scale": {
+                  "zero": true
+                },
+                "axis": {
+                  "title": "每条记录金额（未指定币种）",
+                  "format": ".2f"
+                }
+              },
+              "color": {
+                "field": "类型",
+                "type": "nominal",
+                "legend": {
+                  "title": "记录类型"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "记录编号",
+                  "type": "nominal",
+                  "title": "记录编号"
+                },
+                {
+                  "field": "类型",
+                  "type": "nominal",
+                  "title": "类型"
+                },
+                {
+                  "field": "金额",
+                  "type": "quantitative",
+                  "title": "金额",
+                  "format": ".2f"
+                },
+                {
+                  "field": "发生时间",
+                  "type": "nominal",
+                  "title": "原始时间戳"
+                },
+                {
+                  "field": "真实发生时间UTC",
+                  "type": "nominal",
+                  "title": "真实发生时间（UTC）"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "data": [
+        {
+          "记录编号": "R01",
+          "类型": "普通订单",
+          "金额": 12.5,
+          "发生时间": "2026-11-28T23:30:00-05:00",
+          "真实发生时间UTC": "2026-11-29T04:30:00Z"
+        },
+        {
+          "记录编号": "R02",
+          "类型": "退款",
+          "金额": -2.5,
+          "发生时间": "2026-11-29T01:00:00+14:00",
+          "真实发生时间UTC": "2026-11-28T11:00:00Z"
+        },
+        {
+          "记录编号": "R03",
+          "类型": "免费样品",
+          "金额": 0,
+          "发生时间": "2026-11-28T18:00:00Z",
+          "真实发生时间UTC": "2026-11-28T18:00:00Z"
+        },
+        {
+          "记录编号": "R04",
+          "类型": "普通订单",
+          "金额": 8,
+          "发生时间": "2026-11-27T23:30:00-12:00",
+          "真实发生时间UTC": "2026-11-28T11:30:00Z"
+        }
+      ]
+    },
+    "timeCreated": 1795825360812,
+    "timeUpdated": 1795825360812
+  },
+  {
+    "id": "art_g0VcDswPG00OSZq6eFK4",
+    "sessionID": "ses_hUguRm5DUfTON3HMTEzG",
+    "messageID": "msg_g0VcDsrYF00zF3IVH4TO",
+    "payload": {
+      "schemaVersion": "1",
+      "title": "北仓交接金额图·自动时间刻度 20261128",
+      "renderer": "chart@1",
+      "spec": {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "来源：当前项目 events.csv 中此前读取的全部四条记录。真实时刻按各条原始时间戳的时区偏移换算，横轴统一采用 UTC，时间刻度及格式由原生图表自动选择。悬停真实发生时间为可读 UTC 文本，原始时间戳完整保留。金额逐条呈现，不作利润、币种或业务趋势推断。",
+        "width": "container",
+        "height": 340,
+        "layer": [
+          {
+            "mark": {
+              "type": "rule",
+              "color": "#808080",
+              "strokeDash": [
+                4,
+                4
+              ]
+            },
+            "encoding": {
+              "y": {
+                "datum": 0,
+                "type": "quantitative"
+              }
+            }
+          },
+          {
+            "mark": {
+              "type": "point",
+              "filled": true,
+              "size": 140
+            },
+            "encoding": {
+              "x": {
+                "field": "真实时刻UTC",
+                "type": "temporal",
+                "scale": {
+                  "type": "utc"
+                },
+                "axis": {
+                  "title": "真实发生时间 / Event time (UTC)"
+                }
+              },
+              "y": {
+                "field": "金额",
+                "type": "quantitative",
+                "scale": {
+                  "zero": true
+                },
+                "axis": {
+                  "title": "逐条金额 / Amount per record",
+                  "format": ".2f"
+                }
+              },
+              "color": {
+                "field": "类型",
+                "type": "nominal",
+                "legend": {
+                  "title": "类型 / Type"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "记录编号",
+                  "type": "nominal",
+                  "title": "记录编号 / Record ID"
+                },
+                {
+                  "field": "类型",
+                  "type": "nominal",
+                  "title": "类型 / Type"
+                },
+                {
+                  "field": "金额",
+                  "type": "quantitative",
+                  "title": "金额 / Amount",
+                  "format": ".2f"
+                },
+                {
+                  "field": "真实发生时间",
+                  "type": "nominal",
+                  "title": "真实发生时间 / Event time (UTC)"
+                },
+                {
+                  "field": "原始时间戳",
+                  "type": "nominal",
+                  "title": "原始时间戳 / Original timestamp"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "data": [
+        {
+          "记录编号": "R01",
+          "类型": "普通订单",
+          "金额": 12.5,
+          "真实时刻UTC": "2026-11-29T04:30:00Z",
+          "真实发生时间": "2026-11-29 04:30:00 UTC",
+          "原始时间戳": "2026-11-28T23:30:00-05:00"
+        },
+        {
+          "记录编号": "R02",
+          "类型": "退款",
+          "金额": -2.5,
+          "真实时刻UTC": "2026-11-28T11:00:00Z",
+          "真实发生时间": "2026-11-28 11:00:00 UTC",
+          "原始时间戳": "2026-11-29T01:00:00+14:00"
+        },
+        {
+          "记录编号": "R03",
+          "类型": "免费样品",
+          "金额": 0,
+          "真实时刻UTC": "2026-11-28T18:00:00Z",
+          "真实发生时间": "2026-11-28 18:00:00 UTC",
+          "原始时间戳": "2026-11-28T18:00:00Z"
+        },
+        {
+          "记录编号": "R04",
+          "类型": "普通订单",
+          "金额": 8,
+          "真实时刻UTC": "2026-11-28T11:30:00Z",
+          "真实发生时间": "2026-11-28 11:30:00 UTC",
+          "原始时间戳": "2026-11-27T23:30:00-12:00"
+        }
+      ]
+    },
+    "timeCreated": 1795825537318,
+    "timeUpdated": 1795825537318
+  }
+]

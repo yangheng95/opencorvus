@@ -13,11 +13,15 @@ const INTERACTIVE_ARTIFACT_RENDERER_SELECTION = [
 const CHART_ARTIFACT_THEME_GUIDANCE =
   "Chart and Dashboard follow the current app theme. Let ordinary text and backgrounds inherit renderer defaults. Use explicit colors when they encode data meaning or a user-requested design. For a fixed background, specify contrasting text, axis, title, and legend colors together."
 
+export const CHART_ARTIFACT_TIME_GUIDANCE =
+  "For Chart and Dashboard, keep a timestamp field temporal across axes and tooltips: parsing in one channel changes that field in the shared dataflow, so a nominal tooltip can show epoch milliseconds. Preserve original timestamp text in a separate nominal field. A date/time label must match its actual timezone: a UTC axis scale alone does not make a tooltip UTC; use a UTC time unit for the temporal tooltip or a separate readable UTC display string. Native date and number formatting follows the app language, while explicit authored formats retain their own semantics."
+
 export const PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION = [
   "Publish an interactive artifact owned by and displayed inline in this assistant message.",
   "Choose",
   INTERACTIVE_ARTIFACT_RENDERER_SELECTION,
   CHART_ARTIFACT_THEME_GUIDANCE,
+  CHART_ARTIFACT_TIME_GUIDANCE,
 ].join(" ")
 
 export const CHAT_INTERACTIVE_ARTIFACT_GUIDANCE_HEADING = "# Interactive artifacts"
@@ -81,6 +85,7 @@ export const CHAT_INTERACTIVE_ARTIFACT_GUIDANCE = [
   "- Spreadsheet formulas are declarative cell content. Do not publish macros, scripts, external workbook links, or hidden execution.",
   "- Dashboard rows and every view specification are inline. Timeline, network, and tree data are fully embedded and must use explicit stable IDs.",
   `- ${CHART_ARTIFACT_THEME_GUIDANCE}`,
+  `- ${CHART_ARTIFACT_TIME_GUIDANCE}`,
   "- A terminal artifact replays existing American National Standards Institute (ANSI) output. It never starts a shell, process, socket, or pseudoterminal.",
   "- Media, file previews, presentation images, notebook media outputs, and three-dimensional (3D) models require a canonical attachment object with its 64-character SHA-256 (Secure Hash Algorithm 256-bit) digest, `/attachment/<projectID>/<name>` URL, Multipurpose Internet Mail Extensions (MIME) type, byte size, and optional filename. Never guess an attachment reference, publish raw remote URLs, or embed base64 bytes.",
   "- A JavaScript Object Notation (JSON) glTF attachment must be version 2.0 and contain only internally embedded resources; relative or remote buffer, image, and extension resource references are rejected.",

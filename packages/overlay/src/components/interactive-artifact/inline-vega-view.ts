@@ -2,9 +2,10 @@ import vegaEmbed, { vega, type Result } from "vega-embed"
 import { isEqual, normalize, type TopLevelSpec } from "vega-lite"
 import { createEffect, createUniqueId, onCleanup, onMount } from "solid-js"
 import { observeAppliedTheme } from "../../services/theme"
+import { artifactVegaLocale } from "../../services/artifact-vega-locale"
 import { artifactVisualTheme, type ArtifactVisualTheme } from "./theme-color"
 import { INLINE_VEGA_EMBED_OPTIONS } from "./vega-embed-policy"
-import { localeTag, t } from "../../utils/i18n"
+import { localeTag, sanitizeLocale, t } from "../../utils/i18n"
 import { topLayerPortalMount } from "../../utils/top-layer"
 
 type Size = { width: number; height: number }
@@ -15,6 +16,7 @@ function artifactVegaConfig(
   source: Record<string, unknown> = {},
 ): Record<string, unknown> {
   const defaults = {
+    locale: artifactVegaLocale(sanitizeLocale(localeTag())),
     autosize: { type: "fit", contains: "padding" },
     background: theme.surface,
     font: theme.font,

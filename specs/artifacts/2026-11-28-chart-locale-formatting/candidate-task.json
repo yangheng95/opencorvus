@@ -1,0 +1,40 @@
+{
+  "original": "记录编号,类型,金额,发生时间\nR01,普通订单,12.50,2026-11-28T23:30:00-05:00\nR02,退款,-2.50,2026-11-29T01:00:00+14:00\nR03,免费样品,0.00,2026-11-28T18:00:00Z\nR04,普通订单,8.00,2026-11-27T23:30:00-12:00\n",
+  "expected": {
+    "sourceOrder": [
+      "R01",
+      "R02",
+      "R03",
+      "R04"
+    ],
+    "dateAscending": [
+      "R02",
+      "R04",
+      "R03",
+      "R01"
+    ],
+    "dateDescending": [
+      "R01",
+      "R03",
+      "R04",
+      "R02"
+    ],
+    "amountAscending": [
+      "R02",
+      "R03",
+      "R04",
+      "R01"
+    ],
+    "netAmount": "18.00"
+  },
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-south",
+  "projectID": "prj_he6efZFwavshsL4BEGOG",
+  "filename": "events-review.csv",
+  "request": "请只读当前项目的 events-review.csv，发表一张题为“交接时间金额复核图 20261128”的交互图供接班同事复核：横轴是真实发生时间，纵轴是每条记录金额，悬停可核对记录编号、类型、金额和原始时间戳。保留四条记录、退款负数和零金额样品，按各自时区理解真实先后；不要据此推断利润、币种或业务趋势。图应能在页面展开并通过原生菜单导出图片。只阅读和发表，不执行脚本、不修改文件、不委派。",
+  "requestID": "6c2600c5-c3ab-47e2-89fd-7912be884e0d",
+  "messageID": "msg_1add8f49-fa7e-4cba-b38c-70e39f237933",
+  "title": "交接时间金额复核图 20261128",
+  "phase": "accepted",
+  "sessionID": "ses_hG5LR5F9kRlSnFYt0fR9",
+  "url": "http://127.0.0.1:63592/ui/?sessionID=ses_hG5LR5F9kRlSnFYt0fR9&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-south&experience=work"
+}

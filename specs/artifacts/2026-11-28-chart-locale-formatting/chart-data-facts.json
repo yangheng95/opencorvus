@@ -1,0 +1,177 @@
+{
+  "status": "passed",
+  "publicReopen": "complete original messages and both original artifacts equal across candidate restart",
+  "artifacts": [
+    {
+      "artifactID": "art_g0VcDsCUO00tNs09B8KT",
+      "title": "北仓交接记录金额图 20261128",
+      "rows": 4,
+      "amount": "18.00",
+      "sourceIdentity": "all original IDs/types/offset timestamps/decimal amounts matched",
+      "instantOrder": [
+        "R02",
+        "R04",
+        "R03",
+        "R01"
+      ],
+      "readableUTCField": null,
+      "temporalField": "真实发生时间UTC"
+    },
+    {
+      "artifactID": "art_g0VcDswPG00OSZq6eFK4",
+      "title": "北仓交接金额图·自动时间刻度 20261128",
+      "rows": 4,
+      "amount": "18.00",
+      "sourceIdentity": "all original IDs/types/offset timestamps/decimal amounts matched",
+      "instantOrder": [
+        "R02",
+        "R04",
+        "R03",
+        "R01"
+      ],
+      "readableUTCField": "真实发生时间",
+      "temporalField": "真实时刻UTC"
+    },
+    {
+      "artifactID": "art_g0VcDv3GN00zmLd6E0MY",
+      "title": "交接时间金额复核图 20261128",
+      "rows": 4,
+      "amount": "18.00",
+      "sourceIdentity": "all original IDs/types/offset timestamps/decimal amounts matched",
+      "instantOrder": [
+        "R02",
+        "R04",
+        "R03",
+        "R01"
+      ],
+      "readableUTCField": "UTC核对时间",
+      "temporalField": "发生时间UTC"
+    },
+    {
+      "artifactID": "art_g0VcDzZfx004hS3twQ0B",
+      "title": "交接金额·默认画布复核 20261128",
+      "rows": 4,
+      "amount": "18.00",
+      "sourceIdentity": "all original IDs/types/offset timestamps/decimal amounts matched",
+      "instantOrder": [
+        "R02",
+        "R04",
+        "R03",
+        "R01"
+      ],
+      "readableUTCField": null,
+      "temporalField": null
+    }
+  ],
+  "candidateModelInputGuidance": [
+    {
+      "requestIndex": 3,
+      "context": {
+        "sessionID": "ses_hG5LR5F9kRlSnFYt0fR9",
+        "streamRequest": {
+          "requestID": "msg_1add8f49-fa7e-4cba-b38c-70e39f237933",
+          "agentID": "work",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VcDuwsC00jzt5DedrZ",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VcDuwdz00XVkV6CjRU"
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "matches": [
+        {
+          "json_pointer": "/instructions",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 23763
+        },
+        {
+          "json_pointer": "/tools/25/description",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 1100
+        }
+      ]
+    },
+    {
+      "requestIndex": 4,
+      "context": {
+        "sessionID": "ses_hG5LR5F9kRlSnFYt0fR9",
+        "streamRequest": {
+          "requestID": "msg_1add8f49-fa7e-4cba-b38c-70e39f237933",
+          "agentID": "work",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VcDuy8t000Vzc2dhh3",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VcDuxxc00AR4678azB"
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "matches": [
+        {
+          "json_pointer": "/instructions",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 23763
+        },
+        {
+          "json_pointer": "/tools/25/description",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 1100
+        }
+      ]
+    },
+    {
+      "requestIndex": 5,
+      "context": {
+        "sessionID": "ses_hG5LR5F9kRlSnFYt0fR9",
+        "streamRequest": {
+          "requestID": "msg_1add8f49-fa7e-4cba-b38c-70e39f237933",
+          "agentID": "work",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VcDv3N400CZ81xs9t0",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VcDv3Hr00l4mNlEm6C"
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "matches": [
+        {
+          "json_pointer": "/instructions",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 23763
+        },
+        {
+          "json_pointer": "/tools/25/description",
+          "pointer_redacted": false,
+          "message_role": null,
+          "role_json_pointer": null,
+          "decoded_value_utf8_start": 1100
+        }
+      ]
+    }
+  ],
+  "evidenceMethod": "actual complete guideline text matched by Provider observer, actual request context and decoded JSON pointers; source/body digests are not acceptance criteria"
+}

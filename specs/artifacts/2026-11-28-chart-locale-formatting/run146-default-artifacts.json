@@ -1,0 +1,249 @@
+[
+  {
+    "id": "art_g0VcDv3GN00zmLd6E0MY",
+    "sessionID": "ses_hG5LR5F9kRlSnFYt0fR9",
+    "messageID": "msg_g0VcDuxxc00AR4678azB",
+    "payload": {
+      "schemaVersion": "1",
+      "title": "交接时间金额复核图 20261128",
+      "renderer": "chart@1",
+      "spec": {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "来源：当前项目 events-review.csv 第2—5行。完整保留四条记录、负数退款与零金额免费样品。按原始时间戳的各自时区换算为UTC展示真实先后。金额不附币种，不表示利润；离散点不表示业务趋势。",
+        "title": {
+          "text": "交接时间金额复核图 20261128",
+          "subtitle": [
+            "来源：events-review.csv 第2—5行；四条记录全部保留",
+            "横轴统一为UTC；金额未指定币种，不代表利润，不据此推断业务趋势"
+          ]
+        },
+        "width": "container",
+        "height": 360,
+        "mark": {
+          "type": "point",
+          "filled": true,
+          "size": 150
+        },
+        "encoding": {
+          "x": {
+            "field": "发生时间UTC",
+            "type": "temporal",
+            "scale": {
+              "type": "utc"
+            },
+            "axis": {
+              "title": "真实发生时间（统一显示为 UTC）",
+              "format": "%m-%d %H:%M",
+              "labelAngle": -25,
+              "grid": true
+            }
+          },
+          "y": {
+            "field": "金额",
+            "type": "quantitative",
+            "axis": {
+              "title": "每条记录金额（币种未提供）",
+              "format": ".2f"
+            },
+            "scale": {
+              "zero": true
+            }
+          },
+          "color": {
+            "field": "类型",
+            "type": "nominal",
+            "legend": {
+              "title": "记录类型"
+            }
+          },
+          "shape": {
+            "field": "类型",
+            "type": "nominal",
+            "legend": {
+              "title": "记录类型"
+            }
+          },
+          "tooltip": [
+            {
+              "field": "记录编号",
+              "type": "nominal",
+              "title": "记录编号"
+            },
+            {
+              "field": "类型",
+              "type": "nominal",
+              "title": "类型"
+            },
+            {
+              "field": "金额",
+              "type": "quantitative",
+              "title": "金额",
+              "format": ".2f"
+            },
+            {
+              "field": "原始时间戳",
+              "type": "nominal",
+              "title": "原始时间戳（保留时区）"
+            },
+            {
+              "field": "UTC核对时间",
+              "type": "nominal",
+              "title": "真实发生时间（UTC）"
+            },
+            {
+              "field": "来源",
+              "type": "nominal",
+              "title": "来源位置"
+            }
+          ]
+        }
+      },
+      "data": [
+        {
+          "记录编号": "R01",
+          "类型": "普通订单",
+          "金额": 12.5,
+          "发生时间UTC": "2026-11-29T04:30:00Z",
+          "原始时间戳": "2026-11-28T23:30:00-05:00",
+          "UTC核对时间": "2026-11-29 04:30:00 UTC",
+          "来源": "events-review.csv:2"
+        },
+        {
+          "记录编号": "R02",
+          "类型": "退款",
+          "金额": -2.5,
+          "发生时间UTC": "2026-11-28T11:00:00Z",
+          "原始时间戳": "2026-11-29T01:00:00+14:00",
+          "UTC核对时间": "2026-11-28 11:00:00 UTC",
+          "来源": "events-review.csv:3"
+        },
+        {
+          "记录编号": "R03",
+          "类型": "免费样品",
+          "金额": 0,
+          "发生时间UTC": "2026-11-28T18:00:00Z",
+          "原始时间戳": "2026-11-28T18:00:00Z",
+          "UTC核对时间": "2026-11-28 18:00:00 UTC",
+          "来源": "events-review.csv:4"
+        },
+        {
+          "记录编号": "R04",
+          "类型": "普通订单",
+          "金额": 8,
+          "发生时间UTC": "2026-11-28T11:30:00Z",
+          "原始时间戳": "2026-11-27T23:30:00-12:00",
+          "UTC核对时间": "2026-11-28 11:30:00 UTC",
+          "来源": "events-review.csv:5"
+        }
+      ]
+    },
+    "timeCreated": 1795826040331,
+    "timeUpdated": 1795826040331
+  },
+  {
+    "id": "art_g0VcDzZfx004hS3twQ0B",
+    "sessionID": "ses_hG5LR5F9kRlSnFYt0fR9",
+    "messageID": "msg_g0VcDzWAI00betKc9Haw",
+    "payload": {
+      "schemaVersion": "1",
+      "title": "交接金额·默认画布复核 20261128",
+      "renderer": "chart@1",
+      "spec": {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "title": "交接金额·默认画布复核 20261128",
+        "description": "使用本会话已读取并核对的 events-review.csv 第2—5行，不重新读取文件。逐条展示金额，保留负数退款、零额样品及原始时间戳。不汇总，不推断利润、币种或趋势。未指定画布宽高。",
+        "mark": {
+          "type": "point",
+          "filled": true
+        },
+        "encoding": {
+          "x": {
+            "field": "记录编号",
+            "type": "ordinal",
+            "sort": [
+              "R01",
+              "R02",
+              "R03",
+              "R04"
+            ],
+            "axis": {
+              "title": "记录编号",
+              "labelAngle": 0
+            }
+          },
+          "y": {
+            "field": "金额",
+            "type": "quantitative",
+            "scale": {
+              "zero": true
+            },
+            "axis": {
+              "title": "每条记录金额",
+              "format": ".2f"
+            }
+          },
+          "tooltip": [
+            {
+              "field": "记录编号",
+              "type": "nominal",
+              "title": "记录编号"
+            },
+            {
+              "field": "类型",
+              "type": "nominal",
+              "title": "类型"
+            },
+            {
+              "field": "金额",
+              "type": "quantitative",
+              "title": "金额",
+              "format": ".2f"
+            },
+            {
+              "field": "原始时间戳",
+              "type": "nominal",
+              "title": "原始时间戳（保留时区）"
+            },
+            {
+              "field": "来源",
+              "type": "nominal",
+              "title": "来源位置"
+            }
+          ]
+        }
+      },
+      "data": [
+        {
+          "记录编号": "R01",
+          "类型": "普通订单",
+          "金额": 12.5,
+          "原始时间戳": "2026-11-28T23:30:00-05:00",
+          "来源": "events-review.csv:2"
+        },
+        {
+          "记录编号": "R02",
+          "类型": "退款",
+          "金额": -2.5,
+          "原始时间戳": "2026-11-29T01:00:00+14:00",
+          "来源": "events-review.csv:3"
+        },
+        {
+          "记录编号": "R03",
+          "类型": "免费样品",
+          "金额": 0,
+          "原始时间戳": "2026-11-28T18:00:00Z",
+          "来源": "events-review.csv:4"
+        },
+        {
+          "记录编号": "R04",
+          "类型": "普通订单",
+          "金额": 8,
+          "原始时间戳": "2026-11-27T23:30:00-12:00",
+          "来源": "events-review.csv:5"
+        }
+      ]
+    },
+    "timeCreated": 1795827118237,
+    "timeUpdated": 1795827118237
+  }
+]

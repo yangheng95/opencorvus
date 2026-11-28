@@ -6252,6 +6252,13 @@ cleanup retires its own element after finalization, including late asynchronous
 embed completion; multiple Dashboard views never share a global tooltip owner.
 Chart and Dashboard also share one native View lifecycle. Pane/workspace size
 changes and visibility updates resize the mounted View through its public API.
+Inline Chart follows its native graphic's natural height between the existing
+340px minimum reading area and the 620px graphic budget, scaled with the interface;
+taller authored plots keep the same scroll owner. Its default plot height derives
+from that CSS minimum, independently of rendered content, while expanded plots
+measure the actual available host height. Both dimensions subtract current host
+padding. This prevents natural SVG height from feeding back into the default size
+and lets ordinary authored plots show their title and axes together.
 Theme or product-language changes rebuild presentation, transferring the same
 View's native signal state and arrays belonging to explicitly declared compiled
 data sets, including nested groups. Runtime scenegraph/mark data is outside that
@@ -6271,6 +6278,15 @@ layout: the host neither injects root dimensions nor changes their width/height
 signals. This also keeps categorical brushes tied to the same child scales when
 the surrounding pane or workspace changes size. Vega
 export controls use the current product language. The shared theme configuration
+also supplies per-View `config.locale` number/time definitions from D3's bundled
+resources for the current supported product language. Chart and every Dashboard
+View use this same instance configuration; language rebuilds retain the existing
+native interaction-transfer contract. Authored format strings and locale
+configuration retain native override semantics. Global Vega locale setters are
+not part of this lifecycle. The shared publication guidance keeps timestamp
+fields temporal across axes and tooltips, with original text in a separate field
+and timezone labels matching the actual encoding semantics.
+The shared theme configuration
 supplies the native View's default background from the product surface token,
 so SVG/PNG exports carry the same background as the visible plot. Explicit
 authored configuration backgrounds override that default; a top-level background

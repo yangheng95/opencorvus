@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "services": [
+    {
+      "label": "run144",
+      "pid": 37780,
+      "originalExecHandle": 3472,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hdfQ9xkbNAZa0NNX60UJ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    },
+    {
+      "label": "run145",
+      "pid": 23388,
+      "originalExecHandle": 73849,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hAzSt5bXlmv9cI8CLu37",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    },
+    {
+      "label": "run146",
+      "pid": 22524,
+      "originalExecHandle": 59792,
+      "originalExecJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hkg0hoxIATTFYGHad4Kp",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerReaders": "all settled",
+      "pairedCredentialCatalogCopies": "retired"
+    }
+  ],
+  "ownedPort63592": "retired",
+  "ownedTab241805420": "closed through bound browser API",
+  "preferences": "zh-CN/system restored through native settings and personally verified",
+  "priorLimitation": "old tab 241805392 remains unbound; not represented as closed"
+}
