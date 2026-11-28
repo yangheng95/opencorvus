@@ -1,0 +1,393 @@
+{
+  "status": "passed",
+  "label": "run170",
+  "oldPublicArtifacts": 67,
+  "oldSpreadsheets": 6,
+  "protectedOriginalInputs": [
+    {
+      "side": "north",
+      "file": "events.csv",
+      "bytes": 223
+    },
+    {
+      "side": "north",
+      "file": "handoff.md",
+      "bytes": 153
+    },
+    {
+      "side": "north",
+      "file": "records.csv",
+      "bytes": 111
+    },
+    {
+      "side": "north",
+      "file": "settlement-review.csv",
+      "bytes": 150
+    },
+    {
+      "side": "south",
+      "file": "events-review.csv",
+      "bytes": 223
+    },
+    {
+      "side": "south",
+      "file": "handoff.md",
+      "bytes": 159
+    },
+    {
+      "side": "south",
+      "file": "records.csv",
+      "bytes": 111
+    },
+    {
+      "side": "south",
+      "file": "settlement-review.csv",
+      "bytes": 127
+    }
+  ],
+  "baselineBusinessSession": "27 messages exact original",
+  "baselineSource": "15483 bytes exact original",
+  "memory": {
+    "revision": 28,
+    "status": "idle",
+    "pendingCount": 0,
+    "droppedPendingCount": 0
+  },
+  "artifacts": [
+    {
+      "id": "art_g0Vc6tPff00jkpgU5AE4",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc70Ykv00NlpJjXpRL",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc7D4cK00oOPAMPwq4",
+      "renderer": "table@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc7DBhO00vqAn4lown",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc7K0fT00TiJdVRV0q",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc7Tc090066od6LQPJ",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc7fP5H00nwMZnoQTV",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc7iRlf00l8ubieX3b",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc7p5Du00vgZy8riHV",
+      "renderer": "presentation@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc7s5Ye005Xo5lmnrm",
+      "renderer": "presentation@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc809nl00seAgJAcFe",
+      "renderer": "presentation@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc865j800zeOSTYz4n",
+      "renderer": "presentation@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc8DklF00HzIg1Ss2Z",
+      "renderer": "presentation@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc8JddB00rifxkPyIl",
+      "renderer": "presentation@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc8Tx8y00vfqt2JklC",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc8gdaZ00BYeqDlb3g",
+      "renderer": "spreadsheet@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc8huLy00mCG4xZXyM",
+      "renderer": "spreadsheet@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc91zED00L3QeOwJ39",
+      "renderer": "dashboard@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc98WuM00U3GWzHFlO",
+      "renderer": "chart@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc9LWg500nnHSiR3le",
+      "renderer": "chart@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc9g8Lh00oK4FDYhNf",
+      "renderer": "dashboard@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc9mmkV00BbTrQxUBF",
+      "renderer": "chart@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc9rD9900G8mQhzR1c",
+      "renderer": "table@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0Vc9zIRd00VKm2VxZ29",
+      "renderer": "terminal@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcA4KoP0021bOpRlt0",
+      "renderer": "diff@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcAHavW00PoQtVEAR7",
+      "renderer": "tree@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcALKxA008mJxj526D",
+      "renderer": "network@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcATNIz00i6eVti6oS",
+      "renderer": "notebook@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcAV7fY008zDSfNSrl",
+      "renderer": "notebook@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcAcdBO00Cufd05Hql",
+      "renderer": "timeline@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcAqGJ200KWmDtcP57",
+      "renderer": "map@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcAvx2700MSPloJfgh",
+      "renderer": "candlestick@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcB5ObV00wP1lFZdxF",
+      "renderer": "candlestick@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcBNYru001lUt0X4Wi",
+      "renderer": "table@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcC98uu00W5z52v4IH",
+      "renderer": "spreadsheet@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcCFvrZ00wlZF7keJL",
+      "renderer": "diagram@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcCSs2P00dXkWFuhiv",
+      "renderer": "presentation@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcCd1uK00FbkoVOSPf",
+      "renderer": "code@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcCjwcZ003dSX5v6lj",
+      "renderer": "code@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcCk8i800rZv4I564S",
+      "renderer": "code@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcCuGBf00v1T810ddp",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcD6EEH00vsHhh41eG",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcD8asr00DeGon92rV",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDBybC006d6Ilxdlb",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDMiW700AB2zE9yRi",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDaJWl00RuPnZAJ9D",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDaJ1x00LEy0VVxOn",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDg915009tCvhyHYV",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDgAGQ00voBk4DA4D",
+      "renderer": "document@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDmu2E00q0MrzHBES",
+      "renderer": "table@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDsCUO00tNs09B8KT",
+      "renderer": "chart@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDswPG00OSZq6eFK4",
+      "renderer": "chart@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDv3GN00zmLd6E0MY",
+      "renderer": "chart@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcDzZfx004hS3twQ0B",
+      "renderer": "chart@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcE4IRj009JSI4YLSF",
+      "renderer": "dashboard@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcE60C9003r3XgLZKN",
+      "renderer": "dashboard@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcE63Aj004sICSWwzm",
+      "renderer": "table@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEPkqB00Jl0gi3zby",
+      "renderer": "chart@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEUqWe009bjLB4XlK",
+      "renderer": "table@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEV6nR00a6iSxtBfI",
+      "renderer": "table@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEYIys00i9elZts3P",
+      "renderer": "spreadsheet@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEcGJT00oYmWiDaM0",
+      "renderer": "spreadsheet@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEieBa00IFeHOZrf4",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEigsd00fu4qpzup5",
+      "renderer": "spreadsheet@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEpO6D00X9RwD6y5p",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcEt3Z900iyHTagkfl",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    },
+    {
+      "id": "art_g0VcF0NZa00vC10KCf2Z",
+      "renderer": "file-preview@1",
+      "publicPayload": "exact original"
+    }
+  ]
+}

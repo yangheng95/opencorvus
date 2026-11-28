@@ -1,0 +1,205 @@
+{
+  "status": "passed",
+  "sessionID": "ses_-zUNjOe8szzoLJNsOpK7",
+  "artifactID": "art_g0VcGdpKk009tBu4tRsb",
+  "assistantFinish": "stop",
+  "source": {
+    "sha": "23d62db5ef356693dbf99579f0b3a6908c735efdf150da1116aece7e0abac5eb",
+    "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/23d62db5ef356693dbf99579f0b3a6908c735efdf150da1116aece7e0abac5eb.pptx",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "size": 15483,
+    "filename": "北仓结算交接简报.pptx"
+  },
+  "renders": [
+    {
+      "sha": "62ff141fa56f0851a7270ba7792fdf810b5a105ae6f2f81d12af9e350bad1f5e",
+      "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/62ff141fa56f0851a7270ba7792fdf810b5a105ae6f2f81d12af9e350bad1f5e.png",
+      "mime": "image/png",
+      "size": 108661,
+      "filename": "slide-1.png"
+    },
+    {
+      "sha": "d4fbe9567fcfc4e0916bc342345e0a38ea8a28cfa8d6b272b299aafff7f0859a",
+      "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/d4fbe9567fcfc4e0916bc342345e0a38ea8a28cfa8d6b272b299aafff7f0859a.png",
+      "mime": "image/png",
+      "size": 86829,
+      "filename": "slide-2.png"
+    },
+    {
+      "sha": "4917a65cad519725245baf55e29984a339812bc3b6979b16602fe089cc1407d9",
+      "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/4917a65cad519725245baf55e29984a339812bc3b6979b16602fe089cc1407d9.png",
+      "mime": "image/png",
+      "size": 160915,
+      "filename": "slide-3.png"
+    }
+  ],
+  "expected": {
+    "rows": 6,
+    "net": "17.65",
+    "groups": {
+      "普通订单": {
+        "count": 3,
+        "amount": "23.65"
+      },
+      "退款": {
+        "count": 2,
+        "amount": "-6.00"
+      },
+      "免费样品": {
+        "count": 1,
+        "amount": "0.00"
+      }
+    }
+  },
+  "authorChart": {
+    "x": 3,
+    "y": 4,
+    "width": 28.5,
+    "height": 8.7,
+    "kind": "chart",
+    "chart_type": "bar",
+    "title": "带符号净额（币种未提供）",
+    "categories": [
+      "普通订单",
+      "退款",
+      "免费样品"
+    ],
+    "series": [
+      {
+        "name": "带符号净额",
+        "values": [
+          23.65,
+          -6,
+          0
+        ]
+      }
+    ],
+    "colors": [
+      "#326AA8"
+    ],
+    "legend": "none",
+    "data_labels": "value",
+    "data_label_font_size_pt": 14,
+    "axis_font_size_pt": 12,
+    "data_label_number_format": "0.00"
+  },
+  "nativeChartValues": [
+    "23.65",
+    "-6",
+    "0"
+  ],
+  "nativeChartFormats": [
+    {
+      "formatCode": "0.00",
+      "sourceLinked": "0"
+    }
+  ],
+  "slideTexts": [
+    "北仓结算交接简报  /  01 结算总览\n六条记录核对一致，带符号净额 17.65\n全量记录数\n6 条\n带符号净额\n17.65（币种未提供）\n分类复算：23.65 + (−6.00) + 0.00 = 17.65\n退款：N02 −4.85、N05 −1.15；保留负号抵减金额，2 条均计数。\n免费样品：N03 0.00；保留原记录，计 1 条，金额贡献为零。\n口径：按每行记录计数、按金额带符号求和；记录数不等同于去重订单数，带符号净额不等同于利润。\n范围：settlement-review.csv 全部 6 条记录（不含表头）；仅含记录编号、类型、金额。",
+    "北仓结算交接简报  /  02 原类型金额比较\n普通订单 23.65，退款抵减 6.00\n记录数：普通订单 3 条  /  退款 2 条  /  免费样品 1 条  /  合计 6 条\n分类计算：普通订单 15.20 + 6.35 + 2.10 = 23.65；退款 −4.85 − 1.15 = −6.00；免费样品 0.00。\n来源：当前项目 settlement-review.csv 第 2–7 行。按原“类型”分组，对“金额”带符号求和；记录数单列，不进入金额坐标轴。",
+    "北仓结算交接简报  /  03 交接核对与待补信息\n逐项核对留痕，缺失业务信息待补\n已核对：原始六条记录\nN01　普通订单　15.20\nN02　退款　　　−4.85\nN03　免费样品　 0.00\nN04　普通订单　 6.35\nN05　退款　　　−1.15\nN06　普通订单　 2.10\n可确认 / 交接复核项\n• 原编号、类型、金额逐行一致。\n• 计数 3 + 2 + 1 = 6，保留零金额。\n• 逐行与分类净额均为 17.65。\n待补 / 本文件不能确认\n• 币种、统一计价口径、结算周期。\n• 成本、费用、税费及利润。\n• 退款关联订单、凭证、到账状态。\n逐行复算：15.20 − 4.85 + 0.00 + 6.35 − 1.15 + 2.10 = 17.65。\n交接建议：补齐业务信息与凭证后，再确认实际结算和到账。当前仅完成文件内算术核对，不代表支付、退款或财务对账已闭环。"
+  ],
+  "toolStates": [
+    {
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "status": "error"
+    },
+    {
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_deliver",
+      "status": "completed"
+    },
+    {
+      "tool": "memory",
+      "status": "completed"
+    }
+  ],
+  "scope": "Real source bytes, native editable text/chart values and exact current public payload;native UI and each fresh render require separate personal review."
+}

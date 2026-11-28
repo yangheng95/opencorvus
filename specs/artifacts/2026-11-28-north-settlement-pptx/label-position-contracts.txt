@@ -1,0 +1,18 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\work-artifact\chart-label-position.test.ts:
+(pass) bar authoring retains the explicit native outsideEnd label placement [6.29ms]
+(pass) bar authoring retains the explicit native insideEnd label placement [0.10ms]
+(pass) bar authoring retains the explicit native insideBase label placement [0.07ms]
+(pass) bar authoring retains the explicit native center label placement [0.10ms]
+(pass) column authoring retains the explicit native outsideEnd label placement [0.08ms]
+(pass) column authoring retains the explicit native insideEnd label placement [0.07ms]
+(pass) column authoring retains the explicit native insideBase label placement [0.07ms]
+(pass) column authoring retains the explicit native center label placement [0.07ms]
+(pass) a label position on another chart type returns the declared field error [0.76ms]
+(pass) a label position with disabled labels returns the declared field error [0.20ms]
+
+ 10 pass
+ 0 fail
+ 10 expect() calls
+Ran 10 tests across 1 file. [1019.00ms]

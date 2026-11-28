@@ -1,0 +1,64 @@
+{
+  "status": "passed",
+  "runs": [
+    {
+      "label": "run169",
+      "originalExecHandle": 28252,
+      "joinedExitCode": 0,
+      "requests": 29,
+      "providerDrain": {
+        "startedAt": 1795866638054,
+        "settledAt": 1795866638054,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "officePackageVerification": {
+        "status": "passed",
+        "managedFiles": 5,
+        "runtimeVersion": "1.0.158"
+      }
+    },
+    {
+      "label": "run170",
+      "originalExecHandle": 99155,
+      "joinedExitCode": 0,
+      "requests": 16,
+      "providerDrain": {
+        "startedAt": 1795867111842,
+        "settledAt": 1795867111842,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "officePackageVerification": {
+        "status": "passed",
+        "managedFiles": 5,
+        "runtimeVersion": "1.0.158"
+      }
+    }
+  ],
+  "port51776": "retired",
+  "ownedTab": "241805516 closed and absent in fresh native inventory",
+  "unboundOldTabs": "479/428 not claimed closed",
+  "validation": {
+    "backendContracts": "10 cases10assertions",
+    "nativeLifecycle": "1case6assertions;original62081joined0",
+    "backendTypes": "original30753joined0",
+    "actualTasks": "27message baseline3pages15483bytes;14message candidate1page11986bytes",
+    "actualBrowserDownloads": "both equal canonical source bytes",
+    "nativeLabelPosition": "insideEnd to inEnd;20pt labels and18pt axes"
+  },
+  "protection": {
+    "projectFiles": 23,
+    "oldRows": 3504,
+    "oldPublicArtifacts": 67,
+    "oldSpreadsheets": 6,
+    "oldInputs": 8,
+    "completedTasks": 2,
+    "taskReferenceRows": 23,
+    "originalCSVBytes": 59
+  },
+  "limits": [
+    "Native horizontal long-category preview clipping remains unresolved.",
+    "No PowerPoint desktop editing, mobile, release, migration, or UI automation acceptance claimed."
+  ]
+}

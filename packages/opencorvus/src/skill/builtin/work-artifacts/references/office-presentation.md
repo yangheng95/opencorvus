@@ -31,6 +31,12 @@ qualified.
   the native chart label format and keeps the underlying values editable.
   Automatic labels may round or abbreviate values; check the actual labels in
   every fresh rendered slide against the source values and intended precision.
+- For bar and column charts with enabled labels, `data_label_position` accepts
+  `outsideEnd`, `insideEnd`, `insideBase`, or `center`. It writes the native label
+  placement. Inspect negative and zero values near category labels; an inside
+  position can separate a negative amount from the category axis. Use readable
+  label/bar contrast and enough space. Omit this field for other chart types.
+  Label placement does not repair the upstream preview's category clipping.
 - Set `data_label_font_size_pt` and `axis_font_size_pt` when chart labels need
   explicit typography. Both accept 8–72 points and write native chart properties;
   they do not change values, number formats, or the chart geometry. Choose sizes

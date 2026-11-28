@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "candidateSession": "ses_-zUNjKC95zzNKa4dnkSo",
+  "candidateArtifact": "art_g0VcGgbHF00x9TwaQPpT",
+  "sourceBytes": 11986,
+  "requestedLabelPosition": "insideEnd",
+  "nativeLabelPosition": "inEnd",
+  "nativeLabelFontSizePt": [
+    20.0
+  ],
+  "nativeAxisFontSizePt": [
+    18.0,
+    18.0
+  ],
+  "nativeChartPart": "ppt/slides/charts/chart1.xml",
+  "outgoingRequestsWithActualDeclaration": 13,
+  "outgoingEnum": [
+    "outsideEnd",
+    "insideEnd",
+    "insideBase",
+    "center"
+  ],
+  "actualModel": "gpt-6.1-sol",
+  "streaming": true,
+  "structuredOutputOptionalNull": "actual nullable SDK declaration;selected insideEnd retained in real author input and native file",
+  "baselineAndCandidateActualBrowserDownloads": "exact canonical bytes",
+  "expected": {
+    "rows": 6,
+    "net": "17.65",
+    "groups": {
+      "普通订单": {
+        "count": 3,
+        "amount": "23.65"
+      },
+      "退款": {
+        "count": 2,
+        "amount": "-6.00"
+      },
+      "免费样品": {
+        "count": 1,
+        "amount": "0.00"
+      }
+    }
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "status": "passed",
+  "sessionID": "ses_-zUNjKC95zzNKa4dnkSo",
+  "artifactID": "art_g0VcGgbHF00x9TwaQPpT",
+  "assistantFinish": "stop",
+  "source": {
+    "sha": "210823c31ba9a89775235c0049018cb93fe54065ca88d8a147f843308f259c28",
+    "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/210823c31ba9a89775235c0049018cb93fe54065ca88d8a147f843308f259c28.pptx",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "size": 11986,
+    "filename": "北仓结算内侧标签图.pptx"
+  },
+  "renders": [
+    {
+      "sha": "4dcdcebd9679932ff570c2911ba2dca6051adb163b40ef89ea07a81c55038185",
+      "url": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/4dcdcebd9679932ff570c2911ba2dca6051adb163b40ef89ea07a81c55038185.png",
+      "mime": "image/png",
+      "size": 93244,
+      "filename": "slide-1.png"
+    }
+  ],
+  "expected": {
+    "rows": 6,
+    "net": "17.65",
+    "groups": {
+      "普通订单": {
+        "count": 3,
+        "amount": "23.65"
+      },
+      "退款": {
+        "count": 2,
+        "amount": "-6.00"
+      },
+      "免费样品": {
+        "count": 1,
+        "amount": "0.00"
+      }
+    }
+  },
+  "authorChart": {
+    "x": 1.1,
+    "y": 3.4,
+    "width": 22.2,
+    "height": 11.3,
+    "kind": "chart",
+    "chart_type": "column",
+    "title": "带符号金额（币种未提供）",
+    "categories": [
+      "普通订单",
+      "退款",
+      "免费样品"
+    ],
+    "series": [
+      {
+        "name": "带符号金额",
+        "values": [
+          23.65,
+          -6,
+          0
+        ]
+      }
+    ],
+    "colors": [
+      "#B9DDEB"
+    ],
+    "legend": "none",
+    "data_labels": "value",
+    "data_label_position": "insideEnd",
+    "data_label_font_size_pt": 20,
+    "axis_font_size_pt": 18,
+    "data_label_number_format": "0.00"
+  },
+  "nativeChartValues": [
+    "23.65",
+    "-6",
+    "0"
+  ],
+  "nativeChartFormats": [
+    {
+      "formatCode": "0.00",
+      "sourceLinked": "0"
+    }
+  ],
+  "slideTexts": [
+    "北仓结算｜6 条记录，带符号净额 17.65\n分类带符号金额 · 退款保留负号，零金额样品保留\n记录数单列（条）\n普通订单     3\n退款             2\n免费样品     1\n全量记录数   6 条\n\n带符号净额\n17.65\n核对：23.65 − 6.00 + 0.00 = 17.65；3 + 2 + 1 = 6 条。\n来源：当前项目 settlement-review.csv，全部 6 条原始记录（N01–N06）。\n口径：按原始类型汇总带符号金额；零金额样品计数。币种、成本未提供；净额不等于利润。"
+  ],
+  "toolStates": [
+    {
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "status": "error"
+    },
+    {
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "status": "completed"
+    },
+    {
+      "tool": "work_artifact_deliver",
+      "status": "completed"
+    }
+  ],
+  "scope": "Real source bytes, native editable text/chart values and exact current public payload;native UI and each fresh render require separate personal review."
+}

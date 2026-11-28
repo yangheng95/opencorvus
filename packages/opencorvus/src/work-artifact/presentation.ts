@@ -176,6 +176,9 @@ const ChartElement = BaseElement.extend({
   colors: z.array(Color).min(1).max(12),
   legend: z.enum(["none", "top", "bottom", "left", "right"]).default("bottom"),
   data_labels: z.enum(["none", "value", "percent", "category"]).default("none"),
+  data_label_position: z.enum(["outsideEnd", "insideEnd", "insideBase", "center"])
+    .describe("Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render.")
+    .optional(),
   data_label_font_size_pt: z.number().finite().min(8).max(72)
     .describe("Native chart data-label font size in points. Inspect rendered labels for readability.")
     .optional(),
@@ -203,6 +206,15 @@ export const PresentationElement = z
       })
     }
     if (element.kind === "chart") {
+      if (element.data_label_position !== undefined) {
+        if (element.chart_type !== "bar" && element.chart_type !== "column") {
+          ctx.addIssue({ code: "custom", path: ["data_label_position"],
+            message: "data_label_position is supported for bar and column charts" })
+        } else if (element.data_labels === "none") {
+          ctx.addIssue({ code: "custom", path: ["data_label_position"],
+            message: "data_label_position requires enabled data_labels" })
+        }
+      }
       for (const series of element.series) {
         if (series.values.length !== element.categories.length) {
           ctx.addIssue({
@@ -710,6 +722,7 @@ async function authorCommands(
             colors: element.colors.map(stripColor).join(","),
             legend: element.legend,
             dataLabels: element.data_labels,
+            ...(element.data_label_position ? { "dataLabels.position": element.data_label_position } : {}),
             ...(element.data_label_number_format ? { "dataLabels.numFmt": element.data_label_number_format } : {}),
             ...(element.data_label_font_size_pt !== undefined ? { "labelFont.size": String(element.data_label_font_size_pt) } : {}),
             ...(element.axis_font_size_pt !== undefined ? { axisFont: String(element.axis_font_size_pt) } : {}),

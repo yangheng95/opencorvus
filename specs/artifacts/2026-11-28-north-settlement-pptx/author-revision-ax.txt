@@ -1,0 +1,30 @@
+Browser tab: 241805516, Title: "OpenCorvus", URL: "http://127.0.0.1:51776/ui/?sessionID=ses_-zUNjOe8szzoLJNsOpK7&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-north&experience=work".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~								33 button 定位当前工作
+~									201 text 2 分 15 秒
++									206 text 我会先读取六条原始记录，逐项核对分类与带符号金额，再制作三页中文简报，并检查每页实际渲染。全程直接完成，不改原始文件、不运行项目脚本，也不委派。
++									207 button (collapsed) Description: 2 次操作 · 加载技能, Secondary Actions: Expand
++										208 text 2 次操作
++										209 text 加载技能
++										210 text work-artifacts · references/office-presentation.md
++										211 image
++									212 button (collapsed) Description: 2 次操作 · 加载技能, Secondary Actions: Expand
++										213 text 2 次操作
++										214 text 加载技能
++										215 text work-artifacts · references/review.md
++										216 image
++									217 container 来源
++										218 button 打开来源文件: settlement-review.csv
++										219 button 查看保存摘录：settlement-review.csv
++										220 button 复制来源位置：settlement-review.csv
++									221 text 六条记录已核对：普通订单 3 条，合计 23.65；退款 2 条，合计 −6.00；免费样品 1 条，金额 0.00。分类合计与逐行加总一致，全量带符号净额为 17.65。简报会保留退款负号，将零金额样品计入记录数，并明确文件未提供币种及成本信息。
++									222 button (collapsed) Description: 3 次操作 · 校验文件与预览 · 1 次失败, Secondary Actions: Expand
++										223 text 3 次操作
++										224 text 校验文件与预览
++										225 text 工具操作未完成
++										226 text 1 次失败
++									227 text 初次检查发现部分文本框高度不足，尚未达到交付要求。我会扩大文本区域、调整排版，再重新渲染并逐页检查；已核对的金额和统计口径不变。
++									228 button (collapsed) Description: 生成工作文件 · 1 个正在接收参数, Secondary Actions: Expand
++										229 text 生成工作文件
++										230 text 1 个正在接收参数
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:51776/ui/?sessionID=ses_-zUNjOe8szzoLJNsOpK7&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-north&experience=work

@@ -1,0 +1,379 @@
+[
+  {
+    "requestIndex": 3,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 5,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 6,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 7,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 8,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 9,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 10,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 11,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 12,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 13,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 14,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "requestIndex": 15,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "tool": "work_artifact_author",
+    "strict": false,
+    "declarations": [
+      {
+        "pointer": "/properties/operation/anyOf/0/properties/slides/items/properties/elements/items/oneOf/3",
+        "positionSchema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "outsideEnd",
+                "insideEnd",
+                "insideBase",
+                "center"
+              ],
+              "description": "Native bar/column label placement. Requires enabled data_labels; omit for other chart types. Inside positions can separate negative-value labels from category labels; inspect the fresh render."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

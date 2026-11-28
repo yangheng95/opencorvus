@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [北仓结算演示交付证据](2026-11-28-north-settlement-pptx/README.md)
 - [有限复合值声明证据](2026-11-28-finite-composite-domain/README.md)
 - [PDF整页阅读证据](2026-11-28-pdf-fit-page/README.md)
 - [有限字面值声明投影证据](2026-11-28-untyped-literal-schema/README.md)

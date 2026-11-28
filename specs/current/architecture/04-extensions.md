@@ -690,7 +690,12 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   PPTX原生图表计划通过可选`data_label_number_format`直接投影OfficeCLI的`dataLabels.numFmt`，
   例如`0.00`保留金额标签的两位小数；自动标签可能舍入，必须复核实际渲染与源数值。
   可选`data_label_font_size_pt`/`axis_font_size_pt`在8–72pt范围直接投影原生标签/轴字号，
-  不改变数据、数值格式或几何。PPTX通过同一OfficeCLI HTML和显式Node浏览器生成完整1280×720页图，
+  不改变数据、数值格式或几何。
+  启用标签的bar/column原生作者通过可选`data_label_position`声明
+  outsideEnd/insideEnd/insideBase/center，唯一适配器写入`dataLabels.position`。
+  其他图表类型或关闭标签时声明位置返回该字段的明确输入错误；缺省保留原生默认。
+  位置选择不改变源数据或补绘第二份图表，也不承诺修复上游类别标签裁切。
+  PPTX通过同一OfficeCLI HTML和显式Node浏览器生成完整1280×720页图，
   文本框按原件物理pt排版；固定上游图表SVG仍使用其数值字号转换，不宣称图表物理字号或PowerPoint像素一致。
   不再维护独立SVG/Pango文字光栅器。三格式最终重渲染的完整、有序PNG必须与实际审阅收据
   逐项绑定相同规范引用及内容身份；变化时返回重新校验/审阅错误，不交付未经新审阅页图。

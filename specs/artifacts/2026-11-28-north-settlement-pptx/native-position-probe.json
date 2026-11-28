@@ -1,0 +1,80 @@
+{
+  "runtime": "1.0.158",
+  "verifiedManagedFiles": 5,
+  "sourceBytes": 15584,
+  "candidateBytes": 15605,
+  "results": [
+    {
+      "success": true,
+      "data": "Updated /slide[2]/chart[1]: dataLabels.position=insideEnd",
+      "message": "Updated /slide[2]/chart[1]: dataLabels.position=insideEnd"
+    },
+    {
+      "success": true,
+      "data": {
+        "matches": 1,
+        "results": [
+          {
+            "path": "/slide[2]/chart[@id=100011]",
+            "type": "chart",
+            "preview": "带符号净额（币种未提供）",
+            "childCount": 1,
+            "format": {
+              "name": "带符号净额（币种未提供）",
+              "id": 100011,
+              "x": "2cm",
+              "y": "4cm",
+              "width": "20.3cm",
+              "height": "10.5cm",
+              "zorder": 3,
+              "chartType": "column",
+              "title": "带符号净额（币种未提供）",
+              "title.size": "14pt",
+              "title.bold": "true",
+              "title.lang": "en-US",
+              "legend": "none",
+              "dataLabels": "value",
+              "labelPos": "inEnd",
+              "gridlines": "true",
+              "gapwidth": "150",
+              "axisFont": "18",
+              "majorTickMark": "out",
+              "minorTickMark": "none",
+              "tickLabelPos": "nextTo",
+              "crosses": "autoZero",
+              "crossBetween": "between",
+              "dispBlanksAs": "gap",
+              "varyColors": "false",
+              "dataLabels.numFmt": "0.00",
+              "labelFont.size": "20pt",
+              "seriesCount": 1,
+              "series1": "带符号净额:23.65,-6,0",
+              "categories": "普通订单,退款,免费样品"
+            },
+            "children": [
+              {
+                "path": "/slide[2]/chart[@id=100011]/series[1]",
+                "type": "series",
+                "text": "带符号净额",
+                "childCount": 0,
+                "format": {
+                  "name": "带符号净额",
+                  "values": "23.65,-6,0",
+                  "color": "#326AA8"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "success": true,
+      "data": {
+        "count": 0,
+        "errors": []
+      }
+    }
+  ]
+}
