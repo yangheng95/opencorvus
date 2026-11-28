@@ -1,0 +1,107 @@
+{
+  "runs": [
+    {
+      "label": "run163",
+      "state": "exited",
+      "exitCode": 0,
+      "model": "openai/gpt-6.1-sol",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hyAAhFpGHJSgDo0O3xdv",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "officePackageVerification": {
+        "status": "passed",
+        "managedFiles": 5,
+        "runtimeVersion": "1.0.158"
+      },
+      "providerDrain": {
+        "startedAt": 1795848106888,
+        "settledAt": 1795848106889,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "stopReason": "service_lifetime_elapsed"
+    },
+    {
+      "label": "run164",
+      "state": "exited",
+      "exitCode": 0,
+      "model": "openai/gpt-6.1-sol",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hFLK8kqB72kzvNApa1z8",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "officePackageVerification": {
+        "status": "passed",
+        "managedFiles": 5,
+        "runtimeVersion": "1.0.158"
+      },
+      "providerDrain": {
+        "startedAt": 1795862384198,
+        "settledAt": 1795862384198,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "stopReason": "owned_stop_request"
+    },
+    {
+      "label": "run165",
+      "state": "exited",
+      "exitCode": 0,
+      "model": "openai/gpt-6.1-sol",
+      "requests": 4,
+      "preflight": {
+        "sessionID": "ses_hFcgDe3UdxSU0tnHJpVh",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "officePackageVerification": {
+        "status": "passed",
+        "managedFiles": 5,
+        "runtimeVersion": "1.0.158"
+      },
+      "providerDrain": {
+        "startedAt": 1795863018691,
+        "settledAt": 1795863018692,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "stopReason": "owned_stop_request"
+    }
+  ],
+  "originalJoinedHandles": [
+    {
+      "handle": 68081,
+      "exitCode": 0
+    },
+    {
+      "handle": 82408,
+      "exitCode": 0
+    },
+    {
+      "handle": 14844,
+      "exitCode": 0
+    },
+    {
+      "handle": 31407,
+      "role": "business submission",
+      "exitCode": 0
+    }
+  ],
+  "port51776": "retired",
+  "ownedPages504and507": "close followed by second inventory confirmed absent",
+  "oldUnboundTabs": [
+    "241805479",
+    "241805428"
+  ]
+}

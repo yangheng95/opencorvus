@@ -2128,6 +2128,7 @@ button.msg-source-chip .msg-source-chip__filename {
 
 .msg-artifact-pdf {
   display: block;
+  height: calc(620px * var(--ui-scale));
   max-height: calc(620px * var(--ui-scale));
   padding: var(--ui-gap-lg);
   overflow: auto;

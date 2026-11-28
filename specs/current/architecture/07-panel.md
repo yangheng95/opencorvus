@@ -425,6 +425,14 @@ Manual zoom retains the current page position at the leading edges of the
 reader after the new scale renders. Scroll boundaries still constrain the
 restored position. Explicit page changes and document links retain their own
 navigation targets.
+Fit page is one zoom intent shared by project files, attachments and delivered
+files. It derives its scale from the current PDF page's rotated viewport and
+the reading region's content width and height, and recomputes on page or region
+changes. The region's height budget is independent of page content. Fit views
+may shrink below the manual 50% minimum; destination views retain the existing
+250% rendering maximum. An XYZ destination with zero or null zoom retains the
+actual current scale. Manual zoom switches back to its bounded numeric intent
+and retains the reading anchor. Fit page explicitly reveals the whole page.
 
 Nonimage file chips open an existing Dialog for review before submission. The
 shared util/text-mime classifier serves both model text projection and review:

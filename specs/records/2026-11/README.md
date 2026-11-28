@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [PDF整页阅读与缩放](2026-11-28-pdf-fit-page.md)
 - [有限字面值工具声明的类型投影](2026-11-28-untyped-literal-schema.md)
 - [共用判别值的工具输入完整性](2026-11-28-shared-discriminator-input.md)
 - [通用工具空值语义与原生交接文档](2026-11-28-tool-null-semantics.md)

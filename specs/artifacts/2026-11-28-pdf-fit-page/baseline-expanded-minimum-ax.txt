@@ -1,0 +1,391 @@
+Browser tab: 241805504, Title: "OpenCorvus", URL: "http://127.0.0.1:51776/ui/?sessionID=ses_hlnKOeLEnlANb9kegz7f&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-north&experience=work".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:51776/ui/?sessionID=ses_hlnKOeLEnlANb9kegz7f&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-north&experience=work
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-176-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-178-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-180-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-182-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: 对话快捷入口, ID: workspaceNavigation
+				11 container 对话快捷入口
+					12 button 对话
+					13 button 任务
+					14 button 定时
+					15 button 专家团
+					16 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-142-trigger, Secondary Actions: Expand
+					17 button 设置
+				18 button 关于
+				19 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus 官网, Value: opencorvus.com/zh-cn/
+						24 button 搜索项目、对话、工作或命令
+						25 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container 对话导航
+								29 button 新对话
+							30 container workLedgerProjectsScroll
+								31 heading 项目, Value: 2
+									32 text 项目
+								33 button 定位当前工作
+								34 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-22-trigger, Secondary Actions: Expand
+								35 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-25-trigger, Secondary Actions: Expand
+								62 container
+									63 container
+										64 button (expanded) Description: 收起 匿名项目 ef9c81, Secondary Actions: Collapse
+										65 button 打开项目: 匿名项目 ef9c81
+									66 container
+										67 container 在当前项目中直接与助手完成工作。
+										68 button 162. Reply with OK.
+										69 pop up button (collapsed, opacity: 0) Description: 162. Reply with OK.的更多操作, ID: dropdownmenu-cl-297-trigger, Secondary Actions: Expand
+									70 container
+										71 button (expanded) Description: 收起 匿名项目 6dd42c, Secondary Actions: Collapse
+										72 button 打开项目: 匿名项目 6dd42c
+									73 container
+										74 container 在当前项目中直接与助手完成工作。
+										75 button 161. Reply with OK.
+										76 pop up button (collapsed, opacity: 0) Description: 161. Reply with OK.的更多操作, ID: dropdownmenu-cl-311-trigger, Secondary Actions: Expand
+									77 container
+										78 button (expanded) Description: 收起 memory-handoff-north, Secondary Actions: Collapse
+										79 button 打开项目: memory-handoff-north
+									80 container cl-314
+										81 container
+											82 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											83 button 省略类型字面声明复验
+											84 pop up button (collapsed, opacity: 0) Description: 更多操作, ID: dropdownmenu-cl-325-trigger, Secondary Actions: Expand
+										85 container
+											86 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											87 button 3. 北仓结算结构交接空值验收
+											88 pop up button (collapsed, opacity: 0) Description: 3. 北仓结算结构交接空值验收的更多操作, ID: dropdownmenu-cl-331-trigger, Secondary Actions: Expand
+										89 container
+											90 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											91 button 2. 北仓结算结构交接空值验收
+											92 pop up button (collapsed, opacity: 0) Description: 2. 北仓结算结构交接空值验收的更多操作, ID: dropdownmenu-cl-337-trigger, Secondary Actions: Expand
+										93 container
+											94 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											95 button 请只读当前项目 settlement-review.csv，给接班同事交付一份原生 Excel 结算核对簿，文件名“北仓参数完整性复验.xlsx”。保留全...
+											96 pop up button (collapsed, opacity: 0) Description: 更多操作, ID: dropdownmenu-cl-343-trigger, Secondary Actions: Expand
+										97 container
+											98 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											99 button 1. 北仓结算结构交接空值验收
+											100 pop up button (collapsed, opacity: 0) Description: 1. 北仓结算结构交接空值验收的更多操作, ID: dropdownmenu-cl-349-trigger, Secondary Actions: Expand
+										101 button (collapsed) Description: 再显示 13 项 · memory-handoff-north, Secondary Actions: Expand
+									102 container
+										103 button (expanded) Description: 收起 匿名项目 809590, Secondary Actions: Collapse
+										104 button 打开项目: 匿名项目 809590
+									105 container
+										106 container 在当前项目中直接与助手完成工作。
+										107 button 160. Reply with OK.
+										108 pop up button (collapsed, opacity: 0) Description: 160. Reply with OK.的更多操作, ID: dropdownmenu-cl-363-trigger, Secondary Actions: Expand
+									109 container
+										110 button (expanded) Description: 收起 匿名项目 456486, Secondary Actions: Collapse
+										111 button 打开项目: 匿名项目 456486
+									112 container
+										113 container 在当前项目中直接与助手完成工作。
+										114 button 159. Reply with OK.
+										115 pop up button (collapsed, opacity: 0) Description: 159. Reply with OK.的更多操作, ID: dropdownmenu-cl-377-trigger, Secondary Actions: Expand
+									116 container
+										117 button (expanded) Description: 收起 匿名项目 78d8e1, Secondary Actions: Collapse
+										118 button 打开项目: 匿名项目 78d8e1
+									119 container
+										120 container 在当前项目中直接与助手完成工作。
+										121 button 158. Reply with OK.
+										122 pop up button (collapsed, opacity: 0) Description: 158. Reply with OK.的更多操作, ID: dropdownmenu-cl-391-trigger, Secondary Actions: Expand
+									123 container
+										124 button (expanded) Description: 收起 匿名项目 caa4f2, Secondary Actions: Collapse
+										125 button 打开项目: 匿名项目 caa4f2
+									126 container
+										127 container 在当前项目中直接与助手完成工作。
+										128 button 157. Reply with OK.
+										129 pop up button (collapsed, opacity: 0) Description: 157. Reply with OK.的更多操作, ID: dropdownmenu-cl-405-trigger, Secondary Actions: Expand
+									130 container
+										131 button (expanded) Description: 收起 匿名项目 6d44ba, Secondary Actions: Collapse
+										132 button 打开项目: 匿名项目 6d44ba
+									133 container
+										134 container 在当前项目中直接与助手完成工作。
+										135 button 156. Reply with OK.
+										136 pop up button (collapsed, opacity: 0) Description: 156. Reply with OK.的更多操作, ID: dropdownmenu-cl-419-trigger, Secondary Actions: Expand
+									137 container
+										138 button (expanded) Description: 收起 匿名项目 4dc973, Secondary Actions: Collapse
+										139 button 打开项目: 匿名项目 4dc973
+									140 container
+										141 container 在当前项目中直接与助手完成工作。
+										142 button 155. Reply with OK.
+										143 pop up button (collapsed, opacity: 0) Description: 155. Reply with OK.的更多操作, ID: dropdownmenu-cl-433-trigger, Secondary Actions: Expand
+									144 container
+										145 button (expanded) Description: 收起 匿名项目 db5321, Secondary Actions: Collapse
+										146 button 打开项目: 匿名项目 db5321
+									147 container
+										148 container 在当前项目中直接与助手完成工作。
+										149 button 154. Reply with OK.
+										150 pop up button (collapsed, opacity: 0) Description: 154. Reply with OK.的更多操作, ID: dropdownmenu-cl-447-trigger, Secondary Actions: Expand
+									151 button (collapsed) 再显示 155 个项目, Secondary Actions: Expand
+								152 container 最近
+									153 text 最近
+									154 container
+										155 container 在当前项目中直接与助手完成工作。
+										156 button 162. Reply with OK.
+										157 pop up button (collapsed, opacity: 0) Description: 162. Reply with OK.的更多操作, ID: dropdownmenu-cl-453-trigger, Secondary Actions: Expand
+									158 container
+										159 container 在当前项目中直接与助手完成工作。
+										160 button 161. Reply with OK.
+										161 pop up button (collapsed, opacity: 0) Description: 161. Reply with OK.的更多操作, ID: dropdownmenu-cl-459-trigger, Secondary Actions: Expand
+									162 container
+										163 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+										164 button 省略类型字面声明复验
+										165 pop up button (collapsed, opacity: 0) Description: 更多操作, ID: dropdownmenu-cl-465-trigger, Secondary Actions: Expand
+									166 container
+										167 container 在当前项目中直接与助手完成工作。
+										168 button 160. Reply with OK.
+										169 pop up button (collapsed, opacity: 0) Description: 160. Reply with OK.的更多操作, ID: dropdownmenu-cl-471-trigger, Secondary Actions: Expand
+									170 container
+										171 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+										172 button 3. 北仓结算结构交接空值验收
+										173 pop up button (collapsed, opacity: 0) Description: 3. 北仓结算结构交接空值验收的更多操作, ID: dropdownmenu-cl-477-trigger, Secondary Actions: Expand
+									174 container
+										175 container 在当前项目中直接与助手完成工作。
+										176 button 159. Reply with OK.
+										177 pop up button (collapsed, opacity: 0) Description: 159. Reply with OK.的更多操作, ID: dropdownmenu-cl-483-trigger, Secondary Actions: Expand
+									178 container
+										179 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+										180 button 2. 北仓结算结构交接空值验收
+										181 pop up button (collapsed, opacity: 0) Description: 2. 北仓结算结构交接空值验收的更多操作, ID: dropdownmenu-cl-489-trigger, Secondary Actions: Expand
+									182 container
+										183 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+										184 button 请只读当前项目 settlement-review.csv，给接班同事交付一份原生 Excel 结算核对簿，文件名“北仓参数完整性复验.xlsx”。保留全...
+										185 pop up button (collapsed, opacity: 0) Description: 更多操作, ID: dropdownmenu-cl-495-trigger, Secondary Actions: Expand
+						37 container 连接诊断
+							38 container Description: 连接诊断 · 在线 · 端口 51776, ID: connBadge
+								39 text 在线 · 端口 51776
+				40 splitter Description: 调整左侧面板大小, Value: 240, ID: leftPaneResizer
+				41 container chatSection
+					43 container
+						44 text 请只读当前项目 settlement-review.csv，为下一班同事制作并交付一份原生 Word 交接说明，文件名“北仓结算交接说明换行复验 2026...
+						186 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-248-trigger, Secondary Actions: Expand
+						187 container Description: 空闲, ID: taskStatus
+							188 text 空闲
+						189 button 设置持续目标
+						45 button 侧聊
+						46 container solidChatHeaderRuntimeActions
+							47 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+							48 checkbox Description: 打开右侧面板, Value: 0
+					49 container 持续目标
+					50 container
+						51 container Description: 对话, ID: chatScroll
+							190 container
+								191 container
+									192 text 用户
+									193 text 请只读当前项目 settlement-review.csv，为下一班同事制作并交付一份原生 Word 交接说明，文件名“北仓结算交接说明换行复验 20261128.docx”。正文用中文，包含核对结果、按源顺序的逐行清单、数据口径与使用限制。逐行清单放在同一个正文段落内，每条记录单独一行；分类小计也放在同一个正文段落内，每类单独一行；按类型给出记录数和带符号净额，并给出全量合计。保留退款负数，零金额样品也计入记录数；缺少币种和成本，不推断利润。写成便于同事直接阅读的一到两页文档，给出可下载编辑的原始文件与可复核预览。不要改源文件、运行项目脚本、创建任务或专家团，不委派其他执行者。
+									194 button 复制消息
+									195 text 11月28日 12:30
+								196 container
+									197 text work
+									198 text 1 分 56 秒
+									199 container
+										200 text 我会只读取
+										201 text settlement-review.csv
+										202 text ，核对逐行金额、分类小计与全量合计，再制作 Word 文档；重点检查逐行清单和分类小计是否各自保留在一个正文段落内，并按条目换行。
+										203 button (collapsed) Description: 3 次操作 · 加载技能, Secondary Actions: Expand
+											204 text 3 次操作
+											205 text 加载技能
+											206 text work-artifacts · references/office-document.md
+											207 image
+									208 container
+										209 button (collapsed) Description: 2 次操作 · 加载技能, Secondary Actions: Expand
+											210 text 2 次操作
+											211 text 加载技能
+											212 text work-artifacts · references/review.md
+											213 image
+										214 container 来源
+											215 button 打开来源文件: settlement-review.csv
+											216 button 查看保存摘录：settlement-review.csv
+											217 button 复制来源位置：settlement-review.csv
+									218 container
+										219 text 源文件共有 6 条记录：普通订单 3 条、净额 +23.65；退款 2 条、净额 -6.00；免费样品 1 条、净额 0.00。按源顺序逐笔相加与分类小计相加均为 +17.65。接下来生成文档，并检查换行、分页和预览内容。
+										220 button (collapsed) Description: 3 次操作 · 校验文件与预览, Secondary Actions: Expand
+											221 text 3 次操作
+											222 text 校验文件与预览
+											223 text Word 文档
+											224 image
+									225 container
+										226 button (collapsed) Description: 读取文件 · 北仓结算交接说明换行复验 20261128-preview.pdf, Secondary Actions: Expand
+											227 text 读取文件
+											228 text 北仓结算交接说明换行复验 20261128-preview.pdf
+											229 image
+										230 container 来源
+											231 button 打开来源文件: 北仓结算交接说明换行复验 20261128-preview.pdf
+												232 text 北仓结算交接说明换行复验 20261128-preview.pdf
+												233 text 附件
+											234 button 复制来源位置：北仓结算交接说明换行复验 20261128-preview.pdf
+									235 container
+										236 text 已核查生成的 Word 段落结构：6 条记录在同一个正文段落内逐条换行，3 类小计也在同一个正文段落内逐类换行。预览为 1 页，内容完整、无截断；金额和记录数均与源文件一致。现在交付可编辑的 Word 原件和 PDF 预览。
+										237 button (collapsed) Description: 交付工作文件 · 北仓结算交接说明换行复验 20261128, Secondary Actions: Expand
+											238 text 交付工作文件
+											239 text 北仓结算交接说明换行复验 20261128
+											240 image
+										241 container 北仓结算交接说明换行复验 20261128
+											242 container
+												243 text 文件
+												244 heading 北仓结算交接说明换行复验 20261128, Value: 3
+													245 text 北仓结算交接说明换行复验 20261128
+												246 button 复制文件名
+												247 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-499-trigger, Secondary Actions: Expand
+												248 button (expanded) Description: 关闭 北仓结算交接说明换行复验 20261128 作品视图, Secondary Actions: Collapse
+											249 button (disabled) 上一页
+											250 text field (settable) Description: 页码，共 1 页, Value: 1
+											251 button (disabled) 下一页
+											252 button (disabled) 缩小
+											253 button 适合宽度
+											254 text 50 %
+											255 button 放大
+											256 text 预览文件：北仓结算交接说明换行复验 20261128-preview.pdf
+											257 container 北仓结算交接说明换行复验 20261128，第 1 页，共 1 页
+												258 container
+													259 image 北仓结算交接说明换行复验 20261128
+													260 container 北仓结算交接说明换行复验 20261128
+														511 text 北仓结算交接说明
+														512 text 交接
+														513 text ⽇
+														514 text 期：2026年11
+														515 text ⽉
+														516 text 28
+														517 text ⽇
+														518 text ｜供下
+														519 text ⼀
+														520 text 班同事核对使
+														521 text ⽤
+														522 text 唯
+														523 text ⼀
+														524 text 数据来源：当前项
+														525 text ⽬
+														526 text settlement-review.csv；按
+														527 text ⽂
+														528 text 件原始顺序整理，未改动源
+														529 text ⽂
+														530 text 件。
+														531 text ⼀
+														532 text 、核对结果
+														533 text 全量共6条记录，带符号净额为+17.65。退款负数与零
+														534 text ⾦
+														535 text 额样品均已保留；零
+														536 text ⾦
+														537 text 额
+														538 text 样品计
+														539 text ⼊
+														540 text 记录数。逐
+														541 text ⾏
+														542 text 加总与分类
+														543 text ⼩
+														544 text 计加总
+														545 text ⼀
+														546 text 致。以下正净额以“+”显式标注，
+														547 text ⾦
+														548 text 额保
+														549 text 留两位
+														550 text ⼩
+														551 text 数，不标注币种。
+														552 text ⼆
+														553 text 、逐
+														554 text ⾏
+														555 text 清单（源顺序）
+														556 text N01｜普通订单｜+15.20
+														557 text N02｜退款｜-4.85
+														558 text N03｜免费样品｜0.00
+														559 text N04｜普通订单｜+6.35
+														560 text N05｜退款｜-1.15
+														561 text N06｜普通订单｜+2.10
+														562 text 三、分类
+														563 text ⼩
+														564 text 计与全量合计
+														565 text 普通订单｜3条｜带符号净额 +23.65
+														566 text 退款｜2条｜带符号净额 -6.00
+														567 text 免费样品｜1条｜带符号净额 0.00
+														568 text 全量合计：6条，带符号净额+17.65。
+														569 text 独
+														570 text ⽴
+														571 text 复核：逐
+														572 text ⾏
+														573 text ⾦
+														574 text 额15.20
+														575 text −
+														576 text 4.85+0.00+6.35
+														577 text −
+														578 text 1.15+2.10＝17.65；分类净额
+														579 text 23.65
+														580 text −
+														581 text 6.00+0.00＝17.65；分类记录数3+2+1＝6。
+														582 text 四、数据
+														583 text ⼝
+														584 text 径与使
+														585 text ⽤
+														586 text 限制
+														587 text 源字段仅有“记录编号、类型、
+														588 text ⾦
+														589 text 额”。记录数按数据
+														590 text ⾏
+														591 text 计数，不含表头，不视为独
+														592 text ⽴
+														593 text 订单数；分类使
+														594 text ⽤
+														595 text 源
+														596 text ⽂
+														597 text 件原始类型。净额按
+														598 text ⾦
+														599 text 额原始正负号相加，不取绝对值，不
+														600 text 剔除退款或零值。清单中的正号仅
+														601 text ⽤
+														602 text 于展示，未改变数值。
+														603 text 源
+														604 text ⽂
+														605 text 件未提供币种、成本、交易时间或结算状态。本说明仅反映该
+														606 text ⽂
+														607 text 件的
+														608 text ⾦
+														609 text 额核
+														610 text 对结果，不代表利润、到账
+														611 text ⾦
+														612 text 额或已完成结算，也不
+														613 text ⽤
+														614 text 于推断时间趋势。下
+														615 text ⼀
+														616 text 班如需
+														617 text 确认币种、成本、到账或结算状态，应另
+														618 text ⾏
+														619 text 核实相应业务凭据；本说明未引
+														620 text ⼊
+														621 text 其他数
+														622 text 据。
+									373 container
+										374 text 已交付：
+										375 content list
+											376 container
+												377 AXListMarker •
+												378 link Description: 下载可编辑 Word 原件：北仓结算交接说明换行复验 20261128.docx, Value: 127.0.0.1:51776/ui/?sessionID=ses_hlnKOeLEnlANb9kegz7f&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-north&experience=work#
+											379 container
+												380 AXListMarker •
+												381 link Description: 查看 PDF 预览, Value: 127.0.0.1:51776/ui/?sessionID=ses_hlnKOeLEnlANb9kegz7f&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-north&experience=work#
+										382 text 已核对
+										383 text 6 条记录，全量带符号净额 +17.65
+										384 text ，逐行加总与分类小计一致。Word 中的逐行清单为一个正文段落、每条记录单独换行；分类小计也为一个正文段落、每类单独换行。 文档保留退款负数和零金额样品，包含数据口径与使用限制，不推断币种或利润。仅读取了指定源文件，未修改源文件、运行项目脚本、创建任务或委派执行。
+									385 button 复制消息
+									386 pop up button (collapsed) Description: 查看本轮模型用量：494,472 令牌, Secondary Actions: Expand
+									387 text 11月28日 12:30
+						52 container chatHomeComposition
+							500 container solidChatComposer
+								501 container chatForm
+									502 splitter Description: 拖拽调整消息输入框大小, Value: 42
+									503 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+									504 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-41-trigger, Secondary Actions: Expand
+									505 pop up button (collapsed) Description: 通用 · 对话, Secondary Actions: Expand
+									506 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									507 pop up button (collapsed) Description: OpenCorvus 模型 openai/gpt-6.1-sol，点击切换, Help: OpenCorvus 模型：openai/gpt-6.1-sol, Secondary Actions: Expand
+										508 text openai/gpt-6.1-sol
+									509 button (disabled) Description: 发送, Help: 输入消息后即可发送。, ID: chatSend
+								510 button 滚动到底部
+
+The focused UI element is 252 button (disabled) 缩小

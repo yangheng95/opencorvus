@@ -4,6 +4,7 @@ import {
   PDF_MIN_ZOOM,
   PdfDestinationError,
   pdfDestinationView,
+  pdfFitZoom,
   type PdfDestinationInput,
   type PdfDestinationViewport,
 } from "../src/utils/pdf-destination"
@@ -90,7 +91,7 @@ test("FitR uses natural viewport rotation and user-unit geometry for fitting", (
   }))).toEqual({ zoom: 4 / 3, rect: [50, 100, 350, 500] })
 })
 
-test("destination zoom shares the reader's minimum and maximum", () => {
+test("explicit zoom uses manual bounds while fitting retains its actual size and rendering maximum", () => {
   expect(pdfDestinationView(input([0, { name: "XYZ" }, 0, 800, 100]))).toEqual({
     zoom: PDF_MAX_ZOOM, rect: [0, 800, 0, 800],
   })
@@ -100,7 +101,26 @@ test("destination zoom shares the reader's minimum and maximum", () => {
   expect(pdfDestinationView(input([0, { name: "FitR" }, 0, 0, 1, 1]))).toEqual({
     zoom: PDF_MAX_ZOOM, rect: [0, 0, 1, 1],
   })
-  expect(pdfDestinationView(input([0, { name: "Fit" }], { availableHeight: 10 }))).toEqual({ zoom: PDF_MIN_ZOOM })
+  expect(pdfDestinationView(input([0, { name: "Fit" }], { availableHeight: 10 }))).toEqual({ zoom: 0.0125 })
+})
+
+test("page fitting shares exact geometry across portrait, rotated landscape and height changes", () => {
+  expect(pdfFitZoom(input([], { availableHeight: 240 }))).toBe(0.3)
+  expect(pdfFitZoom(input([], { availableHeight: 160 }))).toBe(0.2)
+  expect(pdfFitZoom(input([], { viewport: { ...page, width: 800, height: 600 }, fitScale: 0.75 }))).toBeCloseTo(8 / 9)
+  expect(pdfFitZoom(input([], { availableWidth: 300, availableHeight: 800, fitScale: 0.5 }))).toBe(1)
+})
+
+test("height and region destinations shrink to their specified region below the manual minimum", () => {
+  expect(pdfDestinationView(input([0, { name: "FitV" }, 40], { availableHeight: 160 }))).toEqual({
+    zoom: 0.2, rect: [40, 0, 640, 800],
+  })
+  expect(pdfDestinationView(input([0, { name: "FitR" }, 0, 0, 600, 800], { availableHeight: 160 }))).toEqual({
+    zoom: 0.2, rect: [0, 0, 600, 800],
+  })
+  expect(pdfDestinationView(input([0, { name: "XYZ" }, null, null, 0], { currentZoom: 0.2 }))).toEqual({
+    zoom: 0.2, rect: [0, 800, 0, 800],
+  })
 })
 
 test.each([

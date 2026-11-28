@@ -1,0 +1,34 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\pdf-destination.test.ts:
+(pass) 381 document's XYZ target retains its current zoom and exact PDF reading point [0.59ms]
+(pass) Fit fits the full page in both available dimensions [0.81ms]
+(pass) FitB fits the full page in both available dimensions [0.23ms]
+(pass) explicit XYZ zoom converts PDF scale into the reader's fit-width multiplier [0.08ms]
+(pass) null XYZ values use the target CropBox origin and top while retaining zoom [0.04ms]
+(pass) FitH fits width and retains an explicit top [0.07ms]
+(pass) FitBH fits width and retains an explicit top [0.02ms]
+(pass) FitV fits height and retains the horizontal PDF region [0.05ms]
+(pass) FitBV fits height and retains the horizontal PDF region [0.01ms]
+(pass) FitR fits the requested area and returns its original PDF coordinates [0.13ms]
+(pass) FitR uses natural viewport rotation and user-unit geometry for fitting [0.06ms]
+(pass) explicit zoom uses manual bounds while fitting retains its actual size and rendering maximum [0.07ms]
+(pass) page fitting shares exact geometry across portrait, rotated landscape and height changes [0.04ms]
+(pass) height and region destinations shrink to their specified region below the manual minimum [0.09ms]
+(pass) invalid destination reports its exact contract: PDF destination must declare a named view type [0.21ms]
+(pass) invalid destination reports its exact contract: Unsupported PDF destination view: Other [0.20ms]
+(pass) invalid destination reports its exact contract: XYZ destination must contain 5 entries [0.02ms]
+(pass) invalid destination reports its exact contract: XYZ zoom must be zero or positive [0.03ms]
+(pass) invalid destination reports its exact contract: XYZ coordinate 3 must be a finite number [0.04ms]
+(pass) invalid destination reports its exact contract: FitH coordinate 2 must be a finite number [0.02ms]
+(pass) invalid destination reports its exact contract: FitR width must be positive [0.05ms]
+(pass) invalid destination reports its exact contract: FitR height must be positive [0.06ms]
+(pass) invalid view geometry reports its exact contract: Fit scale must be positive [0.09ms]
+(pass) invalid view geometry reports its exact contract: Available height must be positive [0.03ms]
+(pass) invalid view geometry reports its exact contract: Current zoom must be a finite number [0.06ms]
+(pass) invalid view geometry reports its exact contract: Page viewBox must have positive width and height [0.01ms]
+
+ 26 pass
+ 0 fail
+ 55 expect() calls
+Ran 26 tests across 1 file. [121.00ms]

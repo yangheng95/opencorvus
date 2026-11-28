@@ -1,0 +1,20 @@
+{
+  "kind": "native desktop interaction and personal visual review",
+  "uiAutomationTests": 0,
+  "baseline": "50% paper bottom clipped",
+  "deliveredFile": "expanded Fit page42%; collapsed57%; all page boundaries visible",
+  "projectFile": "380px→960px content pane,100%→95%;internal link1→7;page10 landscape100%→page1 portrait95%",
+  "heightOnly": "desktop width2560,height900→61%;reset→95%;override reset",
+  "manualAnchor": "200% scrolled to guide/link;225% keeps same leading reading area;250%focus retained;Tab→named reading region",
+  "locale": "English labels and percentage reviewed;Chinese restored",
+  "attachment": "real business upload and Sol answer;Fit page95%;original attachment357419B",
+  "excludedSuccessFrames": {
+    "candidate-expanded-fit-page.jpg": "transient old canvas before new paint",
+    "manual-anchor-before-200.jpg": "blank lower cover, no visible anchor"
+  },
+  "limitations": [
+    "desktop only",
+    "rotated documents not visually exercised;pure rotated geometry contract only",
+    "old unbound479/428 not claimed closed"
+  ]
+}

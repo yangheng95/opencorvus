@@ -461,6 +461,7 @@ code .file-link:focus-visible {
 }
 
 .file-editor-pdf .msg-artifact-pdf {
+  height: 100%;
   min-height: 0;
   max-height: none;
   overscroll-behavior: contain;

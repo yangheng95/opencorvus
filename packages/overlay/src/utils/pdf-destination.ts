@@ -48,6 +48,18 @@ function boundedZoom(value: number): number {
   return Math.min(PDF_MAX_ZOOM, Math.max(PDF_MIN_ZOOM, positiveNumber(value, "Destination zoom")))
 }
 
+function fittedZoom(value: number): number {
+  return Math.min(PDF_MAX_ZOOM, positiveNumber(value, "Destination zoom"))
+}
+
+/** Fit geometry may shrink below the reader's manual zoom minimum. */
+export function pdfFitZoom(input: Pick<PdfDestinationInput, "viewport" | "availableWidth" | "availableHeight" | "fitScale">): number {
+  return fittedZoom(Math.min(
+    positiveNumber(input.availableWidth, "Available width") / positiveNumber(input.viewport.width, "Page viewport width"),
+    positiveNumber(input.availableHeight, "Available height") / positiveNumber(input.viewport.height, "Page viewport height"),
+  ) / positiveNumber(input.fitScale, "Fit scale"))
+}
+
 /** Map PDFLinkService's resolved destination into the single-page reader's view. */
 export function pdfDestinationView(input: PdfDestinationInput): PdfDestinationView {
   const { destination, viewport, currentPoint } = input
@@ -77,7 +89,7 @@ export function pdfDestinationView(input: PdfDestinationInput): PdfDestinationVi
   const coordinate = (index: number, defaultValue: number): number =>
     destination[index] === null ? defaultValue : finiteNumber(destination[index], `${name} coordinate ${index}`)
   const point = (zoom: number, x: number, y: number): PdfDestinationView => ({
-    zoom: boundedZoom(zoom), rect: [x, y, x, y],
+    zoom: positiveNumber(zoom, "Destination zoom"), rect: [x, y, x, y],
   })
 
   // These view types follow PDFViewer.scrollPageIntoView. PDFLinkService retains
@@ -88,25 +100,25 @@ export function pdfDestinationView(input: PdfDestinationInput): PdfDestinationVi
       const x = coordinate(2, left), y = coordinate(3, top)
       const scale = destination[4] === null ? 0 : finiteNumber(destination[4], "XYZ zoom")
       if (scale < 0) throw new PdfDestinationError("XYZ zoom must be zero or positive")
-      return point(scale === 0 ? currentZoom : (scale * (96 / 72)) / fitScale, x, y)
+      return point(scale === 0 ? currentZoom : boundedZoom((scale * (96 / 72)) / fitScale), x, y)
     }
     case "Fit":
     case "FitB":
       argumentCount(2)
-      return { zoom: boundedZoom(Math.min(availableWidth / width, availableHeight / height) / fitScale) }
+      return { zoom: pdfFitZoom(input) }
     case "FitH":
     case "FitBH": {
       argumentCount(3)
       const x = destination[2] === null && currentPoint ? currentPoint[0] : left
       const y = coordinate(2, currentPoint?.[1] ?? top)
-      return point(availableWidth / width / fitScale, x, y)
+      return point(fittedZoom(availableWidth / width / fitScale), x, y)
     }
     case "FitV":
     case "FitBV": {
       argumentCount(3)
       const x = coordinate(2, left)
       const end = finiteNumber(x + (right - left), `${name} rectangle right`)
-      return { zoom: boundedZoom(availableHeight / height / fitScale), rect: [x, bottom, end, top] }
+      return { zoom: fittedZoom(availableHeight / height / fitScale), rect: [x, bottom, end, top] }
     }
     case "FitR": {
       argumentCount(6)
@@ -116,7 +128,7 @@ export function pdfDestinationView(input: PdfDestinationInput): PdfDestinationVi
       transformed.forEach((value) => finiteNumber(value, "Transformed FitR coordinate"))
       const rectWidth = positiveNumber(Math.abs(transformed[2] - transformed[0]), "FitR width")
       const rectHeight = positiveNumber(Math.abs(transformed[3] - transformed[1]), "FitR height")
-      return { zoom: boundedZoom(Math.min(availableWidth / rectWidth, availableHeight / rectHeight) / fitScale), rect }
+      return { zoom: fittedZoom(Math.min(availableWidth / rectWidth, availableHeight / rectHeight) / fitScale), rect }
     }
     default:
       throw new PdfDestinationError(`Unsupported PDF destination view: ${name}`)

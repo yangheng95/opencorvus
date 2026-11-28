@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [PDF整页阅读证据](2026-11-28-pdf-fit-page/README.md)
 - [有限字面值声明投影证据](2026-11-28-untyped-literal-schema/README.md)
 - [共用判别值输入完整性证据](2026-11-28-shared-discriminator-input/README.md)
 - [通用工具空值与原生文档证据](2026-11-28-tool-null-semantics/README.md)
