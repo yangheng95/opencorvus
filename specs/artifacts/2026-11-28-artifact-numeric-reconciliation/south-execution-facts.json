@@ -1,0 +1,16 @@
+{
+  "sourceMessages": 4,
+  "projectedMessages": 4,
+  "toolSequence": [
+    "read",
+    "publish_interactive_artifact"
+  ],
+  "finish": "stop",
+  "memory": {
+    "revision": 6,
+    "status": "idle",
+    "pendingCount": 0,
+    "droppedPendingCount": 0
+  },
+  "projection": "Public fields; opaque Provider reasoning/protocol metadata omitted only from evidence. Actual product messages unchanged."
+}

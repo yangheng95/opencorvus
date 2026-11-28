@@ -6151,6 +6151,15 @@ descriptors share one instruction to inherit ordinary text/surface defaults and
 reserve explicit colors for data meaning or requested design. A fixed authored
 background requires matching authored text, axis, title, and legend foregrounds;
 the host does not infer a second palette from a color literal or rewrite history.
+The same shared artifact guidance projects numeric reconciliation into Chat,
+Work, and both publication tool descriptions. Numeric prose, static metrics,
+tables and chart annotations use the same source rows, aggregation semantics and
+declared filter scope. Before reporting additive totals or counts, the assistant
+cross-checks source records, category subtotals and the grand total, retaining
+negative and zero-valued records and counting each record once. Displayed derived
+values use native aggregates or formulas; unresolved numeric checks are stated.
+This authoring contract does not add host arithmetic inference or change published
+payloads, tool results, or historical messages.
 Network consumes its library style values and Diagram passes its product font
 to Mermaid. Timeline's existing stylesheet projects product tokens into the
 vis-timeline surface, including explicit selected foreground/background for

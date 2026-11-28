@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [交付物数值交叉核对证据](2026-11-28-artifact-numeric-reconciliation/README.md)
 - [框选图例宽度证据](2026-11-28-chart-legend-brush/README.md)
 - [图表无障碍语言证据](2026-11-28-chart-accessible-language/README.md)
 - [带时区交接看板证据](2026-11-28-dashboard-time-review/README.md)

@@ -1,0 +1,76 @@
+{
+  "id": "art_g0VcEV6nR00a6iSxtBfI",
+  "sessionID": "ses_h2GlNWfy2MjF5tT60qpB",
+  "messageID": "msg_g0VcEV4om00IJ2z5ftkg",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "南仓新结算记录复核 20261128",
+    "renderer": "table@1",
+    "columns": [
+      {
+        "id": "line",
+        "label": "原文件行号",
+        "dataType": "number"
+      },
+      {
+        "id": "id",
+        "label": "记录编号",
+        "dataType": "string"
+      },
+      {
+        "id": "type",
+        "label": "类型",
+        "dataType": "string"
+      },
+      {
+        "id": "amount",
+        "label": "金额（按原始符号）",
+        "dataType": "number"
+      },
+      {
+        "id": "original",
+        "label": "原始金额文本",
+        "dataType": "string"
+      }
+    ],
+    "rows": [
+      {
+        "line": 2,
+        "id": "S01",
+        "type": "普通订单",
+        "amount": 8.05,
+        "original": "8.05"
+      },
+      {
+        "line": 3,
+        "id": "S02",
+        "type": "退款",
+        "amount": -3.4,
+        "original": "-3.40"
+      },
+      {
+        "line": 4,
+        "id": "S03",
+        "type": "免费样品",
+        "amount": 0,
+        "original": "0.00"
+      },
+      {
+        "line": 5,
+        "id": "S04",
+        "type": "普通订单",
+        "amount": 1.95,
+        "original": "1.95"
+      },
+      {
+        "line": 6,
+        "id": "S05",
+        "type": "退款",
+        "amount": -0.6,
+        "original": "-0.60"
+      }
+    ]
+  },
+  "timeCreated": 1795834633721,
+  "timeUpdated": 1795834633721
+}

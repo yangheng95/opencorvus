@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "scope": "Actual API/persisted Table payload and original CSV using independent Decimal; natural-language claims personally reviewed on screenshots, not UI assertions.",
+  "cases": [
+    {
+      "case": "north",
+      "artifactID": "art_g0VcEUqWe009bjLB4XlK",
+      "sessionID": "ses_hMtCQ4irwMU275H4C0zz",
+      "renderer": "table@1",
+      "sourceRowsInOriginalOrder": 6,
+      "groups": {
+        "普通订单": {
+          "amount": "23.65",
+          "count": 3
+        },
+        "退款": {
+          "amount": "-6.00",
+          "count": 2
+        },
+        "免费样品": {
+          "amount": "0.00",
+          "count": 1
+        }
+      },
+      "total": "17.65",
+      "inputBytes": 150,
+      "actualAPIEqualsPersistedPayload": true
+    },
+    {
+      "case": "south",
+      "artifactID": "art_g0VcEV6nR00a6iSxtBfI",
+      "sessionID": "ses_h2GlNWfy2MjF5tT60qpB",
+      "renderer": "table@1",
+      "sourceRowsInOriginalOrder": 5,
+      "groups": {
+        "普通订单": {
+          "amount": "10.00",
+          "count": 2
+        },
+        "退款": {
+          "amount": "-4.00",
+          "count": 2
+        },
+        "免费样品": {
+          "amount": "0.00",
+          "count": 1
+        }
+      },
+      "total": "6.00",
+      "inputBytes": 127,
+      "actualAPIEqualsPersistedPayload": true
+    }
+  ]
+}

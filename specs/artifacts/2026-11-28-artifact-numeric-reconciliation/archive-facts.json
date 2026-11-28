@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "originalScreenshotsPersonallyReviewed": 7,
+  "originalByteMembers": {
+    "original-resource.csv": 59,
+    "sales.csv": 181,
+    "north/settlement-review.csv": 150,
+    "north/handoff.md": 153,
+    "north/records.csv": 111,
+    "north/events.csv": 223,
+    "south/settlement-review.csv": 127,
+    "south/handoff.md": 159,
+    "south/records.csv": 111,
+    "south/events-review.csv": 223,
+    "observations/01-north-first-reply-ax.txt": 22452,
+    "observations/05-south-first-reply-ax.txt": 23570,
+    "observations/07-south-restored-ax.txt": 23445,
+    "observations/north-accepted-ax.txt": 16908,
+    "observations/north-filtered-ax.txt": 1162,
+    "observations/north-progress-ax.txt": 4133,
+    "observations/north-started-ax.txt": 5323,
+    "observations/south-first-ax.txt": 11710
+  },
+  "backendEvidence": "Actual API source rows/Decimal, real model request locations and original persisted/API object identity; no UI automated assertions.",
+  "limits": "Prompt behavior improvement observed in two new first-pass tasks; universal arithmetic accuracy not claimed. No full database/private configuration/auth/model catalog/opaque Provider reasoning archived."
+}

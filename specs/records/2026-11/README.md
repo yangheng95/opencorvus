@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [交付物数值与回复的交叉核对](2026-11-28-artifact-numeric-reconciliation.md)
 - [框选联动图的图例宽度](2026-11-28-chart-legend-brush.md)
 - [图表无障碍描述的实例语言](2026-11-28-chart-accessible-language.md)
 - [带时区交接看板的真实筛选与多视图](2026-11-28-dashboard-time-review.md)

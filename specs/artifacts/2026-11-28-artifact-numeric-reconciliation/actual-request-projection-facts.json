@@ -1,0 +1,243 @@
+{
+  "status": "passed",
+  "scope": "Actual source-reader model identity, streaming completion, and decoded numeric-guidance locations; no source hashes used for acceptance.",
+  "requests": [
+    {
+      "requestIndex": 0,
+      "sessionID": "ses_hVdsKeMmW6UeQ7rjfNTj",
+      "agentID": "memory",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": []
+        }
+      ]
+    },
+    {
+      "requestIndex": 1,
+      "sessionID": "ses_hVdsKeMmW6UeQ7rjfNTj",
+      "agentID": "chat",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": [
+            {
+              "json_pointer": "/instructions",
+              "message_role": null,
+              "decoded_value_utf8_start": 22892
+            },
+            {
+              "json_pointer": "/tools/25/description",
+              "message_role": null,
+              "decoded_value_utf8_start": 2199
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 2,
+      "sessionID": "ses_hMtCQ4irwMU275H4C0zz",
+      "agentID": "memory",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": []
+        }
+      ]
+    },
+    {
+      "requestIndex": 3,
+      "sessionID": "ses_hMtCQ4irwMU275H4C0zz",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": [
+            {
+              "json_pointer": "/instructions",
+              "message_role": null,
+              "decoded_value_utf8_start": 24866
+            },
+            {
+              "json_pointer": "/tools/25/description",
+              "message_role": null,
+              "decoded_value_utf8_start": 2199
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 4,
+      "sessionID": "ses_hMtCQ4irwMU275H4C0zz",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": [
+            {
+              "json_pointer": "/instructions",
+              "message_role": null,
+              "decoded_value_utf8_start": 24866
+            },
+            {
+              "json_pointer": "/tools/25/description",
+              "message_role": null,
+              "decoded_value_utf8_start": 2199
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 5,
+      "sessionID": "ses_hMtCQ4irwMU275H4C0zz",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": [
+            {
+              "json_pointer": "/instructions",
+              "message_role": null,
+              "decoded_value_utf8_start": 24866
+            },
+            {
+              "json_pointer": "/tools/25/description",
+              "message_role": null,
+              "decoded_value_utf8_start": 2199
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 6,
+      "sessionID": "ses_h2GlNWfy2MjF5tT60qpB",
+      "agentID": "memory",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": []
+        }
+      ]
+    },
+    {
+      "requestIndex": 7,
+      "sessionID": "ses_h2GlNWfy2MjF5tT60qpB",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": [
+            {
+              "json_pointer": "/instructions",
+              "message_role": null,
+              "decoded_value_utf8_start": 24866
+            },
+            {
+              "json_pointer": "/tools/25/description",
+              "message_role": null,
+              "decoded_value_utf8_start": 2199
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 8,
+      "sessionID": "ses_h2GlNWfy2MjF5tT60qpB",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": [
+            {
+              "json_pointer": "/instructions",
+              "message_role": null,
+              "decoded_value_utf8_start": 24866
+            },
+            {
+              "json_pointer": "/tools/25/description",
+              "message_role": null,
+              "decoded_value_utf8_start": 2199
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 9,
+      "sessionID": "ses_h2GlNWfy2MjF5tT60qpB",
+      "agentID": "work",
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "numericGuidance": [
+        {
+          "id": "shared-numeric-reconciliation-guidance",
+          "matches": [
+            {
+              "json_pointer": "/instructions",
+              "message_role": null,
+              "decoded_value_utf8_start": 24866
+            },
+            {
+              "json_pointer": "/tools/25/description",
+              "message_role": null,
+              "decoded_value_utf8_start": 2199
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

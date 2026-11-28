@@ -1,0 +1,61 @@
+{
+  "id": "art_g0VcEUqWe009bjLB4XlK",
+  "sessionID": "ses_hMtCQ4irwMU275H4C0zz",
+  "messageID": "msg_g0VcEUoty009chxLvog5",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "北仓新结算记录复核 20261128",
+    "renderer": "table@1",
+    "columns": [
+      {
+        "id": "id",
+        "label": "记录编号",
+        "dataType": "string"
+      },
+      {
+        "id": "type",
+        "label": "类型",
+        "dataType": "string"
+      },
+      {
+        "id": "amount",
+        "label": "金额",
+        "dataType": "number"
+      }
+    ],
+    "rows": [
+      {
+        "id": "N01",
+        "type": "普通订单",
+        "amount": 15.2
+      },
+      {
+        "id": "N02",
+        "type": "退款",
+        "amount": -4.85
+      },
+      {
+        "id": "N03",
+        "type": "免费样品",
+        "amount": 0
+      },
+      {
+        "id": "N04",
+        "type": "普通订单",
+        "amount": 6.35
+      },
+      {
+        "id": "N05",
+        "type": "退款",
+        "amount": -1.15
+      },
+      {
+        "id": "N06",
+        "type": "普通订单",
+        "amount": 2.1
+      }
+    ]
+  },
+  "timeCreated": 1795834571176,
+  "timeUpdated": 1795834571176
+}

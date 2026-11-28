@@ -1,0 +1,46 @@
+{
+  "method": "Native desktop interaction and personal review of seven original screenshots; AX files retained only as manual observations, no UI assertions.",
+  "north": {
+    "firstReply": {
+      "ordinaryOrders": [
+        3,
+        "23.65"
+      ],
+      "refunds": [
+        2,
+        "-6.00"
+      ],
+      "zeroSamples": [
+        1,
+        "0.00"
+      ],
+      "full": [
+        6,
+        "17.65"
+      ]
+    },
+    "interactions": "Amount ascending order N02,N05,N03,N06,N04,N01; refund filter N02/N05; clear restored six; static summary explicitly full-dataset."
+  },
+  "south": {
+    "firstReply": {
+      "ordinaryOrders": [
+        2,
+        "10.00"
+      ],
+      "refunds": [
+        2,
+        "-4.00"
+      ],
+      "zeroSamples": [
+        1,
+        "0.00"
+      ],
+      "full": [
+        5,
+        "6.00"
+      ]
+    },
+    "interactions": "Five original rows with line/original amount text; zero sample filter S03; clear restored five; static summary explicitly full-dataset."
+  },
+  "limits": "Two concrete first-pass tasks support this scoped prompt improvement; not a universal arithmetic guarantee. Original wrong26/correction18 history retained."
+}

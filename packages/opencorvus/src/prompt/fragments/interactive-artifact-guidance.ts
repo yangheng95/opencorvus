@@ -19,6 +19,9 @@ export const CHART_ARTIFACT_TIME_GUIDANCE =
 export const DASHBOARD_ARTIFACT_REVIEW_GUIDANCE =
   "For Dashboard, keep category colors stable as filters change: declare the same ordered color.scale.domain from the complete inline data in every view using that category, letting the app palette supply colors. For row-by-row verification of long text such as timestamps, publish a companion Table in the same turn instead of approximating a record grid with categorical text marks that overlap in an inline pane. The companion Table has its own controls; explain that scope rather than claiming it shares the Dashboard filters."
 
+export const INTERACTIVE_ARTIFACT_NUMERIC_GUIDANCE =
+  "Keep numeric claims in surrounding prose, static metrics, tables and chart annotations tied to the artifact's same source rows, aggregation semantics and stated filter scope. Before reporting additive totals or counts, cross-check source records, category subtotals and the grand total: retain negative and zero-valued rows and count each record once. Reuse the reconciled results consistently; use native aggregates or formulas for displayed derived values. State an unresolved numeric check rather than presenting an unverified additional total as settled."
+
 export const PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION = [
   "Publish an interactive artifact owned by and displayed inline in this assistant message.",
   "Choose",
@@ -26,6 +29,7 @@ export const PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION = [
   CHART_ARTIFACT_THEME_GUIDANCE,
   CHART_ARTIFACT_TIME_GUIDANCE,
   DASHBOARD_ARTIFACT_REVIEW_GUIDANCE,
+  INTERACTIVE_ARTIFACT_NUMERIC_GUIDANCE,
 ].join(" ")
 
 export const CHAT_INTERACTIVE_ARTIFACT_GUIDANCE_HEADING = "# Interactive artifacts"
@@ -91,6 +95,7 @@ export const CHAT_INTERACTIVE_ARTIFACT_GUIDANCE = [
   `- ${CHART_ARTIFACT_THEME_GUIDANCE}`,
   `- ${CHART_ARTIFACT_TIME_GUIDANCE}`,
   `- ${DASHBOARD_ARTIFACT_REVIEW_GUIDANCE}`,
+  `- ${INTERACTIVE_ARTIFACT_NUMERIC_GUIDANCE}`,
   "- A terminal artifact replays existing American National Standards Institute (ANSI) output. It never starts a shell, process, socket, or pseudoterminal.",
   "- Media, file previews, presentation images, notebook media outputs, and three-dimensional (3D) models require a canonical attachment object with its 64-character SHA-256 (Secure Hash Algorithm 256-bit) digest, `/attachment/<projectID>/<name>` URL, Multipurpose Internet Mail Extensions (MIME) type, byte size, and optional filename. Never guess an attachment reference, publish raw remote URLs, or embed base64 bytes.",
   "- A JavaScript Object Notation (JSON) glTF attachment must be version 2.0 and contain only internally embedded resources; relative or remote buffer, image, and extension resource references are rejected.",

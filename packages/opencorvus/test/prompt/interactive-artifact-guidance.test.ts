@@ -5,6 +5,7 @@ import {
   CHAT_INTERACTIVE_ARTIFACT_GUIDANCE,
   CHART_ARTIFACT_TIME_GUIDANCE,
   DASHBOARD_ARTIFACT_REVIEW_GUIDANCE,
+  INTERACTIVE_ARTIFACT_NUMERIC_GUIDANCE,
   PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION,
 } from "../../src/prompt/fragments/interactive-artifact-guidance"
 import { PublishInteractiveArtifactParameters } from "../../src/tool/publish-interactive-artifact"
@@ -43,5 +44,11 @@ describe("interactive artifact prompt guidance", () => {
     expect(PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION).toContain(DASHBOARD_ARTIFACT_REVIEW_GUIDANCE)
     expect(PrimaryAssistantRegistry.nativeDefaultPrompt("chat")).toContain(DASHBOARD_ARTIFACT_REVIEW_GUIDANCE)
     expect(WORK_RUNTIME_PROMPT).toContain(DASHBOARD_ARTIFACT_REVIEW_GUIDANCE)
+  })
+
+  test("projects numeric claim reconciliation through the tool, Chat and Work", () => {
+    expect(PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION).toContain(INTERACTIVE_ARTIFACT_NUMERIC_GUIDANCE)
+    expect(PrimaryAssistantRegistry.nativeDefaultPrompt("chat")).toContain(INTERACTIVE_ARTIFACT_NUMERIC_GUIDANCE)
+    expect(WORK_RUNTIME_PROMPT).toContain(INTERACTIVE_ARTIFACT_NUMERIC_GUIDANCE)
   })
 })

@@ -1,0 +1,30 @@
+{
+  "case": "south",
+  "projectID": "prj_he6efZFwavshsL4BEGOG",
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-south",
+  "input": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-south\\settlement-review.csv",
+  "inputBytes": 127,
+  "title": "南仓新结算记录复核 20261128",
+  "prompt": "请只读当前项目的 settlement-review.csv，为交接同事发表一份题为“南仓新结算记录复核 20261128”的完整记录复核表，支持筛选和排序，表内逐行对应原文件记录。完成后简短说明每类的记录数和金额净额，以及全量记录数和净额。金额按原始符号统计，零金额样品计入记录数；缺少成本和币种，不推断利润或币种。请只阅读并发表，不执行脚本、不修改文件、不创建 Task/Mission 或专家团，不委派。",
+  "expected": {
+    "rows": 5,
+    "total": "6.00",
+    "groups": {
+      "普通订单": {
+        "amount": "10.00",
+        "count": 2
+      },
+      "退款": {
+        "amount": "-4.00",
+        "count": 2
+      },
+      "免费样品": {
+        "amount": "0.00",
+        "count": 1
+      }
+    }
+  },
+  "sessionID": "ses_h2GlNWfy2MjF5tT60qpB",
+  "artifactID": "art_g0VcEV6nR00a6iSxtBfI",
+  "url": "http://127.0.0.1:51776/ui/?sessionID=ses_h2GlNWfy2MjF5tT60qpB&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cmemory-handoff-south&experience=work"
+}
