@@ -1,0 +1,51 @@
+{
+  "status": "passed",
+  "baselineNullContract": {
+    "runtime": "WLsORj",
+    "exitCode": 1,
+    "failedCases": 2,
+    "observed": [
+      "Real const/enum/unrestricted/true null values captured as empty object.",
+      "Optional type-null enum constraint rejected provider omission placeholder."
+    ]
+  },
+  "finalBackend": {
+    "originalHandle": 42458,
+    "exitCode": 0,
+    "cases": 45,
+    "assertions": 105,
+    "files": [
+      "provider-tool-null-values.test.ts",
+      "provider-tool-structural-union.test.ts",
+      "interactive-artifact-tool-schema.test.ts",
+      "session-loop-provider-tool-input.test.ts",
+      "expert-squad/authorized-capability-execution.test.ts",
+      "expert-squad/typed-publisher-provider-schema.test.ts"
+    ]
+  },
+  "nativeOffice": {
+    "originalHandle": 19586,
+    "exitCode": 0,
+    "cases": 1,
+    "assertions": 22
+  },
+  "backendTypecheck": {
+    "originalHandle": 60760,
+    "exitCode": 0
+  },
+  "docs": "354 operations/26 groups passed; architecture20 documents passed",
+  "actualProvider": {
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "requests": 29,
+    "status200EOF": 29,
+    "requestAgents": {
+      "memory": 4,
+      "chat": 2,
+      "work": 23
+    }
+  },
+  "visual": "8 original native screenshots personally viewed; no UI automation assertions",
+  "publicAndPersistedSchema": "unchanged; no SDK generation or frontend build needed for backend-only changes",
+  "performance": "Real Office prepare/materialize20 repetitions; normal non-null type short circuit improves repeated mean56.79ms to38.48ms in this sample. Raw canonical identities are fresh, so weak-root caching is intra-tree rather than promised across calls."
+}

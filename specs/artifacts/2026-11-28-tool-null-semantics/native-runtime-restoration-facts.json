@@ -1,0 +1,65 @@
+{
+  "status": "passed",
+  "runtimeVersion": "1.0.158",
+  "managedClosure": [
+    {
+      "path": "bin/officecli.exe",
+      "bytes": 33517480,
+      "immutablePackageIdentity": "exact locked manifest"
+    },
+    {
+      "path": "licenses/OfficeCLI-LICENSE",
+      "bytes": 11375,
+      "immutablePackageIdentity": "exact locked manifest"
+    },
+    {
+      "path": "licenses/OfficeCLI-NOTICE",
+      "bytes": 455,
+      "immutablePackageIdentity": "exact locked manifest"
+    },
+    {
+      "path": "licenses/OfficeCLI-THIRD-PARTY-NOTICES.txt",
+      "bytes": 2179,
+      "immutablePackageIdentity": "exact locked manifest"
+    },
+    {
+      "path": "licenses/WORK-ARTIFACT-RUNTIMES-LOCK.json",
+      "bytes": 4530,
+      "immutablePackageIdentity": "exact locked manifest"
+    }
+  ],
+  "candidatePreflightVerification": {
+    "status": "passed",
+    "managedFiles": 5,
+    "runtimeVersion": "1.0.158"
+  },
+  "incident": {
+    "ownedCopyAutoUpdatedTo": "1.0.163",
+    "changedAtLocal": "2026-11-28 12:18:42",
+    "cause": "Private direct CLI experiment omitted existing production isolated environment.",
+    "restoredFrom": "Exact immutable original .old backup, locked package identity verified before and after copy.",
+    "invalidExperimentalOutput": "Direct/first qualified reproduction from changed1.0.163 excluded from acceptance.",
+    "originalBaselineOfficeDeliveryEndedUTC": "2026-11-28T04:17:46.801+00:00",
+    "ownership": "Only private Temp host executable; unintended resident bound to own breaks-2.docx. Exact close returned already saved/nothing to close; later process inventory empty.",
+    "originalUncapturedBatchFailure": "unknown, retained as an experiment limitation"
+  },
+  "validReproduction": "locked-158-break-reproduction; existing production runtime environment and immutable package verified",
+  "baselineNativeTestBeforeRestore": {
+    "runtime": "LzNDPr",
+    "exitCode": 1,
+    "failure": "Immutable runtime package mismatch, no acceptance claimed"
+  },
+  "baselineNativeTestAfterRestore": {
+    "originalHandle": 78096,
+    "runtime": "mW2Tap",
+    "exitCode": 1,
+    "failure": "Office document readback does not match the complete paragraph plan"
+  },
+  "finalNativeTest": {
+    "originalHandle": 19586,
+    "exitCode": 0,
+    "cases": 1,
+    "assertions": 22,
+    "scope": "Actual editable DOCX, canonical inspection, receipt validation/delivery, real w:br/TAB nodes and paginated file data; not product UI automation"
+  }
+}

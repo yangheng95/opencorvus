@@ -696,6 +696,8 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   逐项绑定相同规范引用及内容身份；变化时返回重新校验/审阅错误，不交付未经新审阅页图。
   DOCX 通过有序 title/heading/paragraph 计划写入；title/heading 明确写入原生 keepNext、
   keepLines，使标题与下段同页并保留标题自身行，普通正文允许自然跨页。
+  同一条目text里的LF/CRLF/CR规范为同段软换行，在唯一OfficeCLI适配边界编码为其VT协议，
+  原生读回解码为LF后仍逐段完整核对；TAB、字面反斜杠与Unicode原文保留，不靠模型拆段重试。
   XLSX 通过有界工作表、列标题和显式字符串/数字/布尔/空单元格计划写入，不接受公式、宏或原始命令；
   同一 batch 在全部单元格完成后按实际内容 autofit 原生列宽。逐表 PNG 按内容宽度包含工作表名称，
   保持真实列宽与渲染限额，不把省略号或空白画布视为可读性通过。

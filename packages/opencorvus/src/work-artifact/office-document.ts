@@ -147,6 +147,10 @@ function mime(profile: z.output<typeof Profile>) {
   return WorkArtifactProfileRegistry.require(profile).mimeTypes[0]!
 }
 
+function documentText(text: string) {
+  return text.replace(/\r\n?|\v/g, "\n")
+}
+
 function runner(input: Operation, directory: string, deadline: number, outputLimit: number, wallClockMs: number) {
   let bytes = 0
   return {
@@ -202,7 +206,7 @@ export async function authorOfficeArtifact(input: Operation) {
         }
         for (const paragraph of plan.paragraphs) {
           const props: Record<string, string> = {
-            text: paragraph.text,
+            text: documentText(paragraph.text).replaceAll("\n", "\v"),
             style: paragraph.kind === "title" ? "Title" : paragraph.kind === "heading" ? "Heading1" : "Normal",
             size: paragraph.kind === "title" ? "24pt" : paragraph.kind === "heading" ? "16pt" : "11pt",
             spaceAfter: paragraph.kind === "paragraph" ? "8pt" : "12pt",
@@ -255,8 +259,8 @@ export async function authorOfficeArtifact(input: Operation) {
       if (plan.profile === "office.document@1") {
         const content = z.object({ elements: z.array(z.object({ text: z.string() })) }).parse(readback.data)
         if (
-          JSON.stringify(content.elements.map((element) => element.text)) !==
-          JSON.stringify(plan.paragraphs.map((paragraph) => paragraph.text))
+          JSON.stringify(content.elements.map((element) => documentText(element.text))) !==
+          JSON.stringify(plan.paragraphs.map((paragraph) => documentText(paragraph.text)))
         )
           throw new Error("Office document readback does not match the complete paragraph plan")
       } else {

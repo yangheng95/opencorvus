@@ -123,6 +123,7 @@ for (const profile of ["office.document@1", "office.spreadsheet@1"] as const) {
               "四模块进展：设计完成、实现完成、验证进行中、交付待确认。",
               "计划36小时，实际25小时，差值−11小时。",
               "来源 sales.csv，净金额35.60；退款金额-2.05。",
+              "换行首行\v第二行\v\v第三行\t制表符\v",
             ])
             const sourcePath = AttachmentStore.resolveAbsolute(Instance.project.id, `${result.source_sha}.docx`)!
             const zip = new ZipReader(new Uint8ArrayReader(Uint8Array.from(await fs.readFile(sourcePath))))
@@ -135,6 +136,8 @@ for (const profile of ["office.document@1", "office.spreadsheet@1"] as const) {
                 expect(paragraph).toMatch(/<w:keepNext(?:\s+w:val="(?:true|1|on)")?\s*\/>/)
                 expect(paragraph).toMatch(/<w:keepLines(?:\s+w:val="(?:true|1|on)")?\s*\/>/)
               }
+              expect(paragraphs[5]!.match(/<w:br\s*\/>/g)?.length).toBe(4)
+              expect(paragraphs[5]!.match(/<w:tab\s*\/>/g)?.length).toBe(1)
             } finally {
               await zip.close()
             }

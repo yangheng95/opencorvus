@@ -3,6 +3,9 @@
 Create a new editable DOCX from `filename`, `locale`, and 1–60 ordered
 `paragraphs`. Each paragraph has `kind` (`title`, `heading`, `paragraph`) and
 plain `text`. Use the user's language and preserve their requested filename.
+Line endings within one entry become soft line breaks in that same paragraph;
+LF, CRLF and CR are accepted. Tabs and literal backslashes stay as authored.
+Use separate entries for separate paragraphs.
 `title` and `heading` keep their own lines together and stay with the following
 paragraph in both the editable DOCX and the paginated preview. Ordinary body
 paragraphs can continue across pages. These semantics are built in; the plan

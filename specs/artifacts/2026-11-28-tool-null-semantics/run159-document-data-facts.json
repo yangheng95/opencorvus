@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "label": "run159",
+  "sessionID": "ses_hlnKOeLEnlANb9kegz7f",
+  "artifactID": "art_g0VcEt3Z900iyHTagkfl",
+  "nativeDownloads": [
+    {
+      "filename": "北仓结算交接说明换行复验 20261128.docx",
+      "bytes": 6599,
+      "canonicalAttachmentBytes": "exact"
+    },
+    {
+      "filename": "北仓结算交接说明换行复验 20261128-preview.pdf",
+      "bytes": 89239,
+      "canonicalAttachmentBytes": "exact"
+    }
+  ],
+  "actualDOCXParagraphs": 12,
+  "canonicalParagraphIdentity": "every complete paragraph equals actual successful author input after line-ending normalization",
+  "multilineAuthorEntries": 4,
+  "nativeSoftLineBreaks": 9,
+  "sourceRows": 6,
+  "sourceRecordOrder": "exact",
+  "groups": {
+    "普通订单": {
+      "count": 3,
+      "net": "23.65"
+    },
+    "退款": {
+      "count": 2,
+      "net": "-6.00"
+    },
+    "免费样品": {
+      "count": 1,
+      "net": "0.00"
+    }
+  },
+  "totalNet": "17.65",
+  "authorAttempts": [
+    {
+      "id": "prt_g0VcEsibX00MU7oFZcDM",
+      "status": "completed"
+    }
+  ],
+  "sourceLocale": "zh-CN"
+}

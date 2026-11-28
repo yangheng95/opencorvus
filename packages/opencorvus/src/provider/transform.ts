@@ -13,6 +13,7 @@ import { normalizeVendorMessages } from "./vendor-messages"
 import { GLM_EVALUATION_TEMPERATURE, THINKING_MODEL_TOP_P } from "./sampling"
 import { requiresOpenAIStrictToolSchema } from "./strict-tool-schema"
 import { requiresSerializedOpenAIToolCalls } from "./tool-call-policy"
+import { schemaAllowsNull } from "./schema-nullability"
 
 export namespace ProviderTransform {
   export const OUTPUT_TOKEN_MAX = Flag.OPENCORVUS_EXPERIMENTAL_OUTPUT_TOKEN_MAX || 64_000
@@ -1313,24 +1314,6 @@ export namespace ProviderTransform {
   }
 
   export function schema(model: ProviderModel, schema: JSONSchema.BaseSchema | JSONSchema7): JSONSchema7 {
-    /*
-    if (["openai", "azure"].includes(providerID)) {
-      if (schema.type === "object" && schema.properties) {
-        for (const [key, value] of Object.entries(schema.properties)) {
-          if (schema.required?.includes(key)) continue
-          schema.properties[key] = {
-            anyOf: [
-              value as JSONSchema.JSONSchema,
-              {
-                type: "null",
-              },
-            ],
-          }
-        }
-      }
-    }
-    */
-
     // Convert integer enums to string enums for Google/Gemini
     if (model.providerID === "google" || model.api.id.includes("gemini")) {
       const sanitizeGemini = (obj: any): any => {
@@ -1408,11 +1391,11 @@ export namespace ProviderTransform {
   }
 
   function normalizeOpenAIStrictToolSchema(schema: JSONSchema7): JSONSchema7 {
-    return strictifyOpenAISchemaNode(schema, false) as JSONSchema7
+    return strictifyOpenAISchemaNode(schema, schema) as JSONSchema7
   }
 
-  function strictifyOpenAISchemaNode(node: unknown, optionalFromParent: boolean): unknown {
-    if (Array.isArray(node)) return node.map((item) => strictifyOpenAISchemaNode(item, false))
+  function strictifyOpenAISchemaNode(node: unknown, root: unknown): unknown {
+    if (Array.isArray(node)) return node.map((item) => strictifyOpenAISchemaNode(item, root))
     if (!node || typeof node !== "object") return node
 
     const input = node as Record<string, unknown>
@@ -1421,7 +1404,7 @@ export namespace ProviderTransform {
       if (key === "properties" && value && typeof value === "object" && !Array.isArray(value)) {
         continue
       }
-      output[key] = strictifyOpenAISchemaNode(value, false)
+      output[key] = strictifyOpenAISchemaNode(value, root)
     }
 
     const properties = input.properties
@@ -1431,27 +1414,16 @@ export namespace ProviderTransform {
       )
       const strictProperties: Record<string, unknown> = {}
       for (const [key, value] of Object.entries(properties as Record<string, unknown>)) {
-        const strictValue = strictifyOpenAISchemaNode(value, !required.has(key))
+        const strictValue = strictifyOpenAISchemaNode(value, root)
         strictProperties[key] =
-          !required.has(key) && !schemaAllowsNull(strictValue) ? nullableOpenAISchema(strictValue) : strictValue
+          !required.has(key) && !schemaAllowsNull(value, root) ? nullableOpenAISchema(strictValue) : strictValue
       }
       output.properties = strictProperties
       output.required = Object.keys(strictProperties)
       if (output.additionalProperties === undefined) output.additionalProperties = false
     }
 
-    return optionalFromParent && !schemaAllowsNull(output) ? nullableOpenAISchema(output) : output
-  }
-
-  function schemaAllowsNull(schema: unknown): boolean {
-    if (!schema || typeof schema !== "object" || Array.isArray(schema)) return false
-    const record = schema as Record<string, unknown>
-    if (record.type === "null") return true
-    if (Array.isArray(record.type) && record.type.includes("null")) return true
-    return (
-      (Array.isArray(record.anyOf) && record.anyOf.some(schemaAllowsNull)) ||
-      (Array.isArray(record.oneOf) && record.oneOf.some(schemaAllowsNull))
-    )
+    return output
   }
 
   function nullableOpenAISchema(schema: unknown): unknown {

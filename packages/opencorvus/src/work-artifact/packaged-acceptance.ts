@@ -92,6 +92,7 @@ export async function runPackagedWorkArtifactAcceptance(input: {
               { kind: "paragraph", text: "四模块进展：设计完成、实现完成、验证进行中、交付待确认。" },
               { kind: "paragraph", text: "计划36小时，实际25小时，差值−11小时。" },
               { kind: "paragraph", text: "来源 sales.csv，净金额35.60；退款金额-2.05。" },
+              { kind: "paragraph", text: "换行首行\n第二行\r\n\r第三行\t制表符\n" },
             ],
           }
         : input.profile === "office.spreadsheet@1"

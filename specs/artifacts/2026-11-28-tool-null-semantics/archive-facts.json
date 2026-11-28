@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "screenshotsPersonallyReviewed": [
+    "02-document-task-start.jpg",
+    "05-document-author-failure.jpg",
+    "06-baseline-document-preview.jpg",
+    "07-baseline-document-full.jpg",
+    "10-candidate-task-start.jpg",
+    "12-candidate-document-preview.jpg",
+    "13-candidate-document-full.jpg",
+    "15-candidate-document-details.jpg"
+  ],
+  "originalByteMembers": {
+    "document-prompt.txt": 642,
+    "candidate-document-prompt.txt": 795,
+    "original-resource.csv": 59,
+    "inputs/north/events.csv": 223,
+    "inputs/north/handoff.md": 153,
+    "inputs/north/records.csv": 111,
+    "inputs/north/settlement-review.csv": 150,
+    "inputs/south/events-review.csv": 223,
+    "inputs/south/handoff.md": 159,
+    "inputs/south/records.csv": 111,
+    "inputs/south/settlement-review.csv": 127,
+    "downloads/run158-北仓结算交接说明 20261128.docx": 6875,
+    "downloads/run158-北仓结算交接说明 20261128-preview.pdf": 92320,
+    "downloads/run159-北仓结算交接说明换行复验 20261128.docx": 6599,
+    "downloads/run159-北仓结算交接说明换行复验 20261128-preview.pdf": 89239,
+    "observations/01-document-start-ax.txt": 5793,
+    "observations/03-document-progress-ax.txt": 19926,
+    "observations/04-document-author-failure-ax.txt": 1515,
+    "observations/08-baseline-downloads-ax.txt": 29533,
+    "observations/09-candidate-start-ax.txt": 6050,
+    "observations/11-candidate-delivered-ax.txt": 28456,
+    "observations/14-candidate-bottom-ax.txt": 401,
+    "observations/16-candidate-downloads-ax.txt": 28356,
+    "locked158-native-reproduction/authoring.json": 581,
+    "locked158-native-reproduction/create.json": 362,
+    "locked158-native-reproduction/batch.json": 1066,
+    "locked158-native-reproduction/readback.json": 1355,
+    "locked158-native-reproduction/qualified-breaks.docx": 5394
+  },
+  "limits": [
+    "Real document tasks use explicit zh-CN; default/null schemas are covered separately by actual production positive contract tests.",
+    "MCP dialect tests exercise the real local Tool preparation/execution contract, not a live external MCP service.",
+    "Candidate first pass12 paragraphs/4 multiline entries/9 native soft line breaks proves this concrete case, not every possible generated document.",
+    "CLI1.0.163 experimental outputs and binaries are excluded; immutable source verification is actual package integrity, not a mutable-source digest gate.",
+    "Opaque Provider reasoning, credentials/catalog, full database and private original project config excluded."
+  ]
+}

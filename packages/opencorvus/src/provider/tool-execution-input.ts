@@ -1,4 +1,5 @@
 import { asSchema } from "ai"
+import { schemaAllowsNull } from "./schema-nullability"
 
 export function materializeToolExecutionInput(inputSchema: unknown, args: unknown): unknown {
   const rawJsonSchema = asSchema(inputSchema as never).jsonSchema
@@ -45,7 +46,7 @@ function materializeFromJsonSchema(
       item === null &&
       propertySchema !== undefined &&
       !required.has(key) &&
-      !jsonSchemaAllowsNull(propertySchema, root)
+      !schemaAllowsNull(propertySchema, root)
     ) {
       continue
     }
@@ -116,7 +117,7 @@ function selectJsonSchemaVariant(
       const property = resolveLocalReference(properties[key], root)
       if (property && typeof property === "object" && "const" in property && valueRecord[key] !== property.const)
         return false
-      if (valueRecord[key] === null && !jsonSchemaAllowsNull(properties[key], root)) return false
+      if (valueRecord[key] === null && !schemaAllowsNull(properties[key], root)) return false
     }
     return Object.entries(valueRecord).every(
       ([key, item]) => Object.hasOwn(properties, key) || (item === null && unionProperties.has(key)),
@@ -145,20 +146,6 @@ function objectUnionVariants(
     active.delete(variant)
     return objects
   })
-}
-
-function jsonSchemaAllowsNull(schema: unknown, root: unknown, visited = new Set<unknown>()): boolean {
-  schema = resolveLocalReference(schema, root)
-  if (visited.has(schema)) return false
-  visited.add(schema)
-  if (!schema || typeof schema !== "object" || Array.isArray(schema)) return false
-  const record = schema as Record<string, unknown>
-  if (record.type === "null") return true
-  if (Array.isArray(record.type) && record.type.includes("null")) return true
-  return (
-    (Array.isArray(record.anyOf) && record.anyOf.some((item) => jsonSchemaAllowsNull(item, root, visited))) ||
-    (Array.isArray(record.oneOf) && record.oneOf.some((item) => jsonSchemaAllowsNull(item, root, visited)))
-  )
 }
 
 /** Resolve local JSON Pointers against the original schema, never a selected branch. */
