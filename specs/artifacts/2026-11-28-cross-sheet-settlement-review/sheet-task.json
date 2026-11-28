@@ -1,0 +1,31 @@
+{
+  "sessionID": "ses_hYnDzvNLQqyGFLPA8TxO",
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+  "projectID": "prj_hZ6Mj0J1wZUIfIIkFSeE",
+  "prompt": "请只读当前项目 settlement-review.csv，给交接同事发表一份可在应用内直接编辑的多工作表核对簿，题为“北仓跨表结算核对簿 20261128”。原始记录表逐行保留编号、类型及数值金额；分类核对表列出每类的记录数和带符号金额净额及全量合计，使用引用原始记录表的公式，修改原始金额后能重算。退款负数与零金额样品都保留，金额显示两位小数，缺少币种和成本不推断利润。提供每张工作表当前值的CSV下载，并简短解释使用方法与保存范围。只阅读并发表，不执行脚本、不修改源文件、不创建Task/Mission或专家团，不委派。",
+  "initialExpected": {
+    "rows": 6,
+    "total": "17.65",
+    "groups": {
+      "普通订单": {
+        "amount": "23.65",
+        "count": 3
+      },
+      "退款": {
+        "amount": "-6.00",
+        "count": 2
+      },
+      "免费样品": {
+        "amount": "0.00",
+        "count": 1
+      }
+    }
+  },
+  "localEditExpected": {
+    "sourceRecord": "N01",
+    "old": "15.20",
+    "new": "16.20",
+    "ordinaryAmount": "24.65",
+    "fullAmount": "18.65"
+  }
+}

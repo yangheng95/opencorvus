@@ -1,0 +1,184 @@
+{
+  "status": "passed",
+  "actualWorkRequests": 3,
+  "actualChatRequests": 1,
+  "observations": [
+    {
+      "requestIndex": 1,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "cellUnions": [
+        {
+          "union": "anyOf",
+          "variants": [
+            {
+              "properties": [
+                "address",
+                "numberFormat",
+                "style",
+                "value"
+              ],
+              "required": [
+                "address",
+                "numberFormat",
+                "style",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "properties": [
+                "address",
+                "numberFormat",
+                "style",
+                "formula",
+                "computed"
+              ],
+              "required": [
+                "address",
+                "numberFormat",
+                "style",
+                "formula",
+                "computed"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 3,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "cellUnions": [
+        {
+          "union": "anyOf",
+          "variants": [
+            {
+              "properties": [
+                "address",
+                "numberFormat",
+                "style",
+                "value"
+              ],
+              "required": [
+                "address",
+                "numberFormat",
+                "style",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "properties": [
+                "address",
+                "numberFormat",
+                "style",
+                "formula",
+                "computed"
+              ],
+              "required": [
+                "address",
+                "numberFormat",
+                "style",
+                "formula",
+                "computed"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 4,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "cellUnions": [
+        {
+          "union": "anyOf",
+          "variants": [
+            {
+              "properties": [
+                "address",
+                "numberFormat",
+                "style",
+                "value"
+              ],
+              "required": [
+                "address",
+                "numberFormat",
+                "style",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "properties": [
+                "address",
+                "numberFormat",
+                "style",
+                "formula",
+                "computed"
+              ],
+              "required": [
+                "address",
+                "numberFormat",
+                "style",
+                "formula",
+                "computed"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestIndex": 5,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "cellUnions": [
+        {
+          "union": "anyOf",
+          "variants": [
+            {
+              "properties": [
+                "address",
+                "numberFormat",
+                "style",
+                "value"
+              ],
+              "required": [
+                "address",
+                "numberFormat",
+                "style",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "properties": [
+                "address",
+                "numberFormat",
+                "style",
+                "formula",
+                "computed"
+              ],
+              "required": [
+                "address",
+                "numberFormat",
+                "style",
+                "formula",
+                "computed"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Actual outgoing request cell schema shape, including Chat preflight and every Work request; not a copied source hash."
+}

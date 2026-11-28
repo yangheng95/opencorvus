@@ -1,0 +1,228 @@
+{
+  "id": "art_g0VcEYIys00i9elZts3P",
+  "sessionID": "ses_hYnDzvNLQqyGFLPA8TxO",
+  "messageID": "msg_g0VcEYDy300ehNX1LLPz",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "北仓跨表结算核对簿 20261128",
+    "renderer": "spreadsheet@1",
+    "editable": true,
+    "sheets": [
+      {
+        "id": "source-records",
+        "name": "原始记录",
+        "rowCount": 7,
+        "columnCount": 3,
+        "frozenRows": 1,
+        "frozenColumns": 0,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "记录编号",
+            "style": {
+              "bold": true
+            }
+          },
+          {
+            "address": "B1",
+            "value": "类型",
+            "style": {
+              "bold": true
+            }
+          },
+          {
+            "address": "C1",
+            "value": "金额",
+            "style": {
+              "bold": true
+            }
+          },
+          {
+            "address": "A2",
+            "value": "N01"
+          },
+          {
+            "address": "B2",
+            "value": "普通订单"
+          },
+          {
+            "address": "C2",
+            "value": 15.2,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A3",
+            "value": "N02"
+          },
+          {
+            "address": "B3",
+            "value": "退款"
+          },
+          {
+            "address": "C3",
+            "value": -4.85,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A4",
+            "value": "N03"
+          },
+          {
+            "address": "B4",
+            "value": "免费样品"
+          },
+          {
+            "address": "C4",
+            "value": 0,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A5",
+            "value": "N04"
+          },
+          {
+            "address": "B5",
+            "value": "普通订单"
+          },
+          {
+            "address": "C5",
+            "value": 6.35,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A6",
+            "value": "N05"
+          },
+          {
+            "address": "B6",
+            "value": "退款"
+          },
+          {
+            "address": "C6",
+            "value": -1.15,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A7",
+            "value": "N06"
+          },
+          {
+            "address": "B7",
+            "value": "普通订单"
+          },
+          {
+            "address": "C7",
+            "value": 2.1,
+            "numberFormat": "0.00"
+          }
+        ]
+      },
+      {
+        "id": "category-check",
+        "name": "分类核对",
+        "rowCount": 5,
+        "columnCount": 3,
+        "frozenRows": 1,
+        "frozenColumns": 0,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "类型",
+            "style": {
+              "bold": true
+            }
+          },
+          {
+            "address": "B1",
+            "value": "记录数",
+            "style": {
+              "bold": true
+            }
+          },
+          {
+            "address": "C1",
+            "value": "带符号金额净额",
+            "style": {
+              "bold": true
+            }
+          },
+          {
+            "address": "A2",
+            "value": "普通订单"
+          },
+          {
+            "address": "B2",
+            "formula": "=COUNTIF('原始记录'!B2:B7,A2)",
+            "computed": 3,
+            "numberFormat": "0"
+          },
+          {
+            "address": "C2",
+            "formula": "=SUMIF('原始记录'!B2:B7,A2,'原始记录'!C2:C7)",
+            "computed": 23.65,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A3",
+            "value": "退款"
+          },
+          {
+            "address": "B3",
+            "formula": "=COUNTIF('原始记录'!B2:B7,A3)",
+            "computed": 2,
+            "numberFormat": "0"
+          },
+          {
+            "address": "C3",
+            "formula": "=SUMIF('原始记录'!B2:B7,A3,'原始记录'!C2:C7)",
+            "computed": -6,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A4",
+            "value": "免费样品"
+          },
+          {
+            "address": "B4",
+            "formula": "=COUNTIF('原始记录'!B2:B7,A4)",
+            "computed": 1,
+            "numberFormat": "0"
+          },
+          {
+            "address": "C4",
+            "formula": "=SUMIF('原始记录'!B2:B7,A4,'原始记录'!C2:C7)",
+            "computed": 0,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A5",
+            "value": "全量合计",
+            "style": {
+              "bold": true
+            }
+          },
+          {
+            "address": "B5",
+            "formula": "=COUNTA('原始记录'!A2:A7)",
+            "computed": 6,
+            "numberFormat": "0",
+            "style": {
+              "bold": true
+            }
+          },
+          {
+            "address": "C5",
+            "formula": "=SUM('原始记录'!C2:C7)",
+            "computed": 17.65,
+            "numberFormat": "0.00",
+            "style": {
+              "bold": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "timeCreated": 1795835395542,
+  "timeUpdated": 1795835395542
+}

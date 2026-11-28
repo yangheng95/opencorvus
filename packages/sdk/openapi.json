@@ -10683,71 +10683,123 @@
                   "properties": {
                     "cells": {
                       "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                          "address": {
-                            "pattern": "^[A-Z]{1,3}[1-9][0-9]{0,5}$",
-                            "type": "string"
-                          },
-                          "computed": {
-                            "type": [
-                              "string",
-                              "number",
-                              "boolean",
-                              "null"
-                            ]
-                          },
-                          "formula": {
-                            "maxLength": 2000,
-                            "pattern": "^=[^\\r\\n]+$",
-                            "type": "string"
-                          },
-                          "numberFormat": {
-                            "maxLength": 80,
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "style": {
+                        "anyOf": [
+                          {
                             "additionalProperties": false,
                             "properties": {
-                              "align": {
-                                "enum": [
-                                  "left",
-                                  "center",
-                                  "right"
-                                ],
+                              "address": {
+                                "pattern": "^[A-Z]{1,3}[1-9][0-9]{0,5}$",
                                 "type": "string"
                               },
-                              "background": {
-                                "pattern": "^#[0-9a-fA-F]{6}$",
+                              "numberFormat": {
+                                "maxLength": 80,
+                                "minLength": 1,
                                 "type": "string"
                               },
-                              "bold": {
-                                "type": "boolean"
+                              "style": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "align": {
+                                    "enum": [
+                                      "left",
+                                      "center",
+                                      "right"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "background": {
+                                    "pattern": "^#[0-9a-fA-F]{6}$",
+                                    "type": "string"
+                                  },
+                                  "bold": {
+                                    "type": "boolean"
+                                  },
+                                  "color": {
+                                    "pattern": "^#[0-9a-fA-F]{6}$",
+                                    "type": "string"
+                                  },
+                                  "italic": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "type": "object"
                               },
-                              "color": {
-                                "pattern": "^#[0-9a-fA-F]{6}$",
-                                "type": "string"
-                              },
-                              "italic": {
-                                "type": "boolean"
+                              "value": {
+                                "type": [
+                                  "string",
+                                  "number",
+                                  "boolean",
+                                  "null"
+                                ]
                               }
                             },
+                            "required": [
+                              "address",
+                              "value"
+                            ],
                             "type": "object"
                           },
-                          "value": {
-                            "type": [
-                              "string",
-                              "number",
-                              "boolean",
-                              "null"
-                            ]
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "address": {
+                                "pattern": "^[A-Z]{1,3}[1-9][0-9]{0,5}$",
+                                "type": "string"
+                              },
+                              "computed": {
+                                "type": [
+                                  "string",
+                                  "number",
+                                  "boolean",
+                                  "null"
+                                ]
+                              },
+                              "formula": {
+                                "maxLength": 2000,
+                                "pattern": "^=[^\\r\\n]+$",
+                                "type": "string"
+                              },
+                              "numberFormat": {
+                                "maxLength": 80,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "style": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "align": {
+                                    "enum": [
+                                      "left",
+                                      "center",
+                                      "right"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "background": {
+                                    "pattern": "^#[0-9a-fA-F]{6}$",
+                                    "type": "string"
+                                  },
+                                  "bold": {
+                                    "type": "boolean"
+                                  },
+                                  "color": {
+                                    "pattern": "^#[0-9a-fA-F]{6}$",
+                                    "type": "string"
+                                  },
+                                  "italic": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            },
+                            "required": [
+                              "address",
+                              "formula"
+                            ],
+                            "type": "object"
                           }
-                        },
-                        "required": [
-                          "address"
-                        ],
-                        "type": "object"
+                        ]
                       },
                       "maxItems": 50000,
                       "type": "array"

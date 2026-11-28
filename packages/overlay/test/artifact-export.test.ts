@@ -259,6 +259,28 @@ test("Spreadsheet exports retain every sheet under distinct sanitized filenames"
   ])
 })
 
+test("Spreadsheet value exports preserve literal blanks and cached formula results", () => {
+  expect(artifactExports({
+    ...base,
+    renderer: "spreadsheet@1",
+    editable: true,
+    sheets: [{
+      id: "records",
+      name: "Records",
+      rowCount: 2,
+      columnCount: 2,
+      frozenRows: 0,
+      frozenColumns: 0,
+      cells: [
+        { address: "A1", value: null },
+        { address: "B1", value: "Double" },
+        { address: "A2", value: 12.5 },
+        { address: "B2", formula: "=A2*2", computed: 25 },
+      ],
+    }],
+  })).toEqual([{ filename: "Acceptance - Records.csv", mime: "text/csv;charset=utf-8", text: '"","Double"\r\n"12.5","25"' }])
+})
+
 test.each(mediaReferences)(
   "Notebook media export preserves $filename and its plain label",
   ({ filename, alt, reference }) => {

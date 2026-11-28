@@ -2985,20 +2985,33 @@ export type InteractiveArtifactPayload =
       renderer: "spreadsheet@1"
       schemaVersion: "1"
       sheets: Array<{
-        cells: Array<{
-          address: string
-          computed?: string | number | boolean | null
-          formula?: string
-          numberFormat?: string
-          style?: {
-            align?: "left" | "center" | "right"
-            background?: string
-            bold?: boolean
-            color?: string
-            italic?: boolean
-          }
-          value?: string | number | boolean | null
-        }>
+        cells: Array<
+          | {
+              address: string
+              numberFormat?: string
+              style?: {
+                align?: "left" | "center" | "right"
+                background?: string
+                bold?: boolean
+                color?: string
+                italic?: boolean
+              }
+              value: string | number | boolean | null
+            }
+          | {
+              address: string
+              computed?: string | number | boolean | null
+              formula: string
+              numberFormat?: string
+              style?: {
+                align?: "left" | "center" | "right"
+                background?: string
+                bold?: boolean
+                color?: string
+                italic?: boolean
+              }
+            }
+        >
         columnCount: number
         frozenColumns?: number
         frozenRows?: number

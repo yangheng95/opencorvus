@@ -93,6 +93,75 @@ describe("interactive artifact Tool schema", () => {
     expect(acceptedProviders.sort()).toEqual(["anthropic", "openai"])
   })
 
+  test("publishes literal blanks and formula cells through the strict Provider contract", async () => {
+    const model = providerModels().find((candidate) => candidate.providerID === "openai")!
+    const prepared = SessionLoop.prepareProviderTool({
+      name: "publish_interactive_artifact",
+      source: "registry",
+      model,
+      tool: createPublishInteractiveArtifactAiTool(),
+    })
+    const schema = asSchema((prepared as { inputSchema?: unknown }).inputSchema as never)
+    const providerInput = {
+      artifact: {
+        schemaVersion: "1",
+        title: "Formula review",
+        presentation: null,
+        content: {
+          renderer: "spreadsheet@1",
+          editable: true,
+          sheets: [
+            {
+              id: "records",
+              name: "Records",
+              rowCount: 2,
+              columnCount: 2,
+              frozenRows: 0,
+              frozenColumns: 0,
+              cells: [
+                { address: "A1", value: null, numberFormat: null, style: null },
+                { address: "A2", value: 12.5, numberFormat: "0.00", style: null },
+                { address: "B2", formula: "=A2*2", computed: 25, numberFormat: "0.00", style: null },
+              ],
+            },
+          ],
+        },
+      },
+    }
+    const validate = new Ajv({ allErrors: true, strict: false, formats: { "date-time": true } }).compile(
+      schema.jsonSchema,
+    )
+    expect(validate(providerInput), JSON.stringify(validate.errors)).toBe(true)
+    expect(await schema.validate!(providerInput)).toEqual({
+      success: true,
+      value: {
+        artifact: {
+          schemaVersion: "1",
+          title: "Formula review",
+          content: {
+            renderer: "spreadsheet@1",
+            editable: true,
+            sheets: [
+              {
+                id: "records",
+                name: "Records",
+                rowCount: 2,
+                columnCount: 2,
+                frozenRows: 0,
+                frozenColumns: 0,
+                cells: [
+                  { address: "A1", value: null },
+                  { address: "A2", value: 12.5, numberFormat: "0.00" },
+                  { address: "B2", formula: "=A2*2", computed: 25, numberFormat: "0.00" },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    })
+  })
+
   test("preserves canonical renderer refinements in the factored Provider projection", () => {
     const result = PublishInteractiveArtifactParameters.safeParse({
       artifact: {

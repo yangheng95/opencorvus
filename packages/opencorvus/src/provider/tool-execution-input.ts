@@ -96,6 +96,31 @@ function selectJsonSchemaVariant(
     }
     if (matchedConst && !mismatched) return { schema: variant, unionProperties }
   }
+  const structuralMatches = variants.filter((rawVariant) => {
+    const variant = resolveLocalReference(rawVariant, root)
+    if (!variant || typeof variant !== "object" || Array.isArray(variant)) return false
+    const candidate = variant as Record<string, unknown>
+    if (
+      candidate.type !== "object" ||
+      candidate.additionalProperties !== false ||
+      !candidate.properties ||
+      typeof candidate.properties !== "object" ||
+      Array.isArray(candidate.properties)
+    )
+      return false
+    const properties = candidate.properties as Record<string, unknown>
+    const required = Array.isArray(candidate.required) ? candidate.required : []
+    for (const key of required) {
+      if (typeof key !== "string" || !Object.hasOwn(valueRecord, key)) return false
+      if (valueRecord[key] === null && !jsonSchemaAllowsNull(properties[key], root)) return false
+    }
+    return Object.entries(valueRecord).every(
+      ([key, item]) => Object.hasOwn(properties, key) || (item === null && unionProperties.has(key)),
+    )
+  })
+  if (structuralMatches.length === 1) {
+    return { schema: resolveLocalReference(structuralMatches[0], root), unionProperties }
+  }
   return { schema }
 }
 

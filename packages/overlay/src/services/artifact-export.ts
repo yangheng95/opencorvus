@@ -275,7 +275,7 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExportPla
               return {
                 row: Number(cell.address.slice(letters.length)) - 1,
                 column: [...letters].reduce((n, letter) => n * 26 + letter.charCodeAt(0) - 64, 0) - 1,
-                value: cell.computed ?? cell.value ?? cell.formula,
+                value: "formula" in cell ? cell.computed ?? cell.formula : cell.value,
               }
             })
             const lastRow = Math.max(-1, ...cells.map((cell) => cell.row))

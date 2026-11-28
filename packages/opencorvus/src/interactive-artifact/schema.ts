@@ -274,28 +274,24 @@ const SpreadsheetCellStyle = z
   })
   .strict()
 
-const SpreadsheetCell = z
+const SpreadsheetCellBase = z
   .object({
     address: z.string().regex(/^[A-Z]{1,3}[1-9][0-9]{0,5}$/),
-    value: JsonScalar.optional(),
-    formula: z
-      .string()
-      .regex(/^=[^\r\n]+$/)
-      .max(2_000)
-      .optional(),
-    computed: JsonScalar.optional(),
     numberFormat: z.string().trim().min(1).max(80).optional(),
     style: SpreadsheetCellStyle.optional(),
   })
   .strict()
-  .refine((cell) => (cell.value === undefined) !== (cell.formula === undefined), {
-    message: "spreadsheet cell must contain exactly one value or formula",
-    path: ["value"],
-  })
-  .refine((cell) => cell.formula !== undefined || cell.computed === undefined, {
-    message: "computed spreadsheet value requires a formula",
-    path: ["computed"],
-  })
+
+const SpreadsheetCell = z.union([
+  SpreadsheetCellBase.extend({ value: JsonScalar }),
+  SpreadsheetCellBase.extend({
+    formula: z
+      .string()
+      .regex(/^=[^\r\n]+$/)
+      .max(2_000),
+    computed: JsonScalar.optional(),
+  }),
+])
 
 function spreadsheetColumnIndex(address: string): number {
   const letters = address.match(/^[A-Z]+/)?.[0] ?? ""

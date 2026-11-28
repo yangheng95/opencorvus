@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [跨工作表结算核对证据](2026-11-28-cross-sheet-settlement-review/README.md)
 - [交付物数值交叉核对证据](2026-11-28-artifact-numeric-reconciliation/README.md)
 - [框选图例宽度证据](2026-11-28-chart-legend-brush/README.md)
 - [图表无障碍语言证据](2026-11-28-chart-accessible-language/README.md)

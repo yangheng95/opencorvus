@@ -5979,8 +5979,13 @@ or mutate the original publication. Copy/download continue to export the current
 mounted source; recreating the renderer restores the published content.
 
 Spreadsheet passes its canonical payload identity to the shared Frame while its
-custom export accessor continues to read the currently mounted workbook. Product
-language changes update that same Univer instance through its public locale
+custom export accessor continues to read the currently mounted workbook. Cell
+schemas distinguish literal values, including a real null blank, from
+formula cells with an optional cached computed value. The same explicit object
+union supplies publication Tool declarations and persisted/API validation;
+Provider optional-null placeholders do not become a second literal value on a
+formula cell. Existing stored cell shapes and formula calculation remain intact.
+Product language changes update that same Univer instance through its public locale
 service and the already registered language packages; they do not recreate the
 workbook or replace edited cells with the published payload.
 The ready Spreadsheet exposes a current-language “Fit columns to content” action

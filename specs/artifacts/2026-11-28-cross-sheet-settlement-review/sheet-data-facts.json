@@ -1,0 +1,84 @@
+{
+  "status": "passed",
+  "scope": "Actual public/persisted payload, source CSV, independent Decimal and native browser downloads. No UI assertions.",
+  "cases": [
+    {
+      "label": "run155",
+      "artifactID": "art_g0VcEYIys00i9elZts3P",
+      "sourceRows": 6,
+      "initialGroups": {
+        "普通订单": {
+          "count": 3,
+          "amount": "23.65"
+        },
+        "退款": {
+          "count": 2,
+          "amount": "-6.00"
+        },
+        "免费样品": {
+          "count": 1,
+          "amount": "0.00"
+        }
+      },
+      "initialTotal": "17.65",
+      "crossSheetFormulas": {
+        "B2": "=COUNTIF('原始记录'!B2:B7,A2)",
+        "C2": "=SUMIF('原始记录'!B2:B7,A2,'原始记录'!C2:C7)",
+        "B3": "=COUNTIF('原始记录'!B2:B7,A3)",
+        "C3": "=SUMIF('原始记录'!B2:B7,A3,'原始记录'!C2:C7)",
+        "B4": "=COUNTIF('原始记录'!B2:B7,A4)",
+        "C4": "=SUMIF('原始记录'!B2:B7,A4,'原始记录'!C2:C7)",
+        "B5": "=COUNTA('原始记录'!A2:A7)",
+        "C5": "=SUM('原始记录'!C2:C7)"
+      },
+      "actualAPIEqualsOriginalPersistedPublication": true,
+      "editedDownloadSourceRows": 6,
+      "editedOrdinaryAmount": "24.65",
+      "editedTotal": "18.65",
+      "downloadBytes": {
+        "source": 192,
+        "category": 143
+      }
+    },
+    {
+      "label": "run156",
+      "artifactID": "art_g0VcEcGJT00oYmWiDaM0",
+      "sourceRows": 6,
+      "initialGroups": {
+        "普通订单": {
+          "count": 3,
+          "amount": "23.65"
+        },
+        "退款": {
+          "count": 2,
+          "amount": "-6.00"
+        },
+        "免费样品": {
+          "count": 1,
+          "amount": "0.00"
+        }
+      },
+      "initialTotal": "17.65",
+      "crossSheetFormulas": {
+        "B2": "=COUNTIF('原始记录'!B2:B7,A2)",
+        "C2": "=SUMIF('原始记录'!B2:B7,A2,'原始记录'!C2:C7)",
+        "B3": "=COUNTIF('原始记录'!B2:B7,A3)",
+        "C3": "=SUMIF('原始记录'!B2:B7,A3,'原始记录'!C2:C7)",
+        "B4": "=COUNTIF('原始记录'!B2:B7,A4)",
+        "C4": "=SUMIF('原始记录'!B2:B7,A4,'原始记录'!C2:C7)",
+        "B5": "=COUNTA('原始记录'!A2:A7)",
+        "C5": "=SUM('原始记录'!C2:C7)"
+      },
+      "actualAPIEqualsOriginalPersistedPublication": true,
+      "editedDownloadSourceRows": 6,
+      "editedOrdinaryAmount": "24.65",
+      "editedTotal": "18.65",
+      "downloadBytes": {
+        "source": 192,
+        "category": 143
+      }
+    }
+  ],
+  "bothEditedDownloadPairs": "byte-identical",
+  "protectedBusinessInputs": 8
+}

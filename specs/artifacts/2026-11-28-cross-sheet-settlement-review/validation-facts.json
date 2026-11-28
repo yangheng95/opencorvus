@@ -1,0 +1,49 @@
+{
+  "status": "passed",
+  "baselinePositiveFormulaTest": {
+    "command": "packages/opencorvus: bun run test test/interactive-artifact-tool-schema.test.ts",
+    "exitCode": 1,
+    "failedCase": "publishes literal blanks and formula cells through the strict Provider contract",
+    "failure": "Valid exclusive cell forms failed prepared strict JSON Schema required-field validation."
+  },
+  "finalBackend": {
+    "cases": 33,
+    "assertions": 78,
+    "files": [
+      "interactive-artifact-tool-schema.test.ts",
+      "provider-tool-structural-union.test.ts",
+      "session-loop-provider-tool-input.test.ts",
+      "expert-squad/authorized-capability-execution.test.ts"
+    ],
+    "finalClosedShapeRerun": "7 cases/12 assertions passed after final closed-object guard"
+  },
+  "pureExportData": {
+    "cases": 46,
+    "assertions": 51,
+    "file": "packages/overlay/test/artifact-export.test.ts"
+  },
+  "typechecks": {
+    "backendOriginalHandle": 30252,
+    "overlayAfterGeneratedTypesHandle": 81567,
+    "exitCodes": [
+      0,
+      0
+    ]
+  },
+  "sdkGeneration": {
+    "originalHandle": 36806,
+    "exitCode": 0,
+    "changedGeneratedFiles": [
+      "packages/sdk/openapi.json",
+      "packages/sdk/js/src/gen/types.gen.ts"
+    ]
+  },
+  "frontendNodeBuild": {
+    "originalHandle": 24818,
+    "exitCode": 0,
+    "publicRendererSurface": "passed"
+  },
+  "docs": "354 operations/26 groups passed",
+  "architectureIndex": "20 documents passed",
+  "visual": "11 native original screenshots personally reviewed, no UI automation assertions"
+}
