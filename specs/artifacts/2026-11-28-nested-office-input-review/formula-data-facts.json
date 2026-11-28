@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0VcEigsd00fu4qpzup5",
+  "publishedRows": 6,
+  "initialTotal": "17.65",
+  "crossSheetFormulas": {
+    "B2": "=COUNTIF('原始记录'!B2:B7,A2)",
+    "C2": "=SUMIF('原始记录'!B2:B7,A2,'原始记录'!C2:C7)",
+    "B3": "=COUNTIF('原始记录'!B2:B7,A3)",
+    "C3": "=SUMIF('原始记录'!B2:B7,A3,'原始记录'!C2:C7)",
+    "B4": "=COUNTIF('原始记录'!B2:B7,A4)",
+    "C4": "=SUMIF('原始记录'!B2:B7,A4,'原始记录'!C2:C7)",
+    "B5": "=COUNTA('原始记录'!A2:A7)",
+    "C5": "=SUM('原始记录'!C2:C7)"
+  },
+  "actualPublicAPI": "original publication preserved after view edit",
+  "editedFirstAmount": "16.20",
+  "editedOrdinaryAmount": "24.65",
+  "editedTotal": "18.65",
+  "nativeDownloads": [
+    {
+      "filename": "北仓修正后公式复核 20261128 - 原始记录.csv",
+      "bytes": 192
+    },
+    {
+      "filename": "北仓修正后公式复核 20261128 - 分类核对.csv",
+      "bytes": 143
+    }
+  ],
+  "protectedBusinessInputs": 8,
+  "limitation": "View edits are temporary; actual CSV contains current values only."
+}

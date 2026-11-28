@@ -240,7 +240,7 @@ SDK 命名空间映射，辅助调用不得使用空选项遗漏 `store` 等服�
 `providerOptions()` 命名空间封装前设置 `parallelToolCalls: false`。这是 `tool-call-policy.ts` 拥有的
 Provider 执行策略，不是 Structured Outputs 或 `tools[].strict` 声明；Provider-bound schema 继续作为
 best-effort function definition，并由 canonical Zod schema 在执行前完成最终校验与默认值 materialization。
-对象联合的提供方物化沿同一个数据入口处理：先使用明确常量判别；没有判别字段时，只有必需字段及实际有效字段能唯一确定封闭对象形状才选择该分支，清除该分支的可选空占位。真实可空字面值保持为null；冲突或多义形状交由原规范校验器返回错误，不猜业务含义。发布电子表格的字面值/公式单元格使用此明确联合声明，不依靠提供方不可见的跨字段自定义校验。
+对象联合的提供方物化沿同一个数据入口处理：递归读取anyOf/oneOf的对象叶候选，本地引用始终对原声明根解析，路径内递归联合不会无限展开。先使用明确常量判别；没有匹配判别字段时，只有必需字段、常量及实际有效字段能唯一确定封闭对象形状才选择该分支，清除该分支的可选空占位。真实可空字面值保持为null；冲突或多义形状交由原规范校验器返回错误，不猜业务含义。发布电子表格的字面值/公式单元格使用此明确联合声明，不依靠提供方不可见的跨字段自定义校验。
 Zod 开放 record 的 provider projection 必须保留可接受非空 JSON map 的语义。当前 SDK 7 保留
 `additionalProperties` 的真实值 schema；未知值采用空 schema `{}`，不再修补旧 SDK 的 `false` 投影。该策略只串行化
 单个 Provider step 内的 Tool calls，不得串行化不同 Session、Task、Agent、Project 或 scheduler

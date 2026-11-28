@@ -1,0 +1,90 @@
+{
+  "office": {
+    "sessionID": "ses_hTMFDMZz3ZCo1oyaellO",
+    "finish": "stop",
+    "tools": [
+      {
+        "tool": "skill",
+        "status": "completed"
+      },
+      {
+        "tool": "skill",
+        "status": "completed"
+      },
+      {
+        "tool": "skill",
+        "status": "completed"
+      },
+      {
+        "tool": "read",
+        "status": "completed"
+      },
+      {
+        "tool": "work_artifact_author",
+        "status": "completed"
+      },
+      {
+        "tool": "work_artifact_inspect",
+        "status": "completed"
+      },
+      {
+        "tool": "work_artifact_validate",
+        "status": "completed"
+      },
+      {
+        "tool": "skill",
+        "status": "completed"
+      },
+      {
+        "tool": "read",
+        "status": "completed"
+      },
+      {
+        "tool": "work_artifact_deliver",
+        "status": "completed"
+      }
+    ],
+    "actualPreviewRead": {
+      "partID": "prt_g0VcEiXeT002mls5gKtR",
+      "input": {
+        "filePath": "/attachment/prj_hZ6Mj0J1wZUIfIIkFSeE/739135cfa35745ff3a42b0c7fb565ef35814d53a3768d35a048b469348a6b0d0.pdf"
+      },
+      "metadata": {
+        "preview": "PDF read successfully",
+        "truncated": false,
+        "loaded": [],
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      }
+    }
+  },
+  "formula": {
+    "sessionID": "ses_hlJ3YfUB4JA5YO3RUQTh",
+    "finish": "stop",
+    "tools": [
+      {
+        "tool": "read",
+        "status": "completed"
+      },
+      {
+        "tool": "capability_search",
+        "status": "completed"
+      },
+      {
+        "tool": "publish_interactive_artifact",
+        "status": "completed"
+      },
+      {
+        "tool": "capability_search",
+        "status": "completed"
+      }
+    ]
+  },
+  "memory": {
+    "revision": 13,
+    "status": "idle",
+    "pendingCount": 0,
+    "droppedPendingCount": 0
+  }
+}

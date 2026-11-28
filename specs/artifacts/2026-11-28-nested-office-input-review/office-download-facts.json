@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "actualNativeDownloads": [
+    {
+      "filename": "北仓原生结算交接 20261128.xlsx",
+      "bytes": 5325,
+      "canonicalAttachmentBytes": "equal"
+    },
+    {
+      "filename": "北仓原生结算交接 20261128-preview.pdf",
+      "bytes": 115930,
+      "canonicalAttachmentBytes": "equal"
+    }
+  ],
+  "sheetNames": [
+    "原始记录",
+    "分类汇总"
+  ],
+  "originalRecordOrder": "exact",
+  "recordCount": 6,
+  "groups": {
+    "普通订单": {
+      "count": 3,
+      "net": "23.65"
+    },
+    "退款": {
+      "count": 2,
+      "net": "-6.00"
+    },
+    "免费样品": {
+      "count": 1,
+      "net": "0.00"
+    }
+  },
+  "totalNet": "17.65",
+  "numericCells": "OpenXML numeric cells parsed as Decimal; signed refunds and zero preserved",
+  "visualEvidence": [
+    "07-office-records-full.jpg",
+    "08-office-summary-full.jpg"
+  ],
+  "limitation": "Native Office literal workbook; edited rows do not recalculate summary. Actual locale was zh-CN; locale:null default independently covered by production-schema positive test."
+}

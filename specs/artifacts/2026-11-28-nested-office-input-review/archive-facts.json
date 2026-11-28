@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "screenshotsPersonallyReviewed": [
+    "01-task-entry-scope.jpg",
+    "03-office-start.jpg",
+    "06-office-records-preview.jpg",
+    "07-office-records-full.jpg",
+    "08-office-summary-full.jpg",
+    "11-formula-source-initial.jpg",
+    "12-formula-summary-initial.jpg",
+    "13-formula-summary-fitted.jpg",
+    "15-formula-source-edited.jpg",
+    "16-formula-summary-recalculated.jpg",
+    "17-formula-download-menu.jpg"
+  ],
+  "originalByteMembers": {
+    "office-prompt.txt": 688,
+    "formula-prompt.txt": 697,
+    "original-resource.csv": 59,
+    "北仓原生结算交接 20261128.xlsx": 5325,
+    "北仓原生结算交接 20261128-preview.pdf": 115930,
+    "北仓修正后公式复核 20261128 - 原始记录.csv": 192,
+    "北仓修正后公式复核 20261128 - 分类核对.csv": 143,
+    "inputs/north/events.csv": 223,
+    "inputs/north/handoff.md": 153,
+    "inputs/north/records.csv": 111,
+    "inputs/north/settlement-review.csv": 150,
+    "inputs/south/events-review.csv": 223,
+    "inputs/south/handoff.md": 159,
+    "inputs/south/records.csv": 111,
+    "inputs/south/settlement-review.csv": 127,
+    "observations/01-task-entry-scope-ax.txt": 20349,
+    "observations/02-office-prompt-ax.txt": 18290,
+    "observations/04-formula-start-ax.txt": 4748,
+    "observations/05-office-progress-ax.txt": 20201,
+    "observations/09-office-download-ax.txt": 24978,
+    "observations/10-formula-loaded-ax.txt": 17427,
+    "observations/14-formula-edit-ax.txt": 566,
+    "observations/18-formula-downloaded-ax.txt": 24247,
+    "observations/task-entry-ax.txt": 20349
+  },
+  "scope": "One canonical tool-input materializer, positive backend contracts, provider architecture, spec and evidence.",
+  "limits": [
+    "Real Office task chose explicit zh-CN; default null locale is proven separately through the actual production prepared schema.",
+    "One Office delivery and one formula publication do not prove every model-generated document.",
+    "Literal XLSX has no recalculation contract; interactive formula edits remain in current view and CSV holds values.",
+    "Initial long formula header required existing content-fit button; recorded for next UI iteration.",
+    "Opaque Provider reasoning, credentials/catalog, full database and private original project config excluded."
+  ]
+}

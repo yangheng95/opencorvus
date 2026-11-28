@@ -62,8 +62,9 @@ function selectJsonSchemaVariant(
   if (!schema || typeof schema !== "object" || Array.isArray(schema)) return { schema }
   if (!value || typeof value !== "object" || Array.isArray(value)) return { schema }
   const record = schema as Record<string, unknown>
-  const variants = Array.isArray(record.anyOf) ? record.anyOf : Array.isArray(record.oneOf) ? record.oneOf : undefined
-  if (!variants) return { schema }
+  const union = Array.isArray(record.anyOf) ? record.anyOf : Array.isArray(record.oneOf) ? record.oneOf : undefined
+  if (!union) return { schema }
+  const variants = objectUnionVariants(union, root)
   const valueRecord = value as Record<string, unknown>
   const unionProperties = new Set<string>()
   for (const rawVariant of variants) {
@@ -112,6 +113,9 @@ function selectJsonSchemaVariant(
     const required = Array.isArray(candidate.required) ? candidate.required : []
     for (const key of required) {
       if (typeof key !== "string" || !Object.hasOwn(valueRecord, key)) return false
+      const property = resolveLocalReference(properties[key], root)
+      if (property && typeof property === "object" && "const" in property && valueRecord[key] !== property.const)
+        return false
       if (valueRecord[key] === null && !jsonSchemaAllowsNull(properties[key], root)) return false
     }
     return Object.entries(valueRecord).every(
@@ -122,6 +126,25 @@ function selectJsonSchemaVariant(
     return { schema: resolveLocalReference(structuralMatches[0], root), unionProperties }
   }
   return { schema }
+}
+
+function objectUnionVariants(
+  variants: unknown[],
+  root: unknown,
+  active = new Set<unknown>(),
+): Record<string, unknown>[] {
+  return variants.flatMap((rawVariant) => {
+    const variant = resolveLocalReference(rawVariant, root)
+    if (!variant || typeof variant !== "object" || Array.isArray(variant)) return []
+    const record = variant as Record<string, unknown>
+    if (record.type === "object" && record.properties && typeof record.properties === "object") return [record]
+    const nested = Array.isArray(record.anyOf) ? record.anyOf : Array.isArray(record.oneOf) ? record.oneOf : undefined
+    if (!nested || active.has(variant)) return []
+    active.add(variant)
+    const objects = objectUnionVariants(nested, root, active)
+    active.delete(variant)
+    return objects
+  })
 }
 
 function jsonSchemaAllowsNull(schema: unknown, root: unknown, visited = new Set<unknown>()): boolean {

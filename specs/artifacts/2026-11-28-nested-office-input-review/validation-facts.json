@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "baselineObserved": {
+    "exitCode": 1,
+    "passed": 2,
+    "failed": 2,
+    "failures": [
+      "Nested valid nullable data silently became an empty options object.",
+      "Production Office author provider-valid locale:null returned canonical invalid_union."
+    ],
+    "runtime": "opencorvus-test-run-W4jMHY"
+  },
+  "finalBackend": {
+    "originalHandle": 91446,
+    "exitCode": 0,
+    "cases": 37,
+    "assertions": 83,
+    "files": [
+      "provider-tool-structural-union.test.ts",
+      "interactive-artifact-tool-schema.test.ts",
+      "session-loop-provider-tool-input.test.ts",
+      "expert-squad/authorized-capability-execution.test.ts"
+    ],
+    "structuralCases": 6,
+    "structuralAssertions": 7
+  },
+  "backendTypecheck": {
+    "originalHandle": 2632,
+    "exitCode": 0
+  },
+  "schemaAndPersistedShape": "unchanged; SDK regeneration not needed",
+  "frontend": "unchanged backend-only fix; existing source39f74345 built UI used for real desktop acceptance",
+  "actualProvider": {
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "requests": 20,
+    "status200EOF": 20,
+    "requestAgents": {
+      "memory": 3,
+      "chat": 1,
+      "work": 16
+    }
+  },
+  "visual": "11 original native screenshots personally viewed; no UI automation assertions",
+  "checkerCorrections": [
+    "Private OpenXML checker initially omitted actual t=str; added exact text value handling and reran original check successfully.",
+    "Private read-fact extraction initially searched display filename in canonical URL; changed to actual .pdf canonical URL and reran original check."
+  ],
+  "docs": "354 operations/26 groups passed; architecture20 documents passed; original24823 exit0"
+}

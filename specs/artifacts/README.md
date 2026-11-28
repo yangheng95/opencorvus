@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [嵌套工具输入与工作簿证据](2026-11-28-nested-office-input-review/README.md)
 - [跨工作表结算核对证据](2026-11-28-cross-sheet-settlement-review/README.md)
 - [交付物数值交叉核对证据](2026-11-28-artifact-numeric-reconciliation/README.md)
 - [框选图例宽度证据](2026-11-28-chart-legend-brush/README.md)
